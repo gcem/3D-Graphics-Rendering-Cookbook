@@ -131,18 +131,25 @@ main(void)
     glCreateVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    const GLsizeiptr kBufferSize = sizeof(PerFrameData);
+    GLint uniformBufferAlignment;
+    glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignment);
+    const GLsizeiptr perFrameDataAlignedSize =
+      (sizeof(PerFrameData) + uniformBufferAlignment - 1) &
+      ~(unsigned int)(uniformBufferAlignment - 1);
 
     GLuint perFrameDataBuffer;
     glCreateBuffers(1, &perFrameDataBuffer);
-    glNamedBufferStorage(
-      perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
-    glBindBufferRange(GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kBufferSize);
+    glNamedBufferStorage(perFrameDataBuffer,
+                         perFrameDataAlignedSize * 2,
+                         nullptr,
+                         GL_DYNAMIC_STORAGE_BIT);
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_POLYGON_OFFSET_LINE);
     glPolygonOffset(-1.0f, -1.0f);
+
+    GLbyte perFrameData[perFrameDataAlignedSize * 2]{};
 
     while (!glfwWindowShouldClose(window)) {
         int width, height;
@@ -153,21 +160,33 @@ main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         const mat4 m =
-          glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, -3.5f)),
+          glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, -6.5f)),
                       (float)glfwGetTime(),
                       vec3(1.0f, 1.0f, 1.0f));
         const mat4 p = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
+        const mat4 mvp = p * m;
 
-        PerFrameData perFrameData = { .mvp = p * m, .isWireframe = false };
+        *(PerFrameData *)&perFrameData = { .mvp = mvp, .isWireframe = false };
+        *(PerFrameData *)&perFrameData[perFrameDataAlignedSize] = {
+            .mvp = mvp, .isWireframe = true
+        };
 
-        glNamedBufferSubData(perFrameDataBuffer, 0, kBufferSize, &perFrameData);
+        glNamedBufferSubData(
+          perFrameDataBuffer, 0, perFrameDataAlignedSize * 2, &perFrameData);
 
+        glBindBufferRange(GL_UNIFORM_BUFFER,
+                          0,
+                          perFrameDataBuffer,
+                          0,
+                          perFrameDataAlignedSize * 2);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        perFrameData.isWireframe = true;
-        glNamedBufferSubData(perFrameDataBuffer, 0, kBufferSize, &perFrameData);
-
+        glBindBufferRange(GL_UNIFORM_BUFFER,
+                          0,
+                          perFrameDataBuffer,
+                          perFrameDataAlignedSize,
+                          perFrameDataAlignedSize * 2);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
