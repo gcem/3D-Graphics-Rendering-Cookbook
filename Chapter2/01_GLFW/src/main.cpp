@@ -1,10 +1,15 @@
-#include <glad/gl.h>
+#include <glad/glad.h>
+// keep glad.h on top
 #include <GLFW/glfw3.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
-static const char *shaderCodeVertex = R"(
+// the vscode shader extension highlights the shader code in raw strings but
+// the literal should have glsl as delimiter
+
+// VERTEX SHADER
+static const char *shaderCodeVertex = R"glsl(
 #version 460 core
 layout (location=0) out vec3 color;
 const vec2 pos[3] = vec2[3](
@@ -22,9 +27,10 @@ void main()
 	gl_Position = vec4(pos[gl_VertexID], 0.0, 1.0);
 	color = col[gl_VertexID];
 }
-)";
+)glsl";
 
-static const char *shaderCodeFragment = R"(
+// FRAGMENT SHADER
+static const char *shaderCodeFragment = R"glsl(
 #version 460 core
 layout (location=0) in vec3 color;
 layout (location=0) out vec4 out_FragColor;
@@ -32,7 +38,9 @@ void main()
 {
 	out_FragColor = vec4(color, 1.0);
 };
-)";
+)glsl";
+
+// END OF SHADERS
 
 int
 main(void)
@@ -63,8 +71,12 @@ main(void)
       });
 
     glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
+    gladLoadGL();
     glfwSwapInterval(1);
+
+    const unsigned char *vendor = glGetString(GL_VENDOR);
+    const unsigned char *renderer = glGetString(GL_RENDERER);
+    printf("Vendor: %s\nRenderer: %s\n", vendor, renderer);
 
     const GLuint shaderVertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(shaderVertex, 1, &shaderCodeVertex, nullptr);
@@ -87,10 +99,15 @@ main(void)
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+    glfwSetFramebufferSizeCallback(
+      window, [](GLFWwindow *window, int width, int height) {
+          glViewport(0, 0, width, height);
+      });
+
     while (!glfwWindowShouldClose(window)) {
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        glViewport(0, 0, width, height);
+        // int width, height;
+        // glfwGetFramebufferSize(window, &width, &height);
+        // glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glfwSwapBuffers(window);

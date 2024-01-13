@@ -6,4 +6,6 @@ include(../../CMake/CommonMacros.txt)
 
 SETUP_APP(Ch2_Sample01_GLFW "Chapter 02")
 
-target_link_libraries(Ch2_Sample01_GLFW glad glfw)
+# TODO: compile glad.c as a library?
+# target_link_libraries(Ch2_Sample01_GLFW glad glfw)
+target_link_libraries(Ch2_Sample01_GLFW glfw)
