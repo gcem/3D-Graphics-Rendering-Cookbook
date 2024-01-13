@@ -1,4 +1,4 @@
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
@@ -9,7 +9,8 @@
 using glm::mat4;
 using glm::vec3;
 
-static const char *shaderCodeVertex = R"(
+// VERTEX SHADER
+static const char *shaderCodeVertex = R"glsl(
 #version 460 core
 layout(std140, binding = 0) uniform PerFrameData
 {
@@ -59,9 +60,10 @@ void main()
 	gl_Position = MVP * vec4(pos[idx], 1.0);
 	color = isWireframe > 0 ? vec3(0.0) : col[idx];
 }
-)";
+)glsl";
 
-static const char *shaderCodeFragment = R"(
+// FRAGMENT SHADER
+static const char *shaderCodeFragment = R"glsl(
 #version 460 core
 layout (location=0) in vec3 color;
 layout (location=0) out vec4 out_FragColor;
@@ -69,13 +71,15 @@ void main()
 {
 	out_FragColor = vec4(color, 1.0);
 };
-)";
+)glsl";
 
 struct PerFrameData
 {
     mat4 mvp;
     int isWireframe;
 };
+
+// END OF SHADERS
 
 int
 main(void)
@@ -106,7 +110,7 @@ main(void)
       });
 
     glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
+    gladLoadGL();
     glfwSwapInterval(1);
 
     const GLuint shaderVertex = glCreateShader(GL_VERTEX_SHADER);
