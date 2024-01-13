@@ -9,18 +9,26 @@ using glm::vec2;
 using glm::vec3;
 using glm::vec4;
 
-class VulkanSingleQuadRenderer: public RendererBase
+class VulkanSingleQuadRenderer : public RendererBase
 {
 public:
-	VulkanSingleQuadRenderer(VulkanRenderDevice& vkDev, VulkanImage tex, VkSampler sampler, VkImageLayout desiredLayout = VK_IMAGE_LAYOUT_GENERAL);
-	virtual ~VulkanSingleQuadRenderer();
+    VulkanSingleQuadRenderer(
+      VulkanRenderDevice &vkDev,
+      VulkanImage tex,
+      VkSampler sampler,
+      VkImageLayout desiredLayout = VK_IMAGE_LAYOUT_GENERAL);
+    virtual ~VulkanSingleQuadRenderer();
 
-	virtual void fillCommandBuffer(VkCommandBuffer commandBuffer, size_t currentImage) override;
+    virtual void fillCommandBuffer(VkCommandBuffer commandBuffer,
+                                   size_t currentImage) override;
+
 private:
-	VulkanRenderDevice& vkDev;
+    VulkanRenderDevice &vkDev;
 
-	bool createDescriptorSet(VulkanRenderDevice& vkDev, VkImageLayout desiredLayout = VK_IMAGE_LAYOUT_GENERAL);
+    bool createDescriptorSet(
+      VulkanRenderDevice &vkDev,
+      VkImageLayout desiredLayout = VK_IMAGE_LAYOUT_GENERAL);
 
-	VulkanImage texture;
-	VkSampler textureSampler;
+    VulkanImage texture;
+    VkSampler textureSampler;
 };

@@ -1,0 +1,11 @@
+---
+BasedOnStyle: Mozilla
+IndentWidth: '4'
+UseTab: Never
+AccessModifierOffset: '-4'
+
+# Some GL headers expect to be on top. Let's keep the order fixed all the time.
+SortIncludes: Never
+
+PointerAlignment: Right
+...

@@ -6,19 +6,24 @@
 #include <glm/ext.hpp>
 using glm::mat4;
 
-class CubeRenderer: public RendererBase
+class CubeRenderer : public RendererBase
 {
 public:
-	CubeRenderer(VulkanRenderDevice& vkDev, VulkanImage inDepthTexture, const char* textureFile);
-	virtual ~CubeRenderer();
+    CubeRenderer(VulkanRenderDevice &vkDev,
+                 VulkanImage inDepthTexture,
+                 const char *textureFile);
+    virtual ~CubeRenderer();
 
-	virtual void fillCommandBuffer(VkCommandBuffer commandBuffer, size_t currentImage) override;
+    virtual void fillCommandBuffer(VkCommandBuffer commandBuffer,
+                                   size_t currentImage) override;
 
-	void updateUniformBuffer(VulkanRenderDevice& vkDev, uint32_t currentImage, const mat4& m);
+    void updateUniformBuffer(VulkanRenderDevice &vkDev,
+                             uint32_t currentImage,
+                             const mat4 &m);
 
 private:
-	VkSampler textureSampler;
-	VulkanImage texture;
+    VkSampler textureSampler;
+    VulkanImage texture;
 
-	bool createDescriptorSet(VulkanRenderDevice& vkDev);
+    bool createDescriptorSet(VulkanRenderDevice &vkDev);
 };

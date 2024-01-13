@@ -2,13 +2,14 @@
 
 #include "shared/vkRenderers/VulkanRendererBase.h"
 
-class VulkanClear: public RendererBase
+class VulkanClear : public RendererBase
 {
 public:
-	VulkanClear(VulkanRenderDevice& vkDev, VulkanImage depthTexture);
+    VulkanClear(VulkanRenderDevice &vkDev, VulkanImage depthTexture);
 
-	virtual void fillCommandBuffer(VkCommandBuffer commandBuffer, size_t currentImage) override;
+    virtual void fillCommandBuffer(VkCommandBuffer commandBuffer,
+                                   size_t currentImage) override;
 
 private:
-	bool shouldClearDepth;
+    bool shouldClearDepth;
 };

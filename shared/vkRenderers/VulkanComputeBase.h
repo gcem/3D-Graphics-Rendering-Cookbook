@@ -5,36 +5,46 @@
 
 struct ComputeBase
 {
-	ComputeBase(VulkanRenderDevice& vkDev, const char* shaderName, uint32_t inputSize, uint32_t outputSize);
+    ComputeBase(VulkanRenderDevice &vkDev,
+                const char *shaderName,
+                uint32_t inputSize,
+                uint32_t outputSize);
 
-	virtual ~ComputeBase();
+    virtual ~ComputeBase();
 
-	inline void uploadInput(uint32_t offset, void* inData, uint32_t byteCount) {
-		uploadBufferData(vkDev, inBufferMemory, offset, inData, byteCount);
-	}
+    inline void uploadInput(uint32_t offset, void *inData, uint32_t byteCount)
+    {
+        uploadBufferData(vkDev, inBufferMemory, offset, inData, byteCount);
+    }
 
-	inline void downloadOutput(uint32_t offset, void* outData, uint32_t byteCount) {
-		downloadBufferData(vkDev, outBufferMemory, offset, outData, byteCount);
-	}
+    inline void downloadOutput(uint32_t offset,
+                               void *outData,
+                               uint32_t byteCount)
+    {
+        downloadBufferData(vkDev, outBufferMemory, offset, outData, byteCount);
+    }
 
-	inline bool execute(uint32_t xsize, uint32_t ysize, uint32_t zsize) {
-		return executeComputeShader(vkDev, pipeline, pipelineLayout, descriptorSet, xsize, ysize, zsize);
-	}
+    inline bool execute(uint32_t xsize, uint32_t ysize, uint32_t zsize)
+    {
+        return executeComputeShader(
+          vkDev, pipeline, pipelineLayout, descriptorSet, xsize, ysize, zsize);
+    }
 
 protected:
-	VulkanRenderDevice& vkDev;
+    VulkanRenderDevice &vkDev;
 
-	VkBuffer inBuffer;
-	VkBuffer outBuffer;
-	VkDeviceMemory inBufferMemory;
-	VkDeviceMemory outBufferMemory;
+    VkBuffer inBuffer;
+    VkBuffer outBuffer;
+    VkDeviceMemory inBufferMemory;
+    VkDeviceMemory outBufferMemory;
 
-	VkDescriptorSetLayout dsLayout;
-	VkPipelineLayout pipelineLayout;
-	VkPipeline pipeline;
+    VkDescriptorSetLayout dsLayout;
+    VkPipelineLayout pipelineLayout;
+    VkPipeline pipeline;
 
-	VkDescriptorPool descriptorPool;
-	VkDescriptorSet descriptorSet;
+    VkDescriptorPool descriptorPool;
+    VkDescriptorSet descriptorSet;
 
-	bool createComputeDescriptorSet(VkDevice device, VkDescriptorSetLayout descriptorSetLayout);
+    bool createComputeDescriptorSet(VkDevice device,
+                                    VkDescriptorSetLayout descriptorSetLayout);
 };

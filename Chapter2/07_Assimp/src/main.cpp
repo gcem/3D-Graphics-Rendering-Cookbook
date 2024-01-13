@@ -15,7 +15,7 @@
 using glm::mat4;
 using glm::vec3;
 
-static const char* shaderCodeVertex = R"(
+static const char *shaderCodeVertex = R"(
 #version 460 core
 layout(std140, binding = 0) uniform PerFrameData
 {
@@ -31,7 +31,7 @@ void main()
 }
 )";
 
-static const char* shaderCodeFragment = R"(
+static const char *shaderCodeFragment = R"(
 #version 460 core
 layout (location=0) in vec3 color;
 layout (location=0) out vec4 out_FragColor;
@@ -43,149 +43,149 @@ void main()
 
 struct PerFrameData
 {
-	mat4 mvp;
-	int isWireframe;
+    mat4 mvp;
+    int isWireframe;
 };
 
-int main( void )
+int
+main(void)
 {
-	glfwSetErrorCallback(
-		[]( int error, const char* description )
-		{
-			fprintf( stderr, "Error: %s\n", description );
-		}
-	);
+    glfwSetErrorCallback([](int error, const char *description) {
+        fprintf(stderr, "Error: %s\n", description);
+    });
 
-	if ( !glfwInit() )
-		exit( EXIT_FAILURE );
+    if (!glfwInit())
+        exit(EXIT_FAILURE);
 
-	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
-	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 6 );
-	glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow( 1024, 768, "Simple example", nullptr, nullptr );
-	if ( !window )
-	{
-		glfwTerminate();
-		exit( EXIT_FAILURE );
-	}
+    GLFWwindow *window =
+      glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
+    if (!window) {
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
 
-	glfwSetKeyCallback(
-		window,
-		[]( GLFWwindow* window, int key, int scancode, int action, int mods )
-		{
-			if ( key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
-				glfwSetWindowShouldClose( window, GLFW_TRUE );
-		}
-	);
+    glfwSetKeyCallback(
+      window,
+      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+              glfwSetWindowShouldClose(window, GLFW_TRUE);
+      });
 
-	glfwMakeContextCurrent( window );
-	gladLoadGL( glfwGetProcAddress );
-	glfwSwapInterval( 1 );
+    glfwMakeContextCurrent(window);
+    gladLoadGL(glfwGetProcAddress);
+    glfwSwapInterval(1);
 
-	const GLuint shaderVertex = glCreateShader( GL_VERTEX_SHADER );
-	glShaderSource( shaderVertex, 1, &shaderCodeVertex, nullptr );
-	glCompileShader( shaderVertex );
+    const GLuint shaderVertex = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(shaderVertex, 1, &shaderCodeVertex, nullptr);
+    glCompileShader(shaderVertex);
 
-	const GLuint shaderFragment = glCreateShader( GL_FRAGMENT_SHADER );
-	glShaderSource( shaderFragment, 1, &shaderCodeFragment, nullptr );
-	glCompileShader( shaderFragment );
+    const GLuint shaderFragment = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(shaderFragment, 1, &shaderCodeFragment, nullptr);
+    glCompileShader(shaderFragment);
 
-	const GLuint program = glCreateProgram();
-	glAttachShader( program, shaderVertex );
-	glAttachShader( program, shaderFragment );
-	glLinkProgram( program );
+    const GLuint program = glCreateProgram();
+    glAttachShader(program, shaderVertex);
+    glAttachShader(program, shaderFragment);
+    glLinkProgram(program);
 
-	GLuint vao;
-	glCreateVertexArrays( 1, &vao );
-	glBindVertexArray( vao );
+    GLuint vao;
+    glCreateVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
-	const GLsizeiptr kBufferSize = sizeof( PerFrameData );
+    const GLsizeiptr kBufferSize = sizeof(PerFrameData);
 
-	GLuint perFrameDataBuffer;
-	glCreateBuffers( 1, &perFrameDataBuffer );
-	glNamedBufferStorage( perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT );
-	glBindBufferRange( GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kBufferSize );
+    GLuint perFrameDataBuffer;
+    glCreateBuffers(1, &perFrameDataBuffer);
+    glNamedBufferStorage(
+      perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kBufferSize);
 
-	glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
-	glEnable( GL_DEPTH_TEST );
-	glEnable( GL_POLYGON_OFFSET_LINE );
-	glPolygonOffset( -1.0f, -1.0f );
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_POLYGON_OFFSET_LINE);
+    glPolygonOffset(-1.0f, -1.0f);
 
-	GLuint meshData;
-	glCreateBuffers( 1, &meshData );
+    GLuint meshData;
+    glCreateBuffers(1, &meshData);
 
-	const aiScene* scene = aiImportFile( "data/rubber_duck/scene.gltf", aiProcess_Triangulate );
+    const aiScene *scene =
+      aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
 
-	if ( !scene || !scene->HasMeshes() )
-	{
-		printf( "Unable to load data/rubber_duck/scene.gltf\n" );
-		exit( 255 );
-	}
+    if (!scene || !scene->HasMeshes()) {
+        printf("Unable to load data/rubber_duck/scene.gltf\n");
+        exit(255);
+    }
 
-	const aiMesh* mesh = scene->mMeshes[0];
-	std::vector<vec3> positions;
-	for ( unsigned int i = 0; i != mesh->mNumFaces; i++ )
-	{
-		const aiFace& face = mesh->mFaces[i];
-		const unsigned int idx[3] = { face.mIndices[0], face.mIndices[1], face.mIndices[2] };
-		for ( int j = 0; j != 3; j++ )
-		{
-			const aiVector3D v = mesh->mVertices[idx[j]];
-			positions.push_back( vec3( v.x, v.z, v.y ) );
-		}
-	}
+    const aiMesh *mesh = scene->mMeshes[0];
+    std::vector<vec3> positions;
+    for (unsigned int i = 0; i != mesh->mNumFaces; i++) {
+        const aiFace &face = mesh->mFaces[i];
+        const unsigned int idx[3] = { face.mIndices[0],
+                                      face.mIndices[1],
+                                      face.mIndices[2] };
+        for (int j = 0; j != 3; j++) {
+            const aiVector3D v = mesh->mVertices[idx[j]];
+            positions.push_back(vec3(v.x, v.z, v.y));
+        }
+    }
 
-	aiReleaseImport( scene );
+    aiReleaseImport(scene);
 
-	glNamedBufferStorage( meshData, sizeof( vec3 ) * positions.size(), positions.data(), 0 );
+    glNamedBufferStorage(
+      meshData, sizeof(vec3) * positions.size(), positions.data(), 0);
 
-	glVertexArrayVertexBuffer( vao, 0, meshData, 0, sizeof( vec3 ) );
-	glEnableVertexArrayAttrib( vao, 0 );
-	glVertexArrayAttribFormat( vao, 0, 3, GL_FLOAT, GL_FALSE, 0 );
-	glVertexArrayAttribBinding( vao, 0, 0 );
+    glVertexArrayVertexBuffer(vao, 0, meshData, 0, sizeof(vec3));
+    glEnableVertexArrayAttrib(vao, 0);
+    glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(vao, 0, 0);
 
-	const int numVertices = static_cast<int>(positions.size());
+    const int numVertices = static_cast<int>(positions.size());
 
-	while ( !glfwWindowShouldClose( window ) )
-	{
-		int width, height;
-		glfwGetFramebufferSize( window, &width, &height );
-		const float ratio = width / (float)height;
+    while (!glfwWindowShouldClose(window)) {
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        const float ratio = width / (float)height;
 
-		glViewport( 0, 0, width, height );
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        glViewport(0, 0, width, height);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		const mat4 m = glm::rotate( glm::translate( mat4( 1.0f ), vec3( 0.0f, -0.5f, -1.5f ) ), (float)glfwGetTime(), vec3( 0.0f, 1.0f, 0.0f ) );
-		const mat4 p = glm::perspective( 45.0f, ratio, 0.1f, 1000.0f );
+        const mat4 m =
+          glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, -0.5f, -1.5f)),
+                      (float)glfwGetTime(),
+                      vec3(0.0f, 1.0f, 0.0f));
+        const mat4 p = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
 
-		PerFrameData perFrameData = { .mvp = p * m, .isWireframe = false };
+        PerFrameData perFrameData = { .mvp = p * m, .isWireframe = false };
 
-		glUseProgram( program );
-		glNamedBufferSubData( perFrameDataBuffer, 0, kBufferSize, &perFrameData );
+        glUseProgram(program);
+        glNamedBufferSubData(perFrameDataBuffer, 0, kBufferSize, &perFrameData);
 
-		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-		glDrawArrays( GL_TRIANGLES, 0, numVertices );
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glDrawArrays(GL_TRIANGLES, 0, numVertices);
 
-		perFrameData.isWireframe = true;
-		glNamedBufferSubData( perFrameDataBuffer, 0, kBufferSize, &perFrameData );
+        perFrameData.isWireframe = true;
+        glNamedBufferSubData(perFrameDataBuffer, 0, kBufferSize, &perFrameData);
 
-		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-		glDrawArrays( GL_TRIANGLES, 0, numVertices );
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glDrawArrays(GL_TRIANGLES, 0, numVertices);
 
-		glfwSwapBuffers( window );
-		glfwPollEvents();
-	}
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
 
-	glDeleteBuffers( 1, &meshData );
-	glDeleteBuffers( 1, &perFrameDataBuffer );
-	glDeleteProgram( program );
-	glDeleteShader( shaderFragment );
-	glDeleteShader( shaderVertex );
-	glDeleteVertexArrays( 1, &vao );
+    glDeleteBuffers(1, &meshData);
+    glDeleteBuffers(1, &perFrameDataBuffer);
+    glDeleteProgram(program);
+    glDeleteShader(shaderFragment);
+    glDeleteShader(shaderVertex);
+    glDeleteVertexArrays(1, &vao);
 
-	glfwDestroyWindow( window );
-	glfwTerminate();
+    glfwDestroyWindow(window);
+    glfwTerminate();
 
-	return 0;
+    return 0;
 }
