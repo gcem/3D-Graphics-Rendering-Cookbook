@@ -6,4 +6,4 @@ include(../../CMake/CommonMacros.txt)
 
 SETUP_APP(Ch2_Sample03_STB "Chapter 02")
 
-target_link_libraries(Ch2_Sample03_STB glad glfw)
+target_link_libraries(Ch2_Sample03_STB glfw)

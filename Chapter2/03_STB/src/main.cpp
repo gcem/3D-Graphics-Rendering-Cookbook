@@ -1,4 +1,4 @@
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
@@ -87,7 +87,7 @@ main(void)
       });
 
     glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
+    gladLoadGL();
     glfwSwapInterval(1);
 
     const GLuint shaderVertex = glCreateShader(GL_VERTEX_SHADER);
@@ -119,7 +119,7 @@ main(void)
 
     int w, h, comp;
     const uint8_t *img =
-      stbi_load("data/ch2_sample3_STB.jpg", &w, &h, &comp, 3);
+      stbi_load("../../../data/ch2_sample3_STB.jpg", &w, &h, &comp, 3);
 
     GLuint texture;
     glCreateTextures(GL_TEXTURE_2D, 1, &texture);
