@@ -262,8 +262,8 @@ struct HDRProcessor : public CompositeRenderer
 
         // Convert 32.0 to S5.10 fixed point format (half-float) manually for
         // RGB channels, Set alpha to 1.0
-        //		const uint16_t brightPixel[4] = { 0x5400, 0x5400, 0x5400,
-        //0x3C00 }; // 64.0 as initial value
+        //		const uint16_t brightPixel[4] = { 0x5400, 0x5400,
+        // 0x5400, 0x3C00 }; // 64.0 as initial value
         const uint16_t brightPixel[4] = {
             0x5000, 0x5000, 0x5000, 0x3C00
         }; // 32.0 as initial value

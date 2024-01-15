@@ -134,9 +134,9 @@ struct LuminanceCalculator : public CompositeRenderer
         setVkImageName(c.vkDev, lumTex02.image.image, "lum02");
 
         ///	VulkanTexture addColorTexture(int texWidth = 0, int texHeight =
-        ///0, VkFormat colorFormat = VK_FORMAT_B8G8R8A8_UNORM, VkFilter
-        ///minFilter = VK_FILTER_LINEAR, VkFilter maxFilter = VK_FILTER_LINEAR,
-        ///VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_REPEAT);
+        /// 0, VkFormat colorFormat = VK_FORMAT_B8G8R8A8_UNORM, VkFilter
+        /// minFilter = VK_FILTER_LINEAR, VkFilter maxFilter = VK_FILTER_LINEAR,
+        /// VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_REPEAT);
 
         renderers_.emplace_back(lum64ToColor, false);
         renderers_.emplace_back(src_To_64, false);

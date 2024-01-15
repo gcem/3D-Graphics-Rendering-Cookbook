@@ -283,11 +283,11 @@ shiftNodes(Scene &scene, int startOffset, int nodeCount, int shiftAmount)
     // If there are too many nodes, we can use std::execution::par with
     // std::transform
     //	std::transform(scene.hierarchy_.begin() + startOffset,
-    //scene.hierarchy_.begin() + nodeCount, scene.hierarchy_.begin() +
-    //startOffset, shiftNode);
+    // scene.hierarchy_.begin() + nodeCount, scene.hierarchy_.begin() +
+    // startOffset, shiftNode);
 
     //	for (auto i = scene.hierarchy_.begin() + startOffset ; i !=
-    //scene.hierarchy_.begin() + nodeCount ; i++) 		shiftNode(*i);
+    // scene.hierarchy_.begin() + nodeCount ; i++) 		shiftNode(*i);
 
     for (int i = 0; i < nodeCount; i++)
         shiftNode(scene.hierarchy_[i + startOffset]);

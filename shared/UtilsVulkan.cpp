@@ -887,7 +887,7 @@ initVulkanRenderDevice2WithCompute(
     vkDev.graphicsFamily =
       findQueueFamilies(vkDev.physicalDevice, VK_QUEUE_GRAPHICS_BIT);
     //	VK_CHECK(createDevice2(vkDev.physicalDevice, deviceFeatures2,
-    //vkDev.graphicsFamily, &vkDev.device));
+    // vkDev.graphicsFamily, &vkDev.device));
     //	VK_CHECK(vkGetBestComputeQueue(vkDev.physicalDevice,
     //&vkDev.computeFamily));
     vkDev.computeFamily =
