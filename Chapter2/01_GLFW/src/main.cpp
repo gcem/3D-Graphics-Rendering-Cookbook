@@ -101,6 +101,7 @@ main(void)
 
     glfwSetFramebufferSizeCallback(
       window, [](GLFWwindow *window, int width, int height) {
+          // TODO does this need synchronization with the rendering loop?
           glViewport(0, 0, width, height);
       });
 
