@@ -51,18 +51,18 @@ main(void)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
     GLFWwindow *window =
-      glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
+        glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     glfwMakeContextCurrent(window);
     gladLoadGL(glfwGetProcAddress);
@@ -82,16 +82,18 @@ main(void)
 
     GLuint perFrameDataBuffer;
     glCreateBuffers(1, &perFrameDataBuffer);
-    glNamedBufferStorage(
-      perFrameDataBuffer, kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+    glNamedBufferStorage(perFrameDataBuffer,
+                         kUniformBufferSize,
+                         nullptr,
+                         GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(
-      GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kUniformBufferSize);
+        GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kUniformBufferSize);
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glEnable(GL_DEPTH_TEST);
 
     const aiScene *scene =
-      aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
+        aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
 
     if (!scene || !scene->HasMeshes()) {
         printf("Unable to load data/rubber_duck/scene.gltf\n");
@@ -147,7 +149,7 @@ main(void)
     {
         int w, h, comp;
         const uint8_t *img = stbi_load(
-          "data/rubber_duck/textures/Duck_baseColor.png", &w, &h, &comp, 3);
+            "data/rubber_duck/textures/Duck_baseColor.png", &w, &h, &comp, 3);
 
         glCreateTextures(GL_TEXTURE_2D, 1, &texture);
         glTextureParameteri(texture, GL_TEXTURE_MAX_LEVEL, 0);
@@ -155,7 +157,7 @@ main(void)
         glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTextureStorage2D(texture, 1, GL_RGB8, w, h);
         glTextureSubImage2D(
-          texture, 0, 0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, img);
+            texture, 0, 0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, img);
         glBindTextures(0, 1, &texture);
 
         stbi_image_free((void *)img);
@@ -166,7 +168,7 @@ main(void)
     {
         int w, h, comp;
         const float *img =
-          stbi_loadf("data/piazza_bologni_1k.hdr", &w, &h, &comp, 3);
+            stbi_loadf("data/piazza_bologni_1k.hdr", &w, &h, &comp, 3);
         Bitmap in(w, h, comp, eBitmapFormat_Float, img);
         Bitmap out = convertEquirectangularMapToVerticalCross(in);
         stbi_image_free((void *)img);
@@ -220,15 +222,15 @@ main(void)
         const mat4 p = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
 
         {
-            const mat4 m =
-              glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, -0.5f, -1.5f)),
-                          (float)glfwGetTime(),
-                          vec3(0.0f, 1.0f, 0.0f));
+            const mat4 m = glm::rotate(
+                glm::translate(mat4(1.0f), vec3(0.0f, -0.5f, -1.5f)),
+                (float)glfwGetTime(),
+                vec3(0.0f, 1.0f, 0.0f));
             const PerFrameData perFrameData = { .model = m,
                                                 .mvp = p * m,
                                                 .cameraPos = vec4(0.0f) };
             glNamedBufferSubData(
-              perFrameDataBuffer, 0, kUniformBufferSize, &perFrameData);
+                perFrameDataBuffer, 0, kUniformBufferSize, &perFrameData);
             progModel.useProgram();
             glDrawElements(GL_TRIANGLES,
                            static_cast<unsigned>(indices.size()),
@@ -242,7 +244,7 @@ main(void)
                                                 .mvp = p * m,
                                                 .cameraPos = vec4(0.0f) };
             glNamedBufferSubData(
-              perFrameDataBuffer, 0, kUniformBufferSize, &perFrameData);
+                perFrameDataBuffer, 0, kUniformBufferSize, &perFrameData);
             progCube.useProgram();
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }

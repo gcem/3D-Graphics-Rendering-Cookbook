@@ -93,21 +93,21 @@ initVulkan()
 
     imgui = std::make_unique<ImGuiRenderer>(vkDev);
     modelRenderer =
-      std::make_unique<ModelRenderer>(vkDev,
-                                      "data/rubber_duck/scene.gltf",
-                                      "data/ch2_sample3_STB.jpg",
-                                      (uint32_t)sizeof(glm::mat4));
+        std::make_unique<ModelRenderer>(vkDev,
+                                        "data/rubber_duck/scene.gltf",
+                                        "data/ch2_sample3_STB.jpg",
+                                        (uint32_t)sizeof(glm::mat4));
     cubeRenderer = std::make_unique<CubeRenderer>(
-      vkDev, modelRenderer->getDepthTexture(), "data/piazza_bologni_1k.hdr");
+        vkDev, modelRenderer->getDepthTexture(), "data/piazza_bologni_1k.hdr");
     clear =
-      std::make_unique<VulkanClear>(vkDev, modelRenderer->getDepthTexture());
+        std::make_unique<VulkanClear>(vkDev, modelRenderer->getDepthTexture());
     finish =
-      std::make_unique<VulkanFinish>(vkDev, modelRenderer->getDepthTexture());
+        std::make_unique<VulkanFinish>(vkDev, modelRenderer->getDepthTexture());
     canvas2d = std::make_unique<VulkanCanvas>(
-      vkDev,
-      VulkanImage{ .image = VK_NULL_HANDLE, .imageView = VK_NULL_HANDLE });
+        vkDev,
+        VulkanImage{ .image = VK_NULL_HANDLE, .imageView = VK_NULL_HANDLE });
     canvas =
-      std::make_unique<VulkanCanvas>(vkDev, modelRenderer->getDepthTexture());
+        std::make_unique<VulkanCanvas>(vkDev, modelRenderer->getDepthTexture());
 
     return true;
 }
@@ -135,7 +135,7 @@ reinitCamera()
         if (!strcmp(cameraType, "MoveTo")) {
             positioner_moveTo.setDesiredPosition(cameraPos);
             positioner_moveTo.setDesiredAngles(
-              cameraAngles.x, cameraAngles.y, cameraAngles.z);
+                cameraAngles.x, cameraAngles.y, cameraAngles.z);
             camera = Camera(positioner_moveTo);
         }
     }
@@ -154,10 +154,10 @@ renderGUI(uint32_t imageIndex)
     ImGui::NewFrame();
 
     const ImGuiWindowFlags flags =
-      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
-      ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
-      ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs |
-      ImGuiWindowFlags_NoBackground;
+        ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs |
+        ImGuiWindowFlags_NoBackground;
 
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::Begin("Statistics", nullptr, flags);
@@ -167,13 +167,13 @@ renderGUI(uint32_t imageIndex)
     ImGui::Begin("Camera Control", nullptr);
     {
         if (ImGui::BeginCombo(
-              "##combo",
-              currentComboBoxItem)) // The second parameter is the label
-                                    // previewed before opening the combo.
+                "##combo",
+                currentComboBoxItem)) // The second parameter is the label
+                                      // previewed before opening the combo.
         {
             for (int n = 0; n < IM_ARRAYSIZE(comboBoxItems); n++) {
                 const bool isSelected =
-                  (currentComboBoxItem == comboBoxItems[n]);
+                    (currentComboBoxItem == comboBoxItems[n]);
 
                 if (ImGui::Selectable(comboBoxItems[n], isSelected))
                     currentComboBoxItem = comboBoxItems[n];
@@ -190,7 +190,7 @@ renderGUI(uint32_t imageIndex)
 
         if (!strcmp(cameraType, "MoveTo")) {
             if (ImGui::SliderFloat3(
-                  "Position", glm::value_ptr(cameraPos), -10.0f, +10.0f))
+                    "Position", glm::value_ptr(cameraPos), -10.0f, +10.0f))
                 positioner_moveTo.setDesiredPosition(cameraPos);
             if (ImGui::SliderFloat3("Pitch/Pan/Roll",
                                     glm::value_ptr(cameraAngles),
@@ -219,10 +219,10 @@ update3D(uint32_t imageIndex)
     const float ratio = width / (float)height;
 
     const mat4 m1 =
-      glm::rotate(glm::translate(mat4(1.0f), vec3(0.f, 0.5f, -1.5f)) *
-                    glm::rotate(mat4(1.f), glm::pi<float>(), vec3(1, 0, 0)),
-                  (float)glfwGetTime(),
-                  vec3(0.0f, 1.0f, 0.0f));
+        glm::rotate(glm::translate(mat4(1.0f), vec3(0.f, 0.5f, -1.5f)) *
+                        glm::rotate(mat4(1.f), glm::pi<float>(), vec3(1, 0, 0)),
+                    (float)glfwGetTime(),
+                    vec3(0.0f, 1.0f, 0.0f));
     const mat4 p = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
 
     const mat4 view = camera.getViewMatrix();
@@ -231,10 +231,10 @@ update3D(uint32_t imageIndex)
     {
         EASY_BLOCK("UpdateUniformBuffers");
         modelRenderer->updateUniformBuffer(
-          vkDev, imageIndex, glm::value_ptr(mtx), sizeof(mat4));
+            vkDev, imageIndex, glm::value_ptr(mtx), sizeof(mat4));
         canvas->updateUniformBuffer(vkDev, p * view, 0.0f, imageIndex);
         canvas2d->updateUniformBuffer(
-          vkDev, glm::ortho(0, 1, 1, 0), 0.0f, imageIndex);
+            vkDev, glm::ortho(0, 1, 1, 0), 0.0f, imageIndex);
         cubeRenderer->updateUniformBuffer(vkDev, imageIndex, p * view * m1);
         EASY_END_BLOCK;
     }
@@ -307,7 +307,7 @@ drawFrame(const std::vector<RendererBase *> &renderers)
                               .pWaitDstStageMask = waitStages,
                               .commandBufferCount = 1,
                               .pCommandBuffers =
-                                &vkDev.commandBuffers[imageIndex],
+                                  &vkDev.commandBuffers[imageIndex],
                               .signalSemaphoreCount = 1,
                               .pSignalSemaphores = &vkDev.renderSemaphore };
 
@@ -363,7 +363,7 @@ main()
     ImGuiIO &io = ImGui::GetIO();
 
     window = glfwCreateWindow(
-      kScreenWidth, kScreenHeight, "VulkanApp", nullptr, nullptr);
+        kScreenWidth, kScreenHeight, "VulkanApp", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
@@ -374,34 +374,34 @@ main()
     });
 
     glfwSetMouseButtonCallback(
-      window, [](auto *window, int button, int action, int mods) {
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
+        window, [](auto *window, int button, int action, int mods) {
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
 
-          if (button == GLFW_MOUSE_BUTTON_LEFT)
-              mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+                mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner_firstPerson.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner_firstPerson.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner_firstPerson.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner_firstPerson.movement_.right_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner_firstPerson.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner_firstPerson.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner_firstPerson.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner_firstPerson.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner_firstPerson.movement_.right_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner_firstPerson.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     initVulkan();
 
@@ -432,9 +432,9 @@ main()
         {
             EASY_BLOCK("UpdateCameraPositioners")
             positioner_firstPerson.update(
-              deltaSeconds, mouseState.pos, mouseState.pressedLeft);
+                deltaSeconds, mouseState.pos, mouseState.pressedLeft);
             positioner_moveTo.update(
-              deltaSeconds, mouseState.pos, mouseState.pressedLeft);
+                deltaSeconds, mouseState.pos, mouseState.pressedLeft);
             EASY_END_BLOCK;
         }
 

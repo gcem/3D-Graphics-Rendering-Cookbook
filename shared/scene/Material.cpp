@@ -56,9 +56,9 @@ loadMaterials(const char *fileName,
 {
     FILE *f = fopen(fileName, "rb");
     if (!f) {
-        printf(
-          "Cannot load file %s\nPlease run SceneConverter tool from Chapter7\n",
-          fileName);
+        printf("Cannot load file %s\nPlease run SceneConverter tool from "
+               "Chapter7\n",
+               fileName);
         exit(255);
     }
 
@@ -72,18 +72,18 @@ loadMaterials(const char *fileName,
 
 void
 mergeMaterialLists(
-  const std::vector<std::vector<MaterialDescription> *> &oldMaterials,
-  const std::vector<std::vector<std::string> *> &oldTextures,
-  std::vector<MaterialDescription> &allMaterials,
-  std::vector<std::string> &newTextures)
+    const std::vector<std::vector<MaterialDescription> *> &oldMaterials,
+    const std::vector<std::vector<std::string> *> &oldTextures,
+    std::vector<MaterialDescription> &allMaterials,
+    std::vector<std::string> &newTextures)
 {
     // map texture names to indices in newTexturesList (calculated as we fill
     // the newTexturesList)
     std::unordered_map<std::string, int> newTextureNames;
     std::unordered_map<int, int>
-      materialToTextureList; // direct MaterialDescription usage as a key is
-                             // impossible, so we use its index in the
-                             // allMaterials array
+        materialToTextureList; // direct MaterialDescription usage as a key is
+                               // impossible, so we use its index in the
+                               // allMaterials array
 
     // Create combined material list [no hashing of materials, just
     // straightforward merging of all lists]
@@ -101,8 +101,8 @@ mergeMaterialLists(
     for (const std::vector<std::string> *tl : oldTextures)
         for (const std::string &file : *tl) {
             newTextureNames[file] = addUnique(
-              newTextures,
-              file); // addUnique() is in SceneConverter/MaterialConv.inl
+                newTextures,
+                file); // addUnique() is in SceneConverter/MaterialConv.inl
         }
 
     // Lambda to replace textureID by a new "version" (from global list)

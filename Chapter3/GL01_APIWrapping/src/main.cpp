@@ -65,18 +65,18 @@ main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window =
-      glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
+        glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     glfwMakeContextCurrent(window);
 
@@ -109,15 +109,15 @@ main()
     GLuint perFrameDataBuffer;
     api.glCreateBuffers(1, &perFrameDataBuffer);
     api.glNamedBufferStorage(
-      perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     api.glBindBufferRange(
-      GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kBufferSize);
+        GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kBufferSize);
 
     api.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     int w, h, comp;
     const uint8_t *img =
-      stbi_load("data/ch2_sample3_STB.jpg", &w, &h, &comp, 3);
+        stbi_load("data/ch2_sample3_STB.jpg", &w, &h, &comp, 3);
 
     GLuint texture;
     api.glCreateTextures(GL_TEXTURE_2D, 1, &texture);
@@ -127,7 +127,7 @@ main()
     api.glTextureStorage2D(texture, 1, GL_RGB8, w, h);
     api.glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     api.glTextureSubImage2D(
-      texture, 0, 0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, img);
+        texture, 0, 0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, img);
 
     api.glBindTextures(0, 1, &texture);
 
@@ -139,14 +139,14 @@ main()
         api.glViewport(0, 0, width, height);
         api.glClear(GL_COLOR_BUFFER_BIT);
 
-        const mat4 m =
-          glm::rotate(mat4(1.0f), (float)glfwGetTime(), vec3(0.0f, 0.0f, 1.0f));
+        const mat4 m = glm::rotate(
+            mat4(1.0f), (float)glfwGetTime(), vec3(0.0f, 0.0f, 1.0f));
         const mat4 p = glm::ortho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
         const mat4 mvp = p * m;
 
         api.glUseProgram(program);
         api.glNamedBufferSubData(
-          perFrameDataBuffer, 0, kBufferSize, glm::value_ptr(mvp));
+            perFrameDataBuffer, 0, kBufferSize, glm::value_ptr(mvp));
         api.glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);

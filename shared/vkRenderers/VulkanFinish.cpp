@@ -7,18 +7,18 @@ VulkanFinish::VulkanFinish(VulkanRenderDevice &vkDev, VulkanImage depthTexture)
   : RendererBase(vkDev, depthTexture)
 {
     if (!createColorAndDepthRenderPass(
-          vkDev,
-          (depthTexture.image != VK_NULL_HANDLE),
-          &renderPass_,
-          RenderPassCreateInfo{ .clearColor_ = false,
-                                .clearDepth_ = false,
-                                .flags_ = eRenderPassBit_Last })) {
+            vkDev,
+            (depthTexture.image != VK_NULL_HANDLE),
+            &renderPass_,
+            RenderPassCreateInfo{ .clearColor_ = false,
+                                  .clearDepth_ = false,
+                                  .flags_ = eRenderPassBit_Last })) {
         printf("VulkanFinish: failed to create render pass\n");
         exit(EXIT_FAILURE);
     }
 
     createColorAndDepthFramebuffers(
-      vkDev, renderPass_, depthTexture.imageView, swapchainFramebuffers_);
+        vkDev, renderPass_, depthTexture.imageView, swapchainFramebuffers_);
 }
 
 void
@@ -39,6 +39,6 @@ VulkanFinish::fillCommandBuffer(VkCommandBuffer commandBuffer,
     };
 
     vkCmdBeginRenderPass(
-      commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdEndRenderPass(commandBuffer);
 }

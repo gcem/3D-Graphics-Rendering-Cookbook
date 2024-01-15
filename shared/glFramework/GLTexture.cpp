@@ -43,7 +43,7 @@ genDefaultCheckerboardImage(int *width, int *height)
     const int h = 128;
 
     uint8_t *imgData = (uint8_t *)malloc(
-      w * h * 3); // stbi_load() uses malloc(), so this is safe
+        w * h * 3); // stbi_load() uses malloc(), so this is safe
 
     assert(imgData && w > 0 && h > 0);
     assert(w == h);
@@ -57,7 +57,7 @@ genDefaultCheckerboardImage(int *width, int *height)
         const int row = i / w;
         const int col = i % w;
         imgData[i * 3 + 0] = imgData[i * 3 + 1] = imgData[i * 3 + 2] =
-          0xFF * ((row + col) % 2);
+            0xFF * ((row + col) % 2);
     }
 
     if (width)
@@ -97,7 +97,7 @@ GLTexture::GLTexture(GLenum type, const char *fileName, GLenum clamp)
                 gli::texture gliTex = gli::load_ktx(fileName);
                 gli::gl GL(gli::gl::PROFILE_KTX);
                 gli::gl::format const format =
-                  GL.translate(gliTex.format(), gliTex.swizzles());
+                    GL.translate(gliTex.format(), gliTex.swizzles());
                 glm::tvec3<GLsizei> extent(gliTex.extent(0));
                 w = extent.x;
                 h = extent.y;
@@ -114,16 +114,16 @@ GLTexture::GLTexture(GLenum type, const char *fileName, GLenum clamp)
                                     gliTex.data(0, 0, 0));
             } else {
                 uint8_t *img =
-                  stbi_load(fileName, &w, &h, nullptr, STBI_rgb_alpha);
+                    stbi_load(fileName, &w, &h, nullptr, STBI_rgb_alpha);
 
                 // Note(Anton): replaced assert(img) with a fallback image to
                 // prevent crashes with missing files or bad (eg very long)
                 // paths.
                 if (!img) {
-                    fprintf(
-                      stderr,
-                      "WARNING: could not load image `%s`, using a fallback.\n",
-                      fileName);
+                    fprintf(stderr,
+                            "WARNING: could not load image `%s`, using a "
+                            "fallback.\n",
+                            fileName);
                     img = genDefaultCheckerboardImage(&w, &h);
                     if (!img) {
                         fprintf(stderr,
@@ -136,13 +136,13 @@ GLTexture::GLTexture(GLenum type, const char *fileName, GLenum clamp)
                 numMipmaps = getNumMipMapLevels2D(w, h);
                 glTextureStorage2D(handle_, numMipmaps, GL_RGBA8, w, h);
                 glTextureSubImage2D(
-                  handle_, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, img);
+                    handle_, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, img);
                 stbi_image_free((void *)img);
             }
             glGenerateTextureMipmap(handle_);
             glTextureParameteri(handle_, GL_TEXTURE_MAX_LEVEL, numMipmaps - 1);
             glTextureParameteri(
-              handle_, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                handle_, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTextureParameteri(handle_, GL_TEXTURE_MAX_ANISOTROPY, 16);
             break;
         }
@@ -153,8 +153,8 @@ GLTexture::GLTexture(GLenum type, const char *fileName, GLenum clamp)
             Bitmap in(w, h, comp, eBitmapFormat_Float, img);
             const bool isEquirectangular = w == 2 * h;
             Bitmap out = isEquirectangular
-                           ? convertEquirectangularMapToVerticalCross(in)
-                           : in;
+                             ? convertEquirectangularMapToVerticalCross(in)
+                             : in;
             stbi_image_free((void *)img);
             Bitmap cubemap = convertVerticalCrossToCubeMapFaces(out);
 
@@ -166,11 +166,11 @@ GLTexture::GLTexture(GLenum type, const char *fileName, GLenum clamp)
             glTextureParameteri(handle_, GL_TEXTURE_BASE_LEVEL, 0);
             glTextureParameteri(handle_, GL_TEXTURE_MAX_LEVEL, numMipmaps - 1);
             glTextureParameteri(
-              handle_, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                handle_, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTextureParameteri(handle_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
             glTextureStorage2D(
-              handle_, numMipmaps, GL_RGB32F, cubemap.w_, cubemap.h_);
+                handle_, numMipmaps, GL_RGB32F, cubemap.w_, cubemap.h_);
             const uint8_t *data = cubemap.data_.data();
 
             for (unsigned i = 0; i != 6; ++i) {
@@ -211,7 +211,7 @@ GLTexture::GLTexture(int w, int h, const void *img)
     glGenerateTextureMipmap(handle_);
     glTextureParameteri(handle_, GL_TEXTURE_MAX_LEVEL, numMipmaps - 1);
     glTextureParameteri(
-      handle_, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        handle_, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTextureParameteri(handle_, GL_TEXTURE_MAX_ANISOTROPY, 16);
     handleBindless_ = glGetTextureHandleARB(handle_);
     glMakeTextureHandleResidentARB(handleBindless_);

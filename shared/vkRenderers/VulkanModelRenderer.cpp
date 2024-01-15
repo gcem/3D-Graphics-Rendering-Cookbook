@@ -13,11 +13,11 @@ ModelRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
 {
     const std::array<VkDescriptorSetLayoutBinding, 4> bindings = {
         descriptorSetLayoutBinding(
-          0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(3,
                                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                    VK_SHADER_STAGE_FRAGMENT_BIT)
@@ -32,7 +32,7 @@ ModelRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
+        vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
 
     std::vector<VkDescriptorSetLayout> layouts(vkDev.swapchainImages.size(),
                                                descriptorSetLayout_);
@@ -42,14 +42,14 @@ ModelRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
         .pNext = nullptr,
         .descriptorPool = descriptorPool_,
         .descriptorSetCount =
-          static_cast<uint32_t>(vkDev.swapchainImages.size()),
+            static_cast<uint32_t>(vkDev.swapchainImages.size()),
         .pSetLayouts = layouts.data()
     };
 
     descriptorSets_.resize(vkDev.swapchainImages.size());
 
     VK_CHECK(vkAllocateDescriptorSets(
-      vkDev.device, &allocInfo, descriptorSets_.data()));
+        vkDev.device, &allocInfo, descriptorSets_.data()));
 
     for (size_t i = 0; i < vkDev.swapchainImages.size(); i++) {
         VkDescriptorSet ds = descriptorSets_[i];
@@ -72,11 +72,11 @@ ModelRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
 
         const std::array<VkWriteDescriptorSet, 4> descriptorWrites = {
             bufferWriteDescriptorSet(
-              ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
+                ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
             bufferWriteDescriptorSet(
-              ds, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
+                ds, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
             bufferWriteDescriptorSet(
-              ds, &bufferInfo3, 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
+                ds, &bufferInfo3, 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
             imageWriteDescriptorSet(ds, &imageInfo, 3)
         };
 
@@ -113,7 +113,7 @@ ModelRenderer::updateUniformBuffer(VulkanRenderDevice &vkDev,
                                    const size_t dataSize)
 {
     uploadBufferData(
-      vkDev, uniformBuffersMemory_[currentImage], 0, data, dataSize);
+        vkDev, uniformBuffersMemory_[currentImage], 0, data, dataSize);
 }
 
 ModelRenderer::ModelRenderer(VulkanRenderDevice &vkDev,
@@ -134,7 +134,7 @@ ModelRenderer::ModelRenderer(VulkanRenderDevice &vkDev,
     }
 
     createTextureImage(
-      vkDev, textureFile, texture_.image, texture_.imageMemory);
+        vkDev, textureFile, texture_.image, texture_.imageMemory);
     createImageView(vkDev.device,
                     texture_.image,
                     VK_FORMAT_R8G8B8A8_UNORM,
@@ -147,7 +147,7 @@ ModelRenderer::ModelRenderer(VulkanRenderDevice &vkDev,
                               vkDev.framebufferHeight,
                               depthTexture_) ||
         !createColorAndDepthRenderPass(
-          vkDev, true, &renderPass_, RenderPassCreateInfo()) ||
+            vkDev, true, &renderPass_, RenderPassCreateInfo()) ||
         !createUniformBuffers(vkDev, uniformDataSize) ||
         !createColorAndDepthFramebuffers(vkDev,
                                          renderPass_,
@@ -156,7 +156,7 @@ ModelRenderer::ModelRenderer(VulkanRenderDevice &vkDev,
         !createDescriptorPool(vkDev, 1, 2, 1, &descriptorPool_) ||
         !createDescriptorSet(vkDev, uniformDataSize) ||
         !createPipelineLayout(
-          vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
+            vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
         !createGraphicsPipeline(vkDev,
                                 renderPass_,
                                 pipelineLayout_,
@@ -205,7 +205,7 @@ ModelRenderer::ModelRenderer(VulkanRenderDevice &vkDev,
     }
 
     if (!createColorAndDepthRenderPass(
-          vkDev, useDepth, &renderPass_, RenderPassCreateInfo()) ||
+            vkDev, useDepth, &renderPass_, RenderPassCreateInfo()) ||
         !createUniformBuffers(vkDev, uniformDataSize) ||
         !createColorAndDepthFramebuffers(vkDev,
                                          renderPass_,
@@ -214,7 +214,7 @@ ModelRenderer::ModelRenderer(VulkanRenderDevice &vkDev,
         !createDescriptorPool(vkDev, 1, 2, 1, &descriptorPool_) ||
         !createDescriptorSet(vkDev, uniformDataSize) ||
         !createPipelineLayout(
-          vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
+            vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
         !createGraphicsPipeline(vkDev,
                                 renderPass_,
                                 pipelineLayout_,

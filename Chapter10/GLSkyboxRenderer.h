@@ -5,9 +5,9 @@
 class GLSkyboxRenderer
 {
 public:
-    GLSkyboxRenderer(
-      const char *envMap = "data/immenstadter_horn_2k.hdr",
-      const char *envMapIrradiance = "data/immenstadter_horn_2k_irradiance.hdr")
+    GLSkyboxRenderer(const char *envMap = "data/immenstadter_horn_2k.hdr",
+                     const char *envMapIrradiance =
+                         "data/immenstadter_horn_2k_irradiance.hdr")
       : envMap_(GL_TEXTURE_CUBE_MAP, envMap)
       , envMapIrradiance_(GL_TEXTURE_CUBE_MAP, envMapIrradiance)
     {
@@ -35,9 +35,9 @@ private:
     GLTexture envMapIrradiance_;
     GLTexture brdfLUT_ = { GL_TEXTURE_2D, "data/brdfLUT.ktx" };
     GLShader shdCubeVertex_ =
-      GLShader{ "data/shaders/chapter08/GL03_cube.vert" };
+        GLShader{ "data/shaders/chapter08/GL03_cube.vert" };
     GLShader shdCubeFragment_ =
-      GLShader{ "data/shaders/chapter08/GL03_cube.frag" };
+        GLShader{ "data/shaders/chapter08/GL03_cube.frag" };
     GLProgram progCube_ = GLProgram{ shdCubeVertex_, shdCubeFragment_ };
     GLuint dummyVAO_;
 };

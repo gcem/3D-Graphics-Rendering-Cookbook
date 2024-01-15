@@ -26,8 +26,13 @@ struct ComputeBase
 
     inline bool execute(uint32_t xsize, uint32_t ysize, uint32_t zsize)
     {
-        return executeComputeShader(
-          vkDev, pipeline, pipelineLayout, descriptorSet, xsize, ysize, zsize);
+        return executeComputeShader(vkDev,
+                                    pipeline,
+                                    pipelineLayout,
+                                    descriptorSet,
+                                    xsize,
+                                    ysize,
+                                    zsize);
     }
 
 protected:

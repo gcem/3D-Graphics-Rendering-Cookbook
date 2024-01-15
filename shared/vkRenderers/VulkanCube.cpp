@@ -9,7 +9,7 @@ CubeRenderer::createDescriptorSet(VulkanRenderDevice &vkDev)
 {
     const std::array<VkDescriptorSetLayoutBinding, 2> bindings = {
         descriptorSetLayoutBinding(
-          0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(1,
                                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                    VK_SHADER_STAGE_FRAGMENT_BIT)
@@ -24,7 +24,7 @@ CubeRenderer::createDescriptorSet(VulkanRenderDevice &vkDev)
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
+        vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
 
     std::vector<VkDescriptorSetLayout> layouts(vkDev.swapchainImages.size(),
                                                descriptorSetLayout_);
@@ -34,14 +34,14 @@ CubeRenderer::createDescriptorSet(VulkanRenderDevice &vkDev)
         .pNext = nullptr,
         .descriptorPool = descriptorPool_,
         .descriptorSetCount =
-          static_cast<uint32_t>(vkDev.swapchainImages.size()),
+            static_cast<uint32_t>(vkDev.swapchainImages.size()),
         .pSetLayouts = layouts.data()
     };
 
     descriptorSets_.resize(vkDev.swapchainImages.size());
 
     VK_CHECK(vkAllocateDescriptorSets(
-      vkDev.device, &allocInfo, descriptorSets_.data()));
+        vkDev.device, &allocInfo, descriptorSets_.data()));
 
     for (size_t i = 0; i < vkDev.swapchainImages.size(); i++) {
         VkDescriptorSet ds = descriptorSets_[i];
@@ -57,7 +57,7 @@ CubeRenderer::createDescriptorSet(VulkanRenderDevice &vkDev)
 
         const std::array<VkWriteDescriptorSet, 2> descriptorWrites = {
             bufferWriteDescriptorSet(
-              ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
+                ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
             imageWriteDescriptorSet(ds, &imageInfo, 1)
         };
 
@@ -103,7 +103,7 @@ CubeRenderer::CubeRenderer(VulkanRenderDevice &vkDev,
 {
     // Resource loading
     createCubeTextureImage(
-      vkDev, textureFile, texture.image, texture.imageMemory);
+        vkDev, textureFile, texture.image, texture.imageMemory);
 
     createImageView(vkDev.device,
                     texture.image,
@@ -116,7 +116,7 @@ CubeRenderer::CubeRenderer(VulkanRenderDevice &vkDev,
 
     // Pipeline initialization
     if (!createColorAndDepthRenderPass(
-          vkDev, true, &renderPass_, RenderPassCreateInfo()) ||
+            vkDev, true, &renderPass_, RenderPassCreateInfo()) ||
         !createUniformBuffers(vkDev, sizeof(mat4)) ||
         !createColorAndDepthFramebuffers(vkDev,
                                          renderPass_,
@@ -125,7 +125,7 @@ CubeRenderer::CubeRenderer(VulkanRenderDevice &vkDev,
         !createDescriptorPool(vkDev, 1, 0, 1, &descriptorPool_) ||
         !createDescriptorSet(vkDev) ||
         !createPipelineLayout(
-          vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
+            vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
         !createGraphicsPipeline(vkDev,
                                 renderPass_,
                                 pipelineLayout_,

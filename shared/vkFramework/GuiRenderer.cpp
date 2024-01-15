@@ -145,7 +145,7 @@ GuiRenderer::GuiRenderer(VulkanRenderContext &ctx,
     ImGui::CreateContext();
 
     allTextures.push_back(
-      ctx.resources.createFontTexture("data/OpenSans-Light.ttf"));
+        ctx.resources.createFontTexture("data/OpenSans-Light.ttf"));
     for (auto t : textures)
         allTextures.push_back(t);
 
@@ -184,16 +184,16 @@ GuiRenderer::GuiRenderer(VulkanRenderContext &ctx,
         dsInfo.buffers[1].buffer = storages_[i];
         dsInfo.buffers[2].buffer = storages_[i];
 
-        descriptorSets_[i] =
-          ctx.resources.addDescriptorSet(descriptorPool_, descriptorSetLayout_);
+        descriptorSets_[i] = ctx.resources.addDescriptorSet(
+            descriptorPool_, descriptorSetLayout_);
         ctx.resources.updateDescriptorSet(descriptorSets_[i], dsInfo);
     }
 
     const PipelineInfo pInfo = initRenderPass(
-      PipelineInfo{ .useDepth = false, .dynamicScissorState = true },
-      {},
-      renderPass,
-      ctx.screenRenderPass_NoDepth);
+        PipelineInfo{ .useDepth = false, .dynamicScissorState = true },
+        {},
+        renderPass,
+        ctx.screenRenderPass_NoDepth);
 
     initPipeline({ "data/shaders/chapter07/VK02_ImGui.vert",
                    "data/shaders/chapter07/VK02_ImGui.frag" },
@@ -227,14 +227,14 @@ renderSceneTree(const Scene &scene, int node)
     int selected = -1;
     std::string name = getNodeName(scene, node);
     std::string label =
-      name.empty() ? (std::string("Node") + std::to_string(node)) : name;
+        name.empty() ? (std::string("Node") + std::to_string(node)) : name;
 
     const int flags = (scene.hierarchy_[node].firstChild_ < 0)
-                        ? ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet
-                        : 0;
+                          ? ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet
+                          : 0;
 
     const bool opened =
-      ImGui::TreeNodeEx(&scene.hierarchy_[node], flags, "%s", label.c_str());
+        ImGui::TreeNodeEx(&scene.hierarchy_[node], flags, "%s", label.c_str());
 
     ImGui::PushID(node);
 

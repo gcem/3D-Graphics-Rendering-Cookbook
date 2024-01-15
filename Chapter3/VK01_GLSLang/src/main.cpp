@@ -30,7 +30,7 @@ testShaderCompilation(const char *sourceFilename, const char *destFilename)
         return;
 
     saveSPIRVBinaryFile(
-      destFilename, shaderModule.SPIRV.data(), shaderModule.SPIRV.size());
+        destFilename, shaderModule.SPIRV.data(), shaderModule.SPIRV.size());
 }
 
 /*

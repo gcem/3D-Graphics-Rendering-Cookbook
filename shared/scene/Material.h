@@ -53,13 +53,13 @@ loadMaterials(const char *fileName,
 // mergeScenes)
 void
 mergeMaterialLists(
-  // Input:
-  const std::vector<std::vector<MaterialDescription> *>
-    &oldMaterials, // all materials
-  const std::vector<std::vector<std::string> *>
-    &oldTextures, // all textures from all material lists
-  // Output:
-  std::vector<MaterialDescription> &allMaterials,
-  std::vector<std::string>
-    &newTextures // all textures (merged from oldTextures, only unique items)
+    // Input:
+    const std::vector<std::vector<MaterialDescription> *>
+        &oldMaterials, // all materials
+    const std::vector<std::vector<std::string> *>
+        &oldTextures, // all textures from all material lists
+    // Output:
+    std::vector<MaterialDescription> &allMaterials,
+    std::vector<std::string> &
+        newTextures // all textures (merged from oldTextures, only unique items)
 );

@@ -16,9 +16,9 @@ detectResolution(int width, int height)
     const GLFWvidmode *info = glfwGetVideoMode(monitor);
 
     const uint32_t windowW =
-      width > 0 ? width : (uint32_t)(info->width * width / -100);
+        width > 0 ? width : (uint32_t)(info->width * width / -100);
     const uint32_t windowH =
-      height > 0 ? height : (uint32_t)(info->height * height / -100);
+        height > 0 ? height : (uint32_t)(info->height * height / -100);
 
     return Resolution{ .width = windowW, .height = windowH };
 }
@@ -46,7 +46,7 @@ initVulkanApp(int width, int height, Resolution *resolution)
     }
 
     GLFWwindow *result =
-      glfwCreateWindow(width, height, "VulkanApp", nullptr, nullptr);
+        glfwCreateWindow(width, height, "VulkanApp", nullptr, nullptr);
     if (!result) {
         glfwTerminate();
         exit(EXIT_FAILURE);
@@ -57,9 +57,9 @@ initVulkanApp(int width, int height, Resolution *resolution)
 
 bool
 drawFrame(
-  VulkanRenderDevice &vkDev,
-  const std::function<void(uint32_t)> &updateBuffersFunc,
-  const std::function<void(VkCommandBuffer, uint32_t)> &composeFrameFunc)
+    VulkanRenderDevice &vkDev,
+    const std::function<void(uint32_t)> &updateBuffersFunc,
+    const std::function<void(VkCommandBuffer, uint32_t)> &composeFrameFunc)
 {
     uint32_t imageIndex = 0;
     VkResult result = vkAcquireNextImageKHR(vkDev.device,
@@ -101,7 +101,7 @@ drawFrame(
                               .pWaitDstStageMask = waitStages,
                               .commandBufferCount = 1,
                               .pCommandBuffers =
-                                &vkDev.commandBuffers[imageIndex],
+                                  &vkDev.commandBuffers[imageIndex],
                               .signalSemaphoreCount = 1,
                               .pSignalSemaphores = &vkDev.renderSemaphore };
 
@@ -135,8 +135,8 @@ VulkanRenderContext::composeFrame(VkCommandBuffer commandBuffer,
 {
     const VkRect2D defaultScreenRect{ .offset = { 0, 0 },
                                       .extent = {
-                                        .width = vkDev.framebufferWidth,
-                                        .height = vkDev.framebufferHeight } };
+                                          .width = vkDev.framebufferWidth,
+                                          .height = vkDev.framebufferHeight } };
 
     static const VkClearValue defaultClearValues[2] = {
         VkClearValue{ .color = { 1.0f, 1.0f, 1.0f, 1.0f } },
@@ -155,10 +155,10 @@ VulkanRenderContext::composeFrame(VkCommandBuffer commandBuffer,
     for (auto &r : onScreenRenderers_)
         if (r.enabled_) {
             RenderPass rp =
-              r.useDepth_ ? screenRenderPass : screenRenderPass_NoDepth;
+                r.useDepth_ ? screenRenderPass : screenRenderPass_NoDepth;
             VkFramebuffer fb =
-              (r.useDepth_ ? swapchainFramebuffers
-                           : swapchainFramebuffers_NoDepth)[imageIndex];
+                (r.useDepth_ ? swapchainFramebuffers
+                             : swapchainFramebuffers_NoDepth)[imageIndex];
 
             if (r.renderer_.renderPass_.handle != VK_NULL_HANDLE)
                 rp = r.renderer_.renderPass_;
@@ -166,11 +166,11 @@ VulkanRenderContext::composeFrame(VkCommandBuffer commandBuffer,
                 fb = r.renderer_.framebuffer_;
 
             r.renderer_.fillCommandBuffer(
-              commandBuffer, imageIndex, fb, rp.handle);
+                commandBuffer, imageIndex, fb, rp.handle);
         }
 
     beginRenderPass(
-      commandBuffer, finalRenderPass.handle, imageIndex, defaultScreenRect);
+        commandBuffer, finalRenderPass.handle, imageIndex, defaultScreenRect);
     vkCmdEndRenderPass(commandBuffer);
 }
 
@@ -178,40 +178,40 @@ void
 VulkanApp::assignCallbacks()
 {
     glfwSetCursorPosCallback(
-      window_, [](GLFWwindow *window, double x, double y) {
-          ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
+        window_, [](GLFWwindow *window, double x, double y) {
+            ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
 
-          void *ptr = glfwGetWindowUserPointer(window);
-          const float mx = static_cast<float>(x / width);
-          const float my = static_cast<float>(y / height);
-          reinterpret_cast<VulkanApp *>(ptr)->handleMouseMove(mx, my);
-      });
+            void *ptr = glfwGetWindowUserPointer(window);
+            const float mx = static_cast<float>(x / width);
+            const float my = static_cast<float>(y / height);
+            reinterpret_cast<VulkanApp *>(ptr)->handleMouseMove(mx, my);
+        });
 
     glfwSetMouseButtonCallback(
-      window_, [](GLFWwindow *window, int button, int action, int mods) {
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
+        window_, [](GLFWwindow *window, int button, int action, int mods) {
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
 
-          void *ptr = glfwGetWindowUserPointer(window);
-          reinterpret_cast<VulkanApp *>(ptr)->handleMouseClick(
-            button, action == GLFW_PRESS);
-      });
+            void *ptr = glfwGetWindowUserPointer(window);
+            reinterpret_cast<VulkanApp *>(ptr)->handleMouseClick(
+                button, action == GLFW_PRESS);
+        });
 
     glfwSetKeyCallback(
-      window_,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
+        window_,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
 
-          void *ptr = glfwGetWindowUserPointer(window);
-          reinterpret_cast<VulkanApp *>(ptr)->handleKey(key, pressed);
-      });
+            void *ptr = glfwGetWindowUserPointer(window);
+            reinterpret_cast<VulkanApp *>(ptr)->handleKey(key, pressed);
+        });
 }
 
 void
@@ -247,9 +247,9 @@ VulkanApp::mainLoop()
         fpsCounter_.tick(deltaSeconds);
 
         bool frameRendered = drawFrame(
-          ctx_.vkDev,
-          [this](uint32_t img) { this->updateBuffers(img); },
-          [this](auto cmd, auto img) { ctx_.composeFrame(cmd, img); });
+            ctx_.vkDev,
+            [this](uint32_t img) { this->updateBuffers(img); },
+            [this](auto cmd, auto img) { ctx_.composeFrame(cmd, img); });
 
         fpsCounter_.tick(deltaSeconds, frameRendered);
 

@@ -23,9 +23,9 @@ struct SSAOProcessor : public CompositeRenderer
       ,
 
       SSAOParamBuffer(
-        mappedUniformBufferAttachment(ctx.resources,
-                                      &params,
-                                      VK_SHADER_STAGE_FRAGMENT_BIT))
+          mappedUniformBufferAttachment(ctx.resources,
+                                        &params,
+                                        VK_SHADER_STAGE_FRAGMENT_BIT))
       ,
 
       SSAO(ctx,

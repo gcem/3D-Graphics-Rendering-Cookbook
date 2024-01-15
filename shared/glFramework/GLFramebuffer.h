@@ -39,30 +39,30 @@ GLFramebuffer::GLFramebuffer(int width,
 
     if (formatColor) {
         texColor_ = std::make_unique<GLTexture>(
-          GL_TEXTURE_2D, width, height, formatColor);
+            GL_TEXTURE_2D, width, height, formatColor);
         glTextureParameteri(
-          texColor_->getHandle(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            texColor_->getHandle(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTextureParameteri(
-          texColor_->getHandle(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            texColor_->getHandle(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glNamedFramebufferTexture(
-          handle_, GL_COLOR_ATTACHMENT0, texColor_->getHandle(), 0);
+            handle_, GL_COLOR_ATTACHMENT0, texColor_->getHandle(), 0);
     }
     if (formatDepth) {
         texDepth_ = std::make_unique<GLTexture>(
-          GL_TEXTURE_2D, width, height, formatDepth);
+            GL_TEXTURE_2D, width, height, formatDepth);
         const GLfloat border[] = { 0.0f, 0.0f, 0.0f, 0.0f };
         glTextureParameterfv(
-          texDepth_->getHandle(), GL_TEXTURE_BORDER_COLOR, border);
+            texDepth_->getHandle(), GL_TEXTURE_BORDER_COLOR, border);
         glTextureParameteri(
-          texDepth_->getHandle(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+            texDepth_->getHandle(), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
         glTextureParameteri(
-          texDepth_->getHandle(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+            texDepth_->getHandle(), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
         glNamedFramebufferTexture(
-          handle_, GL_DEPTH_ATTACHMENT, texDepth_->getHandle(), 0);
+            handle_, GL_DEPTH_ATTACHMENT, texDepth_->getHandle(), 0);
     }
 
     const GLenum status =
-      glCheckNamedFramebufferStatus(handle_, GL_FRAMEBUFFER);
+        glCheckNamedFramebufferStatus(handle_, GL_FRAMEBUFFER);
 
     assert(status == GL_FRAMEBUFFER_COMPLETE);
 }

@@ -30,14 +30,14 @@ ComputedImage::ComputedImage(VulkanRenderDevice &vkDev,
     };
 
     VK_CHECK(vkCreatePipelineLayout(
-      vkDev.device, &pipelineLayoutInfo, nullptr, &pipelineLayout));
+        vkDev.device, &pipelineLayoutInfo, nullptr, &pipelineLayout));
 
     createDescriptorSet();
 
     ShaderModule s;
     createShaderModule(vkDev.device, &s, shaderName);
     if (createComputePipeline(
-          vkDev.device, s.shaderModule, pipelineLayout, &pipeline) !=
+            vkDev.device, s.shaderModule, pipelineLayout, &pipeline) !=
         VK_SUCCESS)
         exit(EXIT_FAILURE);
 
@@ -51,23 +51,24 @@ ComputedImage::createComputedTexture(uint32_t computedWidth,
 {
     VkFormatProperties fmtProps;
     vkGetPhysicalDeviceFormatProperties(
-      vkDev.physicalDevice, format, &fmtProps);
+        vkDev.physicalDevice, format, &fmtProps);
     if (!(fmtProps.optimalTilingFeatures & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT))
         return false;
 
-    if (!createImage(vkDev.device,
-                     vkDev.physicalDevice,
-                     computedWidth,
-                     computedHeight,
-                     format,
-                     VK_IMAGE_TILING_OPTIMAL,
-                     VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT |
-                       (canDownloadImage ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
-                     !canDownloadImage ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-                                       : (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                                          VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
-                     computed.image,
-                     computed.imageMemory))
+    if (!createImage(
+            vkDev.device,
+            vkDev.physicalDevice,
+            computedWidth,
+            computedHeight,
+            format,
+            VK_IMAGE_TILING_OPTIMAL,
+            VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT |
+                (canDownloadImage ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
+            !canDownloadImage ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+                              : (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                                 VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
+            computed.image,
+            computed.imageMemory))
         return false;
 
     transitionImageLayout(vkDev,
@@ -102,13 +103,13 @@ ComputedImage::createComputedImageSetLayout()
     };
 
     VK_CHECK(vkCreateDescriptorPool(
-      vkDev.device, &descriptorPoolInfo, nullptr, &descriptorPool));
+        vkDev.device, &descriptorPoolInfo, nullptr, &descriptorPool));
 
     std::array<VkDescriptorSetLayoutBinding, 2> bindings = {
         descriptorSetLayoutBinding(
-          0, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, VK_SHADER_STAGE_COMPUTE_BIT),
+            0, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, VK_SHADER_STAGE_COMPUTE_BIT),
         descriptorSetLayoutBinding(
-          1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_COMPUTE_BIT)
+            1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_COMPUTE_BIT)
     };
 
     const VkDescriptorSetLayoutCreateInfo layoutInfo = {
@@ -120,7 +121,7 @@ ComputedImage::createComputedImageSetLayout()
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &dsLayout));
+        vkDev.device, &layoutInfo, nullptr, &dsLayout));
 
     return true;
 }
@@ -137,7 +138,7 @@ ComputedImage::createDescriptorSet()
     };
 
     VK_CHECK(
-      vkAllocateDescriptorSets(vkDev.device, &allocInfo, &descriptorSet));
+        vkAllocateDescriptorSets(vkDev.device, &allocInfo, &descriptorSet));
 
     const VkDescriptorBufferInfo bufferInfo = { uniformBuffer.buffer,
                                                 0,
@@ -156,12 +157,12 @@ ComputedImage::createDescriptorSet()
                               .dstArrayElement = 0,
                               .descriptorCount = 1,
                               .descriptorType =
-                                VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+                                  VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
                               .pImageInfo = &imageInfo,
                               .pBufferInfo = nullptr,
                               .pTexelBufferView = nullptr },
         bufferWriteDescriptorSet(
-          descriptorSet, &bufferInfo, 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+            descriptorSet, &bufferInfo, 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
     };
 
     vkUpdateDescriptorSets(vkDev.device,

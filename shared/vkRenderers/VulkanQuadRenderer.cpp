@@ -30,9 +30,9 @@ VulkanQuadRenderer::createDescriptorSet(VulkanRenderDevice &vkDev)
 {
     const std::array<VkDescriptorSetLayoutBinding, 3> bindings = {
         descriptorSetLayoutBinding(
-          0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(2,
                                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                    VK_SHADER_STAGE_FRAGMENT_BIT,
@@ -48,71 +48,71 @@ VulkanQuadRenderer::createDescriptorSet(VulkanRenderDevice &vkDev)
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
+        vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
 
     const std::vector<VkDescriptorSetLayout> layouts(
-      vkDev.swapchainImages.size(), descriptorSetLayout_);
+        vkDev.swapchainImages.size(), descriptorSetLayout_);
 
     const VkDescriptorSetAllocateInfo allocInfo = {
         .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
         .pNext = nullptr,
         .descriptorPool = descriptorPool_,
         .descriptorSetCount =
-          static_cast<uint32_t>(vkDev.swapchainImages.size()),
+            static_cast<uint32_t>(vkDev.swapchainImages.size()),
         .pSetLayouts = layouts.data()
     };
 
     descriptorSets_.resize(vkDev.swapchainImages.size());
 
     VK_CHECK(vkAllocateDescriptorSets(
-      vkDev.device, &allocInfo, descriptorSets_.data()));
+        vkDev.device, &allocInfo, descriptorSets_.data()));
 
     std::vector<VkDescriptorImageInfo> textureDescriptors(textures_.size());
     for (size_t i = 0; i < textures_.size(); i++) {
-        textureDescriptors[i] =
-          VkDescriptorImageInfo{ .sampler = textureSamplers_[i],
-                                 .imageView = textures_[i].imageView,
-                                 .imageLayout =
-                                   VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
+        textureDescriptors[i] = VkDescriptorImageInfo{
+            .sampler = textureSamplers_[i],
+            .imageView = textures_[i].imageView,
+            .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+        };
     }
 
     for (size_t i = 0; i < vkDev.swapchainImages.size(); i++) {
         const VkDescriptorBufferInfo bufferInfo = { .buffer =
-                                                      uniformBuffers_[i],
+                                                        uniformBuffers_[i],
                                                     .offset = 0,
                                                     .range =
-                                                      sizeof(ConstBuffer) };
+                                                        sizeof(ConstBuffer) };
         const VkDescriptorBufferInfo bufferInfo2 = { .buffer =
-                                                       storageBuffers_[i],
+                                                         storageBuffers_[i],
                                                      .offset = 0,
                                                      .range =
-                                                       vertexBufferSize_ };
+                                                         vertexBufferSize_ };
 
         const std::array<VkWriteDescriptorSet, 3> descriptorWrites = {
             VkWriteDescriptorSet{
-              .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-              .dstSet = descriptorSets_[i],
-              .dstBinding = 0,
-              .dstArrayElement = 0,
-              .descriptorCount = 1,
-              .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-              .pBufferInfo = &bufferInfo },
+                .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                .dstSet = descriptorSets_[i],
+                .dstBinding = 0,
+                .dstArrayElement = 0,
+                .descriptorCount = 1,
+                .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                .pBufferInfo = &bufferInfo },
             VkWriteDescriptorSet{
-              .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-              .dstSet = descriptorSets_[i],
-              .dstBinding = 1,
-              .dstArrayElement = 0,
-              .descriptorCount = 1,
-              .descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-              .pBufferInfo = &bufferInfo2 },
+                .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                .dstSet = descriptorSets_[i],
+                .dstBinding = 1,
+                .dstArrayElement = 0,
+                .descriptorCount = 1,
+                .descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                .pBufferInfo = &bufferInfo2 },
             VkWriteDescriptorSet{
-              .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-              .dstSet = descriptorSets_[i],
-              .dstBinding = 2,
-              .dstArrayElement = 0,
-              .descriptorCount = static_cast<uint32_t>(textures_.size()),
-              .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-              .pImageInfo = textureDescriptors.data() },
+                .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                .dstSet = descriptorSets_[i],
+                .dstBinding = 2,
+                .dstArrayElement = 0,
+                .descriptorCount = static_cast<uint32_t>(textures_.size()),
+                .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                .pImageInfo = textureDescriptors.data() },
         };
         vkUpdateDescriptorSets(vkDev.device,
                                static_cast<uint32_t>(descriptorWrites.size()),
@@ -162,8 +162,8 @@ VulkanQuadRenderer::pushConstants(VkCommandBuffer commandBuffer,
 }
 
 VulkanQuadRenderer::VulkanQuadRenderer(
-  VulkanRenderDevice &vkDev,
-  const std::vector<std::string> &textureFiles)
+    VulkanRenderDevice &vkDev,
+    const std::vector<std::string> &textureFiles)
   : vkDev(vkDev)
   , RendererBase(vkDev, VulkanImage())
 {
@@ -183,7 +183,7 @@ VulkanQuadRenderer::VulkanQuadRenderer(
                           vertexBufferSize_,
                           VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                           storageBuffers_[i],
                           storageBuffersMemory_[i])) {
             printf("Cannot create vertex buffer\n");
@@ -228,19 +228,19 @@ VulkanQuadRenderer::VulkanQuadRenderer(
                               &descriptorPool_) ||
         !createDescriptorSet(vkDev) ||
         !createColorAndDepthRenderPass(
-          vkDev, false, &renderPass_, RenderPassCreateInfo()) ||
+            vkDev, false, &renderPass_, RenderPassCreateInfo()) ||
         !createPipelineLayoutWithConstants(vkDev.device,
                                            descriptorSetLayout_,
                                            &pipelineLayout_,
                                            sizeof(ConstBuffer),
                                            0) ||
         !createGraphicsPipeline(
-          vkDev,
-          renderPass_,
-          pipelineLayout_,
-          { "data/shaders/chapter06/VK02_texture_array.vert",
-            "data/shaders/chapter06/VK02_texture_array.frag" },
-          &graphicsPipeline_)) {
+            vkDev,
+            renderPass_,
+            pipelineLayout_,
+            { "data/shaders/chapter06/VK02_texture_array.vert",
+              "data/shaders/chapter06/VK02_texture_array.frag" },
+            &graphicsPipeline_)) {
         printf("Failed to create pipeline\n");
         fflush(stdout);
         exit(EXIT_FAILURE);

@@ -52,12 +52,12 @@ initVulkan()
     finish = std::make_unique<VulkanFinish>(vkDev, VulkanImage());
 
     multiRenderer =
-      std::make_unique<MultiMeshRenderer>(vkDev,
-                                          "data/meshes/test.meshes",
-                                          "data/meshes/test.meshes.drawdata",
-                                          "",
-                                          "data/shaders/chapter05/VK01.vert",
-                                          "data/shaders/chapter05/VK01.frag");
+        std::make_unique<MultiMeshRenderer>(vkDev,
+                                            "data/meshes/test.meshes",
+                                            "data/meshes/test.meshes.drawdata",
+                                            "",
+                                            "data/shaders/chapter05/VK01.vert",
+                                            "data/shaders/chapter05/VK01.frag");
 }
 
 void
@@ -102,26 +102,26 @@ main()
     window = initVulkanApp(kScreenWidth, kScreenHeight);
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner_firstPerson.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner_firstPerson.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner_firstPerson.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner_firstPerson.movement_.right_ = pressed;
-          if (key == GLFW_KEY_C)
-              positioner_firstPerson.movement_.up_ = pressed;
-          if (key == GLFW_KEY_E)
-              positioner_firstPerson.movement_.down_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner_firstPerson.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner_firstPerson.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner_firstPerson.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner_firstPerson.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner_firstPerson.movement_.right_ = pressed;
+            if (key == GLFW_KEY_C)
+                positioner_firstPerson.movement_.up_ = pressed;
+            if (key == GLFW_KEY_E)
+                positioner_firstPerson.movement_.down_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner_firstPerson.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     initVulkan();
 
@@ -130,7 +130,7 @@ main()
 
     while (!glfwWindowShouldClose(window)) {
         positioner_firstPerson.update(
-          deltaSeconds, mouseState.pos, mouseState.pressedLeft);
+            deltaSeconds, mouseState.pos, mouseState.pressedLeft);
 
         const double newTimeStamp = glfwGetTime();
         deltaSeconds = static_cast<float>(newTimeStamp - timeStamp);

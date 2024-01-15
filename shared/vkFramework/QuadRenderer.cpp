@@ -53,8 +53,10 @@ QuadRenderer::QuadRenderer(VulkanRenderContext &ctx,
                            RenderPass screenRenderPass)
   : Renderer(ctx)
 {
-    const PipelineInfo pInfo = initRenderPass(
-      PipelineInfo{}, outputs, screenRenderPass, ctx.screenRenderPass_NoDepth);
+    const PipelineInfo pInfo = initRenderPass(PipelineInfo{},
+                                              outputs,
+                                              screenRenderPass,
+                                              ctx.screenRenderPass_NoDepth);
 
     uint32_t vertexBufferSize = MAX_QUADS * 6 * sizeof(VertexData);
 
@@ -64,7 +66,7 @@ QuadRenderer::QuadRenderer(VulkanRenderContext &ctx,
 
     DescriptorSetInfo dsInfo = {
         .buffers = { storageBufferAttachment(
-          VulkanBuffer{}, 0, vertexBufferSize, VK_SHADER_STAGE_VERTEX_BIT) },
+            VulkanBuffer{}, 0, vertexBufferSize, VK_SHADER_STAGE_VERTEX_BIT) },
         .textureArrays = { fsTextureArrayAttachment(textures) }
     };
 
@@ -74,8 +76,8 @@ QuadRenderer::QuadRenderer(VulkanRenderContext &ctx,
     for (size_t i = 0; i < imgCount; i++) {
         storages_[i] = ctx.resources.addStorageBuffer(vertexBufferSize);
         dsInfo.buffers[0].buffer = storages_[i];
-        descriptorSets_[i] =
-          ctx.resources.addDescriptorSet(descriptorPool_, descriptorSetLayout_);
+        descriptorSets_[i] = ctx.resources.addDescriptorSet(
+            descriptorPool_, descriptorSetLayout_);
         ctx.resources.updateDescriptorSet(descriptorSets_[i], dsInfo);
     }
 

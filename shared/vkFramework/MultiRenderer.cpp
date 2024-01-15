@@ -35,18 +35,18 @@ VKSceneData::VKSceneData(VulkanRenderContext &ctx,
         loadedFiles_.reserve(textureFiles_.size());
 
         taskflow_.for_each_index(
-          0u, (uint32_t)textureFiles_.size(), 1u, [this](int idx) {
-              int w, h;
-              const uint8_t *img = stbi_load(this->textureFiles_[idx].c_str(),
-                                             &w,
-                                             &h,
-                                             nullptr,
-                                             STBI_rgb_alpha);
-              if (!img)
-                  img = genDefaultCheckerboardImage(&w, &h);
-              std::lock_guard lock(loadedFilesMutex_);
-              loadedFiles_.emplace_back(LoadedImageData{ idx, w, h, img });
-          });
+            0u, (uint32_t)textureFiles_.size(), 1u, [this](int idx) {
+                int w, h;
+                const uint8_t *img = stbi_load(this->textureFiles_[idx].c_str(),
+                                               &w,
+                                               &h,
+                                               nullptr,
+                                               STBI_rgb_alpha);
+                if (!img)
+                    img = genDefaultCheckerboardImage(&w, &h);
+                std::lock_guard lock(loadedFilesMutex_);
+                loadedFiles_.emplace_back(LoadedImageData{ idx, w, h, img });
+            });
 
         executor_.run(taskflow_);
     }
@@ -54,10 +54,10 @@ VKSceneData::VKSceneData(VulkanRenderContext &ctx,
     allMaterialTextures = fsTextureArrayAttachment(textures);
 
     const uint32_t materialsSize =
-      static_cast<uint32_t>(sizeof(MaterialDescription) * materials_.size());
+        static_cast<uint32_t>(sizeof(MaterialDescription) * materials_.size());
     material_ = ctx.resources.addStorageBuffer(materialsSize);
     uploadBufferData(
-      ctx.vkDev, material_.memory, 0, materials_.data(), materialsSize);
+        ctx.vkDev, material_.memory, 0, materials_.data(), materialsSize);
 
     loadMeshes(meshFile);
     loadScene(sceneFile);
@@ -74,16 +74,16 @@ VKSceneData::loadMeshes(const char *meshFile)
     const uint32_t offsetAlignment = getVulkanBufferAlignment(ctx.vkDev);
     if ((vertexBufferSize & (offsetAlignment - 1)) != 0) {
         const size_t numFloats =
-          (offsetAlignment - (vertexBufferSize & (offsetAlignment - 1))) /
-          sizeof(float);
+            (offsetAlignment - (vertexBufferSize & (offsetAlignment - 1))) /
+            sizeof(float);
         for (size_t i = 0; i != numFloats; i++)
             meshData_.vertexData_.push_back(0);
         vertexBufferSize =
-          (vertexBufferSize + offsetAlignment) & ~(offsetAlignment - 1);
+            (vertexBufferSize + offsetAlignment) & ~(offsetAlignment - 1);
     }
 
     VulkanBuffer storage =
-      ctx.resources.addStorageBuffer(vertexBufferSize + indexBufferSize);
+        ctx.resources.addStorageBuffer(vertexBufferSize + indexBufferSize);
     uploadBufferData(ctx.vkDev,
                      storage.memory,
                      0,
@@ -96,19 +96,19 @@ VKSceneData::loadMeshes(const char *meshFile)
                      indexBufferSize);
 
     vertexBuffer_ =
-      BufferAttachment{ .dInfo = { .type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-                                   .shaderStageFlags =
-                                     VK_SHADER_STAGE_VERTEX_BIT },
-                        .buffer = storage,
-                        .offset = 0,
-                        .size = vertexBufferSize };
+        BufferAttachment{ .dInfo = { .type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                                     .shaderStageFlags =
+                                         VK_SHADER_STAGE_VERTEX_BIT },
+                          .buffer = storage,
+                          .offset = 0,
+                          .size = vertexBufferSize };
     indexBuffer_ =
-      BufferAttachment{ .dInfo = { .type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-                                   .shaderStageFlags =
-                                     VK_SHADER_STAGE_VERTEX_BIT },
-                        .buffer = storage,
-                        .offset = vertexBufferSize,
-                        .size = indexBufferSize };
+        BufferAttachment{ .dInfo = { .type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                                     .shaderStageFlags =
+                                         VK_SHADER_STAGE_VERTEX_BIT },
+                          .buffer = storage,
+                          .offset = vertexBufferSize,
+                          .size = indexBufferSize };
 }
 
 void
@@ -123,17 +123,17 @@ VKSceneData::loadScene(const char *sceneFile)
             continue;
 
         shapes_.push_back(
-          DrawData{ .meshIndex = c.second,
-                    .materialIndex = material->second,
-                    .LOD = 0,
-                    .indexOffset = meshData_.meshes_[c.second].indexOffset,
-                    .vertexOffset = meshData_.meshes_[c.second].vertexOffset,
-                    .transformIndex = c.first });
+            DrawData{ .meshIndex = c.second,
+                      .materialIndex = material->second,
+                      .LOD = 0,
+                      .indexOffset = meshData_.meshes_[c.second].indexOffset,
+                      .vertexOffset = meshData_.meshes_[c.second].vertexOffset,
+                      .transformIndex = c.first });
     }
 
     shapeTransforms_.resize(shapes_.size());
     transforms_ =
-      ctx.resources.addStorageBuffer(shapes_.size() * sizeof(glm::mat4));
+        ctx.resources.addStorageBuffer(shapes_.size() * sizeof(glm::mat4));
 
     recalculateAllTransforms();
     uploadGlobalTransforms();
@@ -189,10 +189,10 @@ MultiRenderer::MultiRenderer(VulkanRenderContext &ctx,
   , sceneData_(sceneData)
 {
     const PipelineInfo pInfo = initRenderPass(
-      PipelineInfo{}, outputs, screenRenderPass, ctx.screenRenderPass);
+        PipelineInfo{}, outputs, screenRenderPass, ctx.screenRenderPass);
 
     const uint32_t indirectDataSize =
-      (uint32_t)sceneData_.shapes_.size() * sizeof(VkDrawIndirectCommand);
+        (uint32_t)sceneData_.shapes_.size() * sizeof(VkDrawIndirectCommand);
 
     const size_t imgCount = ctx.vkDev.swapchainImages.size();
     uniforms_.resize(imgCount);
@@ -202,7 +202,7 @@ MultiRenderer::MultiRenderer(VulkanRenderContext &ctx,
     descriptorSets_.resize(imgCount);
 
     const uint32_t shapesSize =
-      (uint32_t)sceneData_.shapes_.size() * sizeof(DrawData);
+        (uint32_t)sceneData_.shapes_.size() * sizeof(DrawData);
     const uint32_t uniformBufferSize = sizeof(ubo_);
 
     std::vector<TextureAttachment> textureAttachments;
@@ -210,7 +210,7 @@ MultiRenderer::MultiRenderer(VulkanRenderContext &ctx,
         textureAttachments.push_back(fsTextureAttachment(sceneData_.envMap_));
     if (sceneData_.envMapIrradiance_.width)
         textureAttachments.push_back(
-          fsTextureAttachment(sceneData_.envMapIrradiance_));
+            fsTextureAttachment(sceneData_.envMapIrradiance_));
     if (sceneData_.brdfLUT_.width)
         textureAttachments.push_back(fsTextureAttachment(sceneData_.brdfLUT_));
 
@@ -235,7 +235,7 @@ MultiRenderer::MultiRenderer(VulkanRenderContext &ctx,
 
     descriptorSetLayout_ = ctx.resources.addDescriptorSetLayout(dsInfo);
     descriptorPool_ =
-      ctx.resources.addDescriptorPool(dsInfo, (uint32_t)imgCount);
+        ctx.resources.addDescriptorPool(dsInfo, (uint32_t)imgCount);
 
     for (size_t i = 0; i != imgCount; i++) {
         uniforms_[i] = ctx.resources.addUniformBuffer(uniformBufferSize);
@@ -252,8 +252,8 @@ MultiRenderer::MultiRenderer(VulkanRenderContext &ctx,
         dsInfo.buffers[0].buffer = uniforms_[i];
         dsInfo.buffers[3].buffer = shape_[i];
 
-        descriptorSets_[i] =
-          ctx.resources.addDescriptorSet(descriptorPool_, descriptorSetLayout_);
+        descriptorSets_[i] = ctx.resources.addDescriptorSet(
+            descriptorPool_, descriptorSetLayout_);
         ctx.resources.updateDescriptorSet(descriptorSets_[i], dsInfo);
     }
 
@@ -310,9 +310,9 @@ MultiRenderer::updateIndirectBuffers(size_t currentImage, bool *visibility)
 
         const uint32_t lod = sceneData_.shapes_[i].LOD;
         data[i] = { .vertexCount =
-                      sceneData_.meshData_.meshes_[j].getLODIndicesCount(lod),
+                        sceneData_.meshData_.meshes_[j].getLODIndicesCount(lod),
                     .instanceCount =
-                      visibility ? (visibility[i] ? 1u : 0u) : 1u,
+                        visibility ? (visibility[i] ? 1u : 0u) : 1u,
                     .firstVertex = 0,
                     .firstInstance = i };
     }
@@ -335,9 +335,10 @@ MultiRenderer::checkLoadedTextures()
         sceneData_.loadedFiles_.pop_back();
     }
 
-    this->updateTexture(data.index_,
-                        ctx_.resources.addRGBATexture(
-                          data.w_, data.h_, const_cast<uint8_t *>(data.img_)));
+    this->updateTexture(
+        data.index_,
+        ctx_.resources.addRGBATexture(
+            data.w_, data.h_, const_cast<uint8_t *>(data.img_)));
 
     stbi_image_free((void *)data.img_);
 

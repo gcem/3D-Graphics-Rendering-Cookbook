@@ -6,11 +6,11 @@ ComputedItem::ComputedItem(VulkanRenderDevice &vkDev,
 {
     uniformBuffer.size = uniformBufferSize;
 
-    VkFenceCreateInfo fenceCreateInfo = { .sType =
-                                            VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
-                                          .pNext = nullptr,
-                                          .flags =
-                                            VK_FENCE_CREATE_SIGNALED_BIT };
+    VkFenceCreateInfo fenceCreateInfo = {
+        .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+        .pNext = nullptr,
+        .flags = VK_FENCE_CREATE_SIGNALED_BIT
+    };
 
     if (vkCreateFence(vkDev.device, &fenceCreateInfo, nullptr, &fence) !=
         VK_SUCCESS)
@@ -91,7 +91,7 @@ ComputedItem::submit()
                                       .pWaitDstStageMask = nullptr,
                                       .commandBufferCount = 1,
                                       .pCommandBuffers =
-                                        &vkDev.computeCommandBuffer,
+                                          &vkDev.computeCommandBuffer,
                                       .signalSemaphoreCount = 0,
                                       .pSignalSemaphores = nullptr };
 

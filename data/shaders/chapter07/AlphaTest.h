@@ -22,10 +22,10 @@ runAlphaTest(float alpha, float alphaThreshold)
                                     6.0 / 17.0);
 
         alpha =
-          clamp(alpha - 0.5 * thresholdMatrix[int(mod(gl_FragCoord.x, 4.0))]
-                                             [int(mod(gl_FragCoord.y, 4.0))],
-                0.0,
-                1.0);
+            clamp(alpha - 0.5 * thresholdMatrix[int(mod(gl_FragCoord.x, 4.0))]
+                                               [int(mod(gl_FragCoord.y, 4.0))],
+                  0.0,
+                  1.0);
 
         if (alpha < alphaThreshold)
             discard;

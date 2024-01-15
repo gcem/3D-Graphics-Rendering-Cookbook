@@ -278,7 +278,7 @@ VulkanResources::addColorTexture(int texWidth,
                     VK_IMAGE_ASPECT_COLOR_BIT,
                     &res.image.imageView);
     createTextureSampler(
-      vkDev.device, &res.sampler, minFilter, maxFilter, addressMode);
+        vkDev.device, &res.sampler, minFilter, maxFilter, addressMode);
 
     transitionImageLayout(vkDev,
                           res.image.image,
@@ -311,7 +311,7 @@ VulkanResources::addDepthTexture(int texWidth,
                      depthFormat,
                      VK_IMAGE_TILING_OPTIMAL,
                      VK_IMAGE_USAGE_SAMPLED_BIT |
-                       VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                         VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                      VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                      depth.image.image,
                      depth.image.imageMemory)) {
@@ -325,11 +325,11 @@ VulkanResources::addDepthTexture(int texWidth,
                     VK_IMAGE_ASPECT_DEPTH_BIT,
                     &depth.image.imageView);
     transitionImageLayout(
-      vkDev,
-      depth.image.image,
-      depthFormat,
-      VK_IMAGE_LAYOUT_UNDEFINED,
-      layout /*VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL*/);
+        vkDev,
+        depth.image.image,
+        depthFormat,
+        VK_IMAGE_LAYOUT_UNDEFINED,
+        layout /*VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL*/);
 
     if (!createDepthSampler(vkDev.device, &depth.sampler)) {
         printf("Cannot create a depth sampler");
@@ -352,7 +352,7 @@ VulkanResources::addBuffer(VkDeviceSize size,
                             .ptr = nullptr };
 
     if (!createSharedBuffer(
-          vkDev, size, usage, properties, buffer.buffer, buffer.memory)) {
+            vkDev, size, usage, properties, buffer.buffer, buffer.memory)) {
         printf("Cannot allocate buffer\n");
         exit(EXIT_FAILURE);
     } else {
@@ -362,7 +362,7 @@ VulkanResources::addBuffer(VkDeviceSize size,
 
     if (createMapping)
         vkMapMemory(
-          vkDev.device, buffer.memory, 0, VK_WHOLE_SIZE, 0, &buffer.ptr);
+            vkDev.device, buffer.memory, 0, VK_WHOLE_SIZE, 0, &buffer.ptr);
 
     return buffer;
 }
@@ -410,18 +410,18 @@ VulkanResources::addDescriptorPool(const DescriptorSetInfo &dsInfo,
 
     if (uniformBufferCount)
         poolSizes.push_back(VkDescriptorPoolSize{
-          .type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-          .descriptorCount = dSetCount * uniformBufferCount });
+            .type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+            .descriptorCount = dSetCount * uniformBufferCount });
 
     if (storageBufferCount)
         poolSizes.push_back(VkDescriptorPoolSize{
-          .type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-          .descriptorCount = dSetCount * storageBufferCount });
+            .type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+            .descriptorCount = dSetCount * storageBufferCount });
 
     if (samplerCount)
         poolSizes.push_back(VkDescriptorPoolSize{
-          .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-          .descriptorCount = dSetCount * samplerCount });
+            .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            .descriptorCount = dSetCount * samplerCount });
 
     const VkDescriptorPoolCreateInfo poolInfo = {
         .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
@@ -435,7 +435,7 @@ VulkanResources::addDescriptorPool(const DescriptorSetInfo &dsInfo,
     VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
 
     if (vkCreateDescriptorPool(
-          vkDev.device, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
+            vkDev.device, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
         printf("Cannot allocate descriptor pool\n");
         exit(EXIT_FAILURE);
     }
@@ -456,7 +456,7 @@ VulkanResources::addComputePipeline(const char *shaderFile,
 
     VkPipeline pipeline;
     VkResult res = createComputePipeline(
-      vkDev.device, s.shaderModule, pipelineLayout, &pipeline);
+        vkDev.device, s.shaderModule, pipelineLayout, &pipeline);
     if (res != VK_SUCCESS) {
         printf("Cannot create compute pipeline (%d / %d)\n", res, res);
         exit(EXIT_FAILURE);
@@ -470,18 +470,18 @@ VulkanResources::addComputePipeline(const char *shaderFile,
 
 bool
 VulkanResources::createGraphicsPipeline(
-  VulkanRenderDevice &vkDev,
-  VkRenderPass renderPass,
-  VkPipelineLayout pipelineLayout,
-  const std::vector<const char *> &shaderFiles,
-  VkPipeline *pipeline,
-  VkPrimitiveTopology topology,
-  bool useDepth,
-  bool useBlending,
-  bool dynamicScissorState,
-  int32_t customWidth,
-  int32_t customHeight,
-  uint32_t numPatchControlPoints)
+    VulkanRenderDevice &vkDev,
+    VkRenderPass renderPass,
+    VkPipelineLayout pipelineLayout,
+    const std::vector<const char *> &shaderFiles,
+    VkPipeline *pipeline,
+    VkPrimitiveTopology topology,
+    bool useDepth,
+    bool useBlending,
+    bool dynamicScissorState,
+    int32_t customWidth,
+    int32_t customHeight,
+    uint32_t numPatchControlPoints)
 {
     std::vector<ShaderModule> localShaderModules;
     std::vector<VkPipelineShaderStageCreateInfo> shaderStages;
@@ -500,13 +500,13 @@ VulkanResources::createGraphicsPipeline(
         } else {
             // printf("Compiling new file (%s)\n", file);
             VK_CHECK(
-              createShaderModule(vkDev.device, &localShaderModules[i], file));
+                createShaderModule(vkDev.device, &localShaderModules[i], file));
             shaderModules.push_back(localShaderModules[i]);
             shaderMap[std::string(file)] = (int)shaderModules.size() - 1;
         }
 
         VkShaderStageFlagBits stage =
-          glslangShaderStageToVulkan(glslangShaderStageFromFileName(file));
+            glslangShaderStageToVulkan(glslangShaderStageFromFileName(file));
 
         shaderStages[i] = shaderStageInfo(stage, localShaderModules[i], "main");
     }
@@ -528,7 +528,7 @@ VulkanResources::createGraphicsPipeline(
         .width = static_cast<float>(customWidth > 0 ? customWidth
                                                     : vkDev.framebufferWidth),
         .height = static_cast<float>(
-          customHeight > 0 ? customHeight : vkDev.framebufferHeight),
+            customHeight > 0 ? customHeight : vkDev.framebufferHeight),
         .minDepth = 0.0f,
         .maxDepth = 1.0f
     };
@@ -588,7 +588,7 @@ VulkanResources::createGraphicsPipeline(
         .sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
         .depthTestEnable = static_cast<VkBool32>(useDepth ? VK_TRUE : VK_FALSE),
         .depthWriteEnable =
-          static_cast<VkBool32>(useDepth ? VK_TRUE : VK_FALSE),
+            static_cast<VkBool32>(useDepth ? VK_TRUE : VK_FALSE),
         .depthCompareOp = VK_COMPARE_OP_LESS,
         .depthBoundsTestEnable = VK_FALSE,
         .minDepthBounds = 0.0f,
@@ -619,8 +619,8 @@ VulkanResources::createGraphicsPipeline(
         .pVertexInputState = &vertexInputInfo,
         .pInputAssemblyState = &inputAssembly,
         .pTessellationState = (topology == VK_PRIMITIVE_TOPOLOGY_PATCH_LIST)
-                                ? &tessellationState
-                                : nullptr,
+                                  ? &tessellationState
+                                  : nullptr,
         .pViewportState = &viewportState,
         .pRasterizationState = &rasterizer,
         .pMultisampleState = &multisampling,
@@ -635,7 +635,7 @@ VulkanResources::createGraphicsPipeline(
     };
 
     VK_CHECK(vkCreateGraphicsPipelines(
-      vkDev.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, pipeline));
+        vkDev.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, pipeline));
 
     return true;
 }
@@ -679,22 +679,22 @@ VulkanResources::addDescriptorSetLayout(const DescriptorSetInfo &dsInfo)
 
     for (const auto &b : dsInfo.buffers) {
         bindings.push_back(descriptorSetLayoutBinding(
-          bindingIdx++, b.dInfo.type, b.dInfo.shaderStageFlags));
+            bindingIdx++, b.dInfo.type, b.dInfo.shaderStageFlags));
     }
 
     for (const auto &i : dsInfo.textures) {
         bindings.push_back(descriptorSetLayoutBinding(
-          bindingIdx++,
-          i.dInfo.type /*VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER*/,
-          i.dInfo.shaderStageFlags));
+            bindingIdx++,
+            i.dInfo.type /*VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER*/,
+            i.dInfo.shaderStageFlags));
     }
 
     for (const auto &t : dsInfo.textureArrays) {
-        bindings.push_back(
-          descriptorSetLayoutBinding(bindingIdx++,
-                                     VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                     t.dInfo.shaderStageFlags,
-                                     static_cast<uint32_t>(t.textures.size())));
+        bindings.push_back(descriptorSetLayoutBinding(
+            bindingIdx++,
+            VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            t.dInfo.shaderStageFlags,
+            static_cast<uint32_t>(t.textures.size())));
     }
 
     const VkDescriptorSetLayoutCreateInfo layoutInfo = {
@@ -706,7 +706,7 @@ VulkanResources::addDescriptorSetLayout(const DescriptorSetInfo &dsInfo)
     };
 
     if (vkCreateDescriptorSetLayout(
-          vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout) !=
+            vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout) !=
         VK_SUCCESS) {
         printf("Failed to create descriptor set layout\n");
         exit(EXIT_FAILURE);
@@ -752,7 +752,7 @@ VulkanResources::updateDescriptorSet(VkDescriptorSet ds,
     std::vector<VkWriteDescriptorSet> descriptorWrites;
 
     std::vector<VkDescriptorBufferInfo> bufferDescriptors(
-      dsInfo.buffers.size());
+        dsInfo.buffers.size());
     std::vector<VkDescriptorImageInfo> imageDescriptors(dsInfo.textures.size());
     std::vector<VkDescriptorImageInfo> imageArrayDescriptors;
 
@@ -760,13 +760,13 @@ VulkanResources::updateDescriptorSet(VkDescriptorSet ds,
         BufferAttachment b = dsInfo.buffers[i];
 
         bufferDescriptors[i] =
-          VkDescriptorBufferInfo{ .buffer = b.buffer.buffer,
-                                  .offset = b.offset,
-                                  .range =
-                                    (b.size > 0) ? b.size : VK_WHOLE_SIZE };
+            VkDescriptorBufferInfo{ .buffer = b.buffer.buffer,
+                                    .offset = b.offset,
+                                    .range =
+                                        (b.size > 0) ? b.size : VK_WHOLE_SIZE };
 
         descriptorWrites.push_back(bufferWriteDescriptorSet(
-          ds, &bufferDescriptors[i], bindingIdx++, b.dInfo.type));
+            ds, &bufferDescriptors[i], bindingIdx++, b.dInfo.type));
     }
 
     for (size_t i = 0; i < dsInfo.textures.size(); i++) {
@@ -776,11 +776,11 @@ VulkanResources::updateDescriptorSet(VkDescriptorSet ds,
             .sampler = t.sampler,
             .imageView = t.image.imageView,
             .imageLayout =
-              /* t.texture.layout */ VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                /* t.texture.layout */ VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
         };
 
         descriptorWrites.push_back(
-          imageWriteDescriptorSet(ds, &imageDescriptors[i], bindingIdx++));
+            imageWriteDescriptorSet(ds, &imageDescriptors[i], bindingIdx++));
     }
 
     uint32_t taOffset = 0;
@@ -798,11 +798,11 @@ VulkanResources::updateDescriptorSet(VkDescriptorSet ds,
             };
 
             imageArrayDescriptors.push_back(
-              imageInfo); // item 'taOffsets[ta] + j'
+                imageInfo); // item 'taOffsets[ta] + j'
         }
 
         taOffset +=
-          static_cast<uint32_t>(dsInfo.textureArrays[ta].textures.size());
+            static_cast<uint32_t>(dsInfo.textureArrays[ta].textures.size());
     }
 
     for (size_t ta = 0; ta < dsInfo.textureArrays.size(); ta++) {
@@ -812,7 +812,7 @@ VulkanResources::updateDescriptorSet(VkDescriptorSet ds,
             .dstBinding = bindingIdx++,
             .dstArrayElement = 0,
             .descriptorCount =
-              static_cast<uint32_t>(dsInfo.textureArrays[ta].textures.size()),
+                static_cast<uint32_t>(dsInfo.textureArrays[ta].textures.size()),
             .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
             .pImageInfo = imageArrayDescriptors.data() + taOffsets[ta]
         };
@@ -893,7 +893,7 @@ VulkanResources::addRenderPass(const std::vector<VulkanTexture> &outputs,
     if (outputs.size() == 1) {
         printf("Creating color-only render pass\n");
         if (!createColorOnlyRenderPass(
-              vkDev, &renderPass, ci, outputs[0].format)) {
+                vkDev, &renderPass, ci, outputs[0].format)) {
             printf("Unable to create offscreen color-only render pass\n");
             exit(EXIT_FAILURE);
         }
@@ -1012,7 +1012,7 @@ VulkanResources::makeMeshBuffers(const std::vector<float> &vertices,
     const uint32_t vertexBufferSize = uint32_t(vertices.size() * sizeof(float));
 
     VulkanBuffer storageBuffer = addVertexBuffer(
-      indexBufferSize, indices.data(), vertexBufferSize, vertices.data());
+        indexBufferSize, indices.data(), vertexBufferSize, vertices.data());
 
     BufferAttachment vertexBufferAttachment{
         .dInfo = { .type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
@@ -1054,7 +1054,7 @@ VulkanResources::loadMeshToBuffer(const char *filename,
     for (unsigned i = 0; i != mesh->mNumVertices; i++) {
         const aiVector3D v = mesh->mVertices[i];
         const aiVector3D t =
-          mesh->mTextureCoords[0] ? mesh->mTextureCoords[0][i] : aiVector3D();
+            mesh->mTextureCoords[0] ? mesh->mTextureCoords[0][i] : aiVector3D();
         const aiVector3D n = mesh->mNormals ? mesh->mNormals[i] : aiVector3D();
 
         vertices.push_back(v.x);
@@ -1080,9 +1080,9 @@ VulkanResources::loadMeshToBuffer(const char *filename,
     aiReleaseImport(scene);
 
     const uint32_t vertexBufferSize =
-      static_cast<uint32_t>(sizeof(float) * vertices.size());
+        static_cast<uint32_t>(sizeof(float) * vertices.size());
     const uint32_t indexBufferSize =
-      static_cast<uint32_t>(sizeof(unsigned int) * indices.size());
+        static_cast<uint32_t>(sizeof(unsigned int) * indices.size());
 
     return makeMeshBuffers(vertices, indices);
 }

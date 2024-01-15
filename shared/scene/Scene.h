@@ -73,7 +73,7 @@ inline std::string
 getNodeName(const Scene &scene, int node)
 {
     int strID =
-      scene.nameForNode_.contains(node) ? scene.nameForNode_.at(node) : -1;
+        scene.nameForNode_.contains(node) ? scene.nameForNode_.at(node) : -1;
     return (strID > -1) ? scene.names_[strID] : std::string();
 }
 

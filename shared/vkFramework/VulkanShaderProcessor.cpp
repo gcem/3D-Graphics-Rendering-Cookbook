@@ -2,13 +2,13 @@
 #include "shared/vkFramework/VulkanResources.h"
 
 VulkanShaderProcessor::VulkanShaderProcessor(
-  VulkanRenderContext &ctx,
-  const PipelineInfo &pInfo,
-  const DescriptorSetInfo &dsInfo,
-  const std::vector<const char *> &shaders,
-  const std::vector<VulkanTexture> &outputs,
-  uint32_t indexBufferSize,
-  RenderPass screenRenderPass)
+    VulkanRenderContext &ctx,
+    const PipelineInfo &pInfo,
+    const DescriptorSetInfo &dsInfo,
+    const std::vector<const char *> &shaders,
+    const std::vector<VulkanTexture> &outputs,
+    uint32_t indexBufferSize,
+    RenderPass screenRenderPass)
   : Renderer(ctx)
   , indexBufferSize(indexBufferSize)
 {
@@ -16,13 +16,13 @@ VulkanShaderProcessor::VulkanShaderProcessor(
 
     descriptorSets_.resize(1);
     descriptorSets_[0] = ctx.resources.addDescriptorSet(
-      ctx.resources.addDescriptorPool(dsInfo), descriptorSetLayout_);
+        ctx.resources.addDescriptorPool(dsInfo), descriptorSetLayout_);
     ctx.resources.updateDescriptorSet(descriptorSets_[0], dsInfo);
 
     initPipeline(
-      shaders,
-      initRenderPass(
-        pInfo, outputs, screenRenderPass, ctx.screenRenderPass_NoDepth));
+        shaders,
+        initRenderPass(
+            pInfo, outputs, screenRenderPass, ctx.screenRenderPass_NoDepth));
 }
 
 void

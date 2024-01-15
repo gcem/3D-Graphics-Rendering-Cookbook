@@ -54,11 +54,11 @@ struct ShaderOptimalToDepthBarrier : public Renderer
                            VkRenderPass rp = VK_NULL_HANDLE) override
     {
         transitionImageLayoutCmd(
-          cmdBuffer,
-          tex_.image.image,
-          tex_.format,
-          VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-          VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+            cmdBuffer,
+            tex_.image.image,
+            tex_.format,
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
     }
 
 private:
@@ -127,11 +127,11 @@ struct DepthToShaderOptimalBarrier : public Renderer
                            VkRenderPass rp = VK_NULL_HANDLE) override
     {
         transitionImageLayoutCmd(
-          cmdBuffer,
-          tex_.image.image,
-          tex_.format,
-          VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-          VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            cmdBuffer,
+            tex_.image.image,
+            tex_.format,
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
 
 private:
@@ -171,11 +171,12 @@ struct ImageBarrier : public Renderer
             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
             .image = image_,
             .subresourceRange =
-              VkImageSubresourceRange{ .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                       .baseMipLevel = 0,
-                                       .levelCount = 1,
-                                       .baseArrayLayer = 0,
-                                       .layerCount = 1 }
+                VkImageSubresourceRange{ .aspectMask =
+                                             VK_IMAGE_ASPECT_COLOR_BIT,
+                                         .baseMipLevel = 0,
+                                         .levelCount = 1,
+                                         .baseArrayLayer = 0,
+                                         .layerCount = 1 }
         };
 
         vkCmdPipelineBarrier(cmdBuffer,

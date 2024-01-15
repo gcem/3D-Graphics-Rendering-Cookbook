@@ -15,7 +15,7 @@ VulkanCanvas::VulkanCanvas(VulkanRenderDevice &vkDev, VulkanImage depth)
                           kMaxLinesDataSize,
                           VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                           storageBuffer_[i],
                           storageBufferMemory_[i])) {
             printf("VaulkanCanvas: createBuffer() failed\n");
@@ -29,11 +29,11 @@ VulkanCanvas::VulkanCanvas(VulkanRenderDevice &vkDev, VulkanImage depth)
                                        RenderPassCreateInfo()) ||
         !createUniformBuffers(vkDev, sizeof(UniformBuffer)) ||
         !createColorAndDepthFramebuffers(
-          vkDev, renderPass_, depth.imageView, swapchainFramebuffers_) ||
+            vkDev, renderPass_, depth.imageView, swapchainFramebuffers_) ||
         !createDescriptorPool(vkDev, 1, 1, 0, &descriptorPool_) ||
         !createDescriptorSet(vkDev) ||
         !createPipelineLayout(
-          vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
+            vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
         !createGraphicsPipeline(vkDev,
                                 renderPass_,
                                 pipelineLayout_,
@@ -64,8 +64,11 @@ VulkanCanvas::updateBuffer(VulkanRenderDevice &vkDev, size_t currentImage)
 
     const VkDeviceSize bufferSize = lines_.size() * sizeof(VertexData);
 
-    uploadBufferData(
-      vkDev, storageBufferMemory_[currentImage], 0, lines_.data(), bufferSize);
+    uploadBufferData(vkDev,
+                     storageBufferMemory_[currentImage],
+                     0,
+                     lines_.data(),
+                     bufferSize);
 }
 
 bool
@@ -73,9 +76,9 @@ VulkanCanvas::createDescriptorSet(VulkanRenderDevice &vkDev)
 {
     const std::array<VkDescriptorSetLayoutBinding, 2> bindings = {
         descriptorSetLayoutBinding(
-          0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT)
+            1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT)
     };
 
     const VkDescriptorSetLayoutCreateInfo layoutInfo = {
@@ -87,7 +90,7 @@ VulkanCanvas::createDescriptorSet(VulkanRenderDevice &vkDev)
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
+        vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
 
     std::vector<VkDescriptorSetLayout> layouts(vkDev.swapchainImages.size(),
                                                descriptorSetLayout_);
@@ -97,14 +100,14 @@ VulkanCanvas::createDescriptorSet(VulkanRenderDevice &vkDev)
         .pNext = nullptr,
         .descriptorPool = descriptorPool_,
         .descriptorSetCount =
-          static_cast<uint32_t>(vkDev.swapchainImages.size()),
+            static_cast<uint32_t>(vkDev.swapchainImages.size()),
         .pSetLayouts = layouts.data()
     };
 
     descriptorSets_.resize(vkDev.swapchainImages.size());
 
     VK_CHECK(vkAllocateDescriptorSets(
-      vkDev.device, &allocInfo, descriptorSets_.data()));
+        vkDev.device, &allocInfo, descriptorSets_.data()));
 
     for (size_t i = 0; i < vkDev.swapchainImages.size(); i++) {
         VkDescriptorSet ds = descriptorSets_[i];
@@ -118,9 +121,9 @@ VulkanCanvas::createDescriptorSet(VulkanRenderDevice &vkDev)
 
         const std::array<VkWriteDescriptorSet, 2> descriptorWrites = {
             bufferWriteDescriptorSet(
-              ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
+                ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
             bufferWriteDescriptorSet(
-              ds, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER)
+                ds, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER)
         };
 
         vkUpdateDescriptorSets(vkDev.device,
@@ -142,7 +145,7 @@ VulkanCanvas::updateUniformBuffer(VulkanRenderDevice &vkDev,
     const UniformBuffer ubo = { .mvp = modelViewProj, .time = time };
 
     uploadBufferData(
-      vkDev, uniformBuffersMemory_[currentImage], 0, &ubo, sizeof(ubo));
+        vkDev, uniformBuffersMemory_[currentImage], 0, &ubo, sizeof(ubo));
 }
 
 void

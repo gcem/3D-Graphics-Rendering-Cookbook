@@ -8,7 +8,7 @@ struct MyApp : public CameraApp
       : CameraApp(-95, -95)
       , envMap(ctx_.resources.loadCubeMap("data/piazza_bologni_1k.hdr"))
       , irrMap(
-          ctx_.resources.loadCubeMap("data/piazza_bologni_1k_irradiance.hdr"))
+            ctx_.resources.loadCubeMap("data/piazza_bologni_1k_irradiance.hdr"))
       , sceneData(ctx_,
                   "data/meshes/test.meshes",
                   "data/meshes/test.scene",
@@ -26,9 +26,9 @@ struct MyApp : public CameraApp
       , imgui(ctx_)
     {
         positioner =
-          CameraPositioner_FirstPerson(glm::vec3(-10.0f, -3.0f, 3.0f),
-                                       glm::vec3(0.0f, 0.0f, -1.0f),
-                                       vec3(0.0f, 1.0f, 0.0f));
+            CameraPositioner_FirstPerson(glm::vec3(-10.0f, -3.0f, 3.0f),
+                                         glm::vec3(0.0f, 0.0f, -1.0f),
+                                         vec3(0.0f, 1.0f, 0.0f));
 
         onScreenRenderers_.emplace_back(multiRenderer);
         onScreenRenderers_.emplace_back(multiRenderer2);

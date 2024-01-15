@@ -4,31 +4,32 @@
 
 struct LineCanvas : public Renderer
 {
-    explicit LineCanvas(
-      VulkanRenderContext &ctx,
-      bool useDepth = true,
-      const std::vector<VulkanTexture> &outputs = std::vector<VulkanTexture>{},
-      VkFramebuffer framebuffer = VK_NULL_HANDLE,
-      RenderPass screenRenderPass = RenderPass());
+    explicit LineCanvas(VulkanRenderContext &ctx,
+                        bool useDepth = true,
+                        const std::vector<VulkanTexture> &outputs =
+                            std::vector<VulkanTexture>{},
+                        VkFramebuffer framebuffer = VK_NULL_HANDLE,
+                        RenderPass screenRenderPass = RenderPass());
 
     /* Strictly offscreen rendering */
     explicit LineCanvas(VulkanRenderContext &ctx,
                         const std::vector<VulkanTexture> &outputs,
                         bool firstPass = false)
       : LineCanvas(
-          ctx,
-          true,
-          outputs,
-          VK_NULL_HANDLE,
-          ctx.resources.addRenderPass(
+            ctx,
+            true,
             outputs,
-            RenderPassCreateInfo{
-              .clearColor_ = firstPass,
-              .clearDepth_ = firstPass,
-              .flags_ =
-                (uint8_t)((firstPass ? eRenderPassBit_First
-                                     : eRenderPassBit_OffscreenInternal) |
-                          eRenderPassBit_Offscreen) }))
+            VK_NULL_HANDLE,
+            ctx.resources.addRenderPass(
+                outputs,
+                RenderPassCreateInfo{
+                    .clearColor_ = firstPass,
+                    .clearDepth_ = firstPass,
+                    .flags_ =
+                        (uint8_t)((firstPass
+                                       ? eRenderPassBit_First
+                                       : eRenderPassBit_OffscreenInternal) |
+                                  eRenderPassBit_Offscreen) }))
     {
     }
 
@@ -74,7 +75,7 @@ private:
 
     static constexpr unsigned kMaxLinesCount = 4 * 8 * 65536;
     static constexpr unsigned kMaxLinesDataSize =
-      kMaxLinesCount * sizeof(LineCanvas::VertexData) * 2;
+        kMaxLinesCount * sizeof(LineCanvas::VertexData) * 2;
 };
 
 void

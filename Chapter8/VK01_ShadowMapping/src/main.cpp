@@ -63,9 +63,9 @@ struct MyApp : public CameraApp
                    meshUniformBuffer,
                    meshBuffer,
                    {
-                     fsTextureAttachment(meshShadowDepth),
-                     fsTextureAttachment(ctx_.resources.loadTexture2D(
-                       "data/rubber_duck/textures/Duck_baseColor.png")),
+                       fsTextureAttachment(meshShadowDepth),
+                       fsTextureAttachment(ctx_.resources.loadTexture2D(
+                           "data/rubber_duck/textures/Duck_baseColor.png")),
                    },
                    { meshColor, meshDepth },
                    { "data/shaders/chapter08/VK01_scene.vert",
@@ -87,7 +87,7 @@ struct MyApp : public CameraApp
                     planeBuffer,
                     { fsTextureAttachment(meshShadowDepth),
                       fsTextureAttachment(ctx_.resources.loadTexture2D(
-                        "data/ch2_sample3_STB.jpg")) },
+                          "data/ch2_sample3_STB.jpg")) },
                     { meshColor, meshDepth },
                     { "data/shaders/chapter08/VK01_scene.vert",
                       "data/shaders/chapter08/VK01_scene.frag" })
@@ -145,14 +145,14 @@ struct MyApp : public CameraApp
     void draw3D() override
     {
         const mat4 proj = getDefaultProjection();
-        const mat4 view =
-          glm::scale(mat4(1.f), vec3(1.f, -1.f, 1.f)) * camera.getViewMatrix();
+        const mat4 view = glm::scale(mat4(1.f), vec3(1.f, -1.f, 1.f)) *
+                          camera.getViewMatrix();
 
         const mat4 m1 = glm::rotate(
-          glm::translate(mat4(1.0f), vec3(0.f, 0.5f, -1.5f)) *
-            glm::rotate(mat4(1.f), -0.5f * glm::pi<float>(), vec3(1, 0, 0)),
-          g_ModelAngle,
-          vec3(0.0f, 0.0f, 1.0f));
+            glm::translate(mat4(1.0f), vec3(0.f, 0.5f, -1.5f)) *
+                glm::rotate(mat4(1.f), -0.5f * glm::pi<float>(), vec3(1, 0, 0)),
+            g_ModelAngle,
+            vec3(0.0f, 0.0f, 1.0f));
 
         canvas.setCameraMatrix(proj * view);
 
@@ -161,18 +161,18 @@ struct MyApp : public CameraApp
         canvas.clear();
 
         const glm::mat4 rotY =
-          glm::rotate(mat4(1.f), g_LightYAngle, glm::vec3(0, 1, 0));
+            glm::rotate(mat4(1.f), g_LightYAngle, glm::vec3(0, 1, 0));
         const glm::mat4 rotX =
-          glm::rotate(rotY, g_LightXAngle, glm::vec3(1, 0, 0));
+            glm::rotate(rotY, g_LightXAngle, glm::vec3(1, 0, 0));
         const glm::vec4 lightPos = rotX * glm::vec4(0, 0, g_LightDist, 1.0f);
 
         const mat4 lightProj = glm::perspective(
-          glm::radians(g_LightAngle), 1.0f, g_LightNear, g_LightFar);
+            glm::radians(g_LightAngle), 1.0f, g_LightNear, g_LightFar);
         const mat4 lightView =
-          glm::lookAt(glm::vec3(lightPos), vec3(0), vec3(0, 1, 0));
+            glm::lookAt(glm::vec3(lightPos), vec3(0), vec3(0, 1, 0));
 
         renderCameraFrustum(
-          canvas, lightView, lightProj, vec4(0.0f, 1.0f, 0.0f, 1.0f));
+            canvas, lightView, lightProj, vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
         const Uniforms uniDepth = {
             .mvp = lightProj * lightView * m1,
@@ -197,7 +197,7 @@ struct MyApp : public CameraApp
             .meshScale = g_meshScale,
         };
         uploadBufferData(
-          ctx_.vkDev, meshUniformBuffer.memory, 0, &uni, sizeof(uni));
+            ctx_.vkDev, meshUniformBuffer.memory, 0, &uni, sizeof(uni));
     }
 
 private:

@@ -425,7 +425,7 @@ GLTracer_glTexSubImage2D(GLenum target,
            E2S(type),
            pixels);
     apiHook.glTexSubImage2D(
-      target, level, xoffset, yoffset, width, height, format, type, pixels);
+        target, level, xoffset, yoffset, width, height, format, type, pixels);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -553,7 +553,7 @@ GLTracer_glCompressedTexImage2D(GLenum target,
            imageSize,
            data);
     apiHook.glCompressedTexImage2D(
-      target, level, internalformat, width, height, border, imageSize, data);
+        target, level, internalformat, width, height, border, imageSize, data);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -812,7 +812,7 @@ GLTracer_glGetActiveAttrib(GLuint program,
            type,
            name);
     apiHook.glGetActiveAttrib(
-      program, index, bufSize, length, size, type, name);
+        program, index, bufSize, length, size, type, name);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -835,7 +835,7 @@ GLTracer_glGetActiveUniform(GLuint program,
            type,
            name);
     apiHook.glGetActiveUniform(
-      program, index, bufSize, length, size, type, name);
+        program, index, bufSize, length, size, type, name);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -1106,7 +1106,7 @@ GLTracer_glVertexAttribPointer(GLuint index,
            stride,
            pointer);
     apiHook.glVertexAttribPointer(
-      index, size, type, normalized, stride, pointer);
+        index, size, type, normalized, stride, pointer);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -1247,7 +1247,7 @@ GLTracer_glFramebufferTexture2D(GLenum target,
            texture,
            level);
     apiHook.glFramebufferTexture2D(
-      target, attachment, textarget, texture, level);
+        target, attachment, textarget, texture, level);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -1268,7 +1268,7 @@ GLTracer_glFramebufferTexture3D(GLenum target,
            level,
            zoffset);
     apiHook.glFramebufferTexture3D(
-      target, attachment, textarget, texture, level, zoffset);
+        target, attachment, textarget, texture, level, zoffset);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -1361,7 +1361,7 @@ GLTracer_glGetActiveUniformBlockiv(GLuint program,
            E2S(pname),
            params);
     apiHook.glGetActiveUniformBlockiv(
-      program, uniformBlockIndex, pname, params);
+        program, uniformBlockIndex, pname, params);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -1376,7 +1376,7 @@ GLTracer_glUniformBlockBinding(GLuint program,
            uniformBlockIndex,
            uniformBlockBinding);
     apiHook.glUniformBlockBinding(
-      program, uniformBlockIndex, uniformBlockBinding);
+        program, uniformBlockIndex, uniformBlockBinding);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -1403,7 +1403,7 @@ GLTracer_glGetSubroutineUniformLocation(GLuint program,
            E2S(shadertype),
            name);
     GLint const r =
-      apiHook.glGetSubroutineUniformLocation(program, shadertype, name);
+        apiHook.glGetSubroutineUniformLocation(program, shadertype, name);
     assert(apiHook.glGetError() == GL_NO_ERROR);
     return r;
 }
@@ -1438,7 +1438,7 @@ GLTracer_glGetActiveSubroutineUniformiv(GLuint program,
            E2S(pname),
            values);
     apiHook.glGetActiveSubroutineUniformiv(
-      program, shadertype, index, pname, values);
+        program, shadertype, index, pname, values);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -1459,7 +1459,7 @@ GLTracer_glGetActiveSubroutineName(GLuint program,
            length,
            name);
     apiHook.glGetActiveSubroutineName(
-      program, shadertype, index, bufsize, length, name);
+        program, shadertype, index, bufsize, length, name);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -1841,7 +1841,7 @@ GLTracer_glCopyNamedBufferSubData(GLuint readBuffer,
            writeOffset,
            size);
     apiHook.glCopyNamedBufferSubData(
-      readBuffer, writeBuffer, readOffset, writeOffset, size);
+        readBuffer, writeBuffer, readOffset, writeOffset, size);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -1882,7 +1882,7 @@ GLTracer_glClearNamedBufferSubData(GLuint buffer,
            E2S(type),
            data);
     apiHook.glClearNamedBufferSubData(
-      buffer, internalformat, offset, size, format, type, data);
+        buffer, internalformat, offset, size, format, type, data);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -1911,7 +1911,7 @@ GLTracer_glMapNamedBufferRange(GLuint buffer,
            length,
            (unsigned int)(access));
     void *const r =
-      apiHook.glMapNamedBufferRange(buffer, offset, length, access);
+        apiHook.glMapNamedBufferRange(buffer, offset, length, access);
     assert(apiHook.glGetError() == GL_NO_ERROR);
     return r;
 }
@@ -2019,7 +2019,7 @@ GLTracer_glNamedFramebufferRenderbuffer(GLuint framebuffer,
            E2S(renderbuffertarget),
            renderbuffer);
     apiHook.glNamedFramebufferRenderbuffer(
-      framebuffer, attachment, renderbuffertarget, renderbuffer);
+        framebuffer, attachment, renderbuffertarget, renderbuffer);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2068,7 +2068,7 @@ GLTracer_glNamedFramebufferTextureLayer(GLuint framebuffer,
            level,
            layer);
     apiHook.glNamedFramebufferTextureLayer(
-      framebuffer, attachment, texture, level, layer);
+        framebuffer, attachment, texture, level, layer);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2119,7 +2119,7 @@ GLTracer_glInvalidateNamedFramebufferData(GLuint framebuffer,
            numAttachments,
            attachments);
     apiHook.glInvalidateNamedFramebufferData(
-      framebuffer, numAttachments, attachments);
+        framebuffer, numAttachments, attachments);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2142,7 +2142,7 @@ GLTracer_glInvalidateNamedFramebufferSubData(GLuint framebuffer,
            width,
            height);
     apiHook.glInvalidateNamedFramebufferSubData(
-      framebuffer, numAttachments, attachments, x, y, width, height);
+        framebuffer, numAttachments, attachments, x, y, width, height);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2292,7 +2292,7 @@ GLTracer_glGetNamedFramebufferAttachmentParameteriv(GLuint framebuffer,
            E2S(pname),
            params);
     apiHook.glGetNamedFramebufferAttachmentParameteriv(
-      framebuffer, attachment, pname, params);
+        framebuffer, attachment, pname, params);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2320,7 +2320,7 @@ GLTracer_glNamedRenderbufferStorage(GLuint renderbuffer,
            width,
            height);
     apiHook.glNamedRenderbufferStorage(
-      renderbuffer, internalformat, width, height);
+        renderbuffer, internalformat, width, height);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2339,7 +2339,7 @@ GLTracer_glNamedRenderbufferStorageMultisample(GLuint renderbuffer,
            width,
            height);
     apiHook.glNamedRenderbufferStorageMultisample(
-      renderbuffer, samples, internalformat, width, height);
+        renderbuffer, samples, internalformat, width, height);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2450,7 +2450,7 @@ GLTracer_glTextureStorage3D(GLuint texture,
            height,
            depth);
     apiHook.glTextureStorage3D(
-      texture, levels, internalformat, width, height, depth);
+        texture, levels, internalformat, width, height, depth);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2471,7 +2471,7 @@ GLTracer_glTextureStorage2DMultisample(GLuint texture,
            height,
            (unsigned int)(fixedsamplelocations));
     apiHook.glTextureStorage2DMultisample(
-      texture, samples, internalformat, width, height, fixedsamplelocations);
+        texture, samples, internalformat, width, height, fixedsamplelocations);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2522,7 +2522,7 @@ GLTracer_glTextureSubImage1D(GLuint texture,
            E2S(type),
            pixels);
     apiHook.glTextureSubImage1D(
-      texture, level, xoffset, width, format, type, pixels);
+        texture, level, xoffset, width, format, type, pixels);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2549,7 +2549,7 @@ GLTracer_glTextureSubImage2D(GLuint texture,
            E2S(type),
            pixels);
     apiHook.glTextureSubImage2D(
-      texture, level, xoffset, yoffset, width, height, format, type, pixels);
+        texture, level, xoffset, yoffset, width, height, format, type, pixels);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2612,7 +2612,7 @@ GLTracer_glCompressedTextureSubImage1D(GLuint texture,
            imageSize,
            data);
     apiHook.glCompressedTextureSubImage1D(
-      texture, level, xoffset, width, format, imageSize, data);
+        texture, level, xoffset, width, format, imageSize, data);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2638,8 +2638,15 @@ GLTracer_glCompressedTextureSubImage2D(GLuint texture,
            E2S(format),
            imageSize,
            data);
-    apiHook.glCompressedTextureSubImage2D(
-      texture, level, xoffset, yoffset, width, height, format, imageSize, data);
+    apiHook.glCompressedTextureSubImage2D(texture,
+                                          level,
+                                          xoffset,
+                                          yoffset,
+                                          width,
+                                          height,
+                                          format,
+                                          imageSize,
+                                          data);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2724,7 +2731,7 @@ GLTracer_glCopyTextureSubImage2D(GLuint texture,
            width,
            height);
     apiHook.glCopyTextureSubImage2D(
-      texture, level, xoffset, yoffset, x, y, width, height);
+        texture, level, xoffset, yoffset, x, y, width, height);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -2751,7 +2758,7 @@ GLTracer_glCopyTextureSubImage3D(GLuint texture,
            width,
            height);
     apiHook.glCopyTextureSubImage3D(
-      texture, level, xoffset, yoffset, zoffset, x, y, width, height);
+        texture, level, xoffset, yoffset, zoffset, x, y, width, height);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -3029,7 +3036,7 @@ GLTracer_glVertexArrayVertexBuffer(GLuint vaobj,
            offset,
            stride);
     apiHook.glVertexArrayVertexBuffer(
-      vaobj, bindingindex, buffer, offset, stride);
+        vaobj, bindingindex, buffer, offset, stride);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -3050,7 +3057,7 @@ GLTracer_glVertexArrayVertexBuffers(GLuint vaobj,
            offsets,
            strides);
     apiHook.glVertexArrayVertexBuffers(
-      vaobj, first, count, buffers, offsets, strides);
+        vaobj, first, count, buffers, offsets, strides);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -3085,7 +3092,7 @@ GLTracer_glVertexArrayAttribFormat(GLuint vaobj,
            (unsigned int)(normalized),
            relativeoffset);
     apiHook.glVertexArrayAttribFormat(
-      vaobj, attribindex, size, type, normalized, relativeoffset);
+        vaobj, attribindex, size, type, normalized, relativeoffset);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -3104,7 +3111,7 @@ GLTracer_glVertexArrayAttribIFormat(GLuint vaobj,
            E2S(type),
            relativeoffset);
     apiHook.glVertexArrayAttribIFormat(
-      vaobj, attribindex, size, type, relativeoffset);
+        vaobj, attribindex, size, type, relativeoffset);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 
@@ -3123,7 +3130,7 @@ GLTracer_glVertexArrayAttribLFormat(GLuint vaobj,
            E2S(type),
            relativeoffset);
     apiHook.glVertexArrayAttribLFormat(
-      vaobj, attribindex, size, type, relativeoffset);
+        vaobj, attribindex, size, type, relativeoffset);
     assert(apiHook.glGetError() == GL_NO_ERROR);
 }
 

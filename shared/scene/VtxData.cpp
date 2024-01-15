@@ -14,9 +14,9 @@ loadMeshData(const char *meshFile, MeshData &out)
     assert(f); // Did you forget to run "Ch5_Tool05_MeshConvert"?
 
     if (!f) {
-        printf(
-          "Cannot open %s. Did you forget to run \"Ch5_Tool05_MeshConvert\"?\n",
-          meshFile);
+        printf("Cannot open %s. Did you forget to run "
+               "\"Ch5_Tool05_MeshConvert\"?\n",
+               meshFile);
         exit(EXIT_FAILURE);
     }
 
@@ -62,8 +62,8 @@ saveMeshData(const char *fileName, const MeshData &m)
     const MeshFileHeader header = {
         .magicValue = 0x12345678,
         .meshCount = (uint32_t)m.meshes_.size(),
-        .dataBlockStartOffset =
-          (uint32_t)(sizeof(MeshFileHeader) + m.meshes_.size() * sizeof(Mesh)),
+        .dataBlockStartOffset = (uint32_t)(sizeof(MeshFileHeader) +
+                                           m.meshes_.size() * sizeof(Mesh)),
         .indexDataSize = (uint32_t)(m.indexData_.size() * sizeof(uint32_t)),
         .vertexDataSize = (uint32_t)(m.vertexData_.size() * sizeof(float))
     };
@@ -129,8 +129,8 @@ mergeMeshData(MeshData &m, const std::vector<MeshData *> md)
         mergeVectors(m.boxes_, i->boxes_);
 
         uint32_t vtxOffset =
-          totalVertexDataSize / 8; /* 8 is the number of per-vertex attributes:
-                                      position, normal + UV */
+            totalVertexDataSize / 8; /* 8 is the number of per-vertex
+                                        attributes: position, normal + UV */
 
         for (size_t j = 0; j < (uint32_t)i->meshes_.size(); j++)
             // m.vertexCount, m.lodCount and m.streamCount do not change
@@ -152,11 +152,11 @@ mergeMeshData(MeshData &m, const std::vector<MeshData *> md)
         .magicValue = 0x12345678,
         .meshCount = (uint32_t)offs,
         .dataBlockStartOffset =
-          (uint32_t)(sizeof(MeshFileHeader) + offs * sizeof(Mesh)),
+            (uint32_t)(sizeof(MeshFileHeader) + offs * sizeof(Mesh)),
         .indexDataSize =
-          static_cast<uint32_t>(totalIndexDataSize * sizeof(uint32_t)),
+            static_cast<uint32_t>(totalIndexDataSize * sizeof(uint32_t)),
         .vertexDataSize =
-          static_cast<uint32_t>(totalVertexDataSize * sizeof(float))
+            static_cast<uint32_t>(totalVertexDataSize * sizeof(float))
     };
 }
 
@@ -173,7 +173,7 @@ recalculateBoundingBoxes(MeshData &m)
 
         for (auto i = 0; i != numIndices; i++) {
             auto vtxOffset =
-              m.indexData_[mesh.indexOffset + i] + mesh.vertexOffset;
+                m.indexData_[mesh.indexOffset + i] + mesh.vertexOffset;
             const float *vf = &m.vertexData_[vtxOffset * kMaxStreams];
             vmin = glm::min(vmin, vec3(vf[0], vf[1], vf[2]));
             vmax = glm::max(vmax, vec3(vf[0], vf[1], vf[2]));

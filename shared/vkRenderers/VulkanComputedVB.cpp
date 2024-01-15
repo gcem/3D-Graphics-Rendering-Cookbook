@@ -22,7 +22,7 @@ ComputedVertexBuffer::ComputedVertexBuffer(VulkanRenderDevice &vkDev,
     ShaderModule s;
     createShaderModule(vkDev.device, &s, shaderName);
     if (createComputePipeline(
-          vkDev.device, s.shaderModule, pipelineLayout, &pipeline) !=
+            vkDev.device, s.shaderModule, pipelineLayout, &pipeline) !=
         VK_SUCCESS)
         exit(EXIT_FAILURE);
 
@@ -33,17 +33,17 @@ bool
 ComputedVertexBuffer::createComputedBuffer()
 {
     return createBuffer(
-      vkDev.device,
-      vkDev.physicalDevice,
-      computedVertexCount * vertexSize + indexBufferSize,
-      VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
-        (canDownloadVertices ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0) |
-        VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-      !canDownloadVertices ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-                           : (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
-      computedBuffer,
-      computedMemory);
+        vkDev.device,
+        vkDev.physicalDevice,
+        computedVertexCount * vertexSize + indexBufferSize,
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
+            (canDownloadVertices ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0) |
+            VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        !canDownloadVertices ? VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+                             : (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT),
+        computedBuffer,
+        computedMemory);
 }
 
 bool
@@ -64,13 +64,13 @@ ComputedVertexBuffer::createComputedSetLayout()
     };
 
     VK_CHECK(vkCreateDescriptorPool(
-      vkDev.device, &descriptorPoolInfo, nullptr, &descriptorPool));
+        vkDev.device, &descriptorPoolInfo, nullptr, &descriptorPool));
 
     std::array<VkDescriptorSetLayoutBinding, 2> bindings = {
         descriptorSetLayoutBinding(
-          0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_COMPUTE_BIT),
+            0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_COMPUTE_BIT),
         descriptorSetLayoutBinding(
-          1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_COMPUTE_BIT)
+            1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_COMPUTE_BIT)
     };
 
     const VkDescriptorSetLayoutCreateInfo layoutInfo = {
@@ -82,7 +82,7 @@ ComputedVertexBuffer::createComputedSetLayout()
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &dsLayout));
+        vkDev.device, &layoutInfo, nullptr, &dsLayout));
 
     return true;
 }
@@ -99,7 +99,7 @@ ComputedVertexBuffer::createDescriptorSet()
     };
 
     VK_CHECK(
-      vkAllocateDescriptorSets(vkDev.device, &allocInfo, &descriptorSet));
+        vkAllocateDescriptorSets(vkDev.device, &allocInfo, &descriptorSet));
 
     const VkDescriptorBufferInfo bufferInfo = {
         computedBuffer, 0, computedVertexCount * vertexSize
@@ -110,9 +110,9 @@ ComputedVertexBuffer::createDescriptorSet()
 
     std::vector<VkWriteDescriptorSet> writeDescriptorSets = {
         bufferWriteDescriptorSet(
-          descriptorSet, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
+            descriptorSet, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
         bufferWriteDescriptorSet(
-          descriptorSet, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+            descriptorSet, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
     };
 
     vkUpdateDescriptorSets(vkDev.device,
@@ -131,7 +131,7 @@ ComputedVertexBuffer::downloadVertices(void *vertexData)
         return;
 
     downloadBufferData(
-      vkDev, computedMemory, 0, vertexData, computedVertexCount * vertexSize);
+        vkDev, computedMemory, 0, vertexData, computedVertexCount * vertexSize);
 }
 
 void

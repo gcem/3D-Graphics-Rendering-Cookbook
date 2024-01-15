@@ -96,18 +96,18 @@ main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window =
-      glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
+        glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     glfwMakeContextCurrent(window);
     gladLoadGL(glfwGetProcAddress);
@@ -141,7 +141,7 @@ main(void)
     GLuint perFrameDataBuffer;
     glCreateBuffers(1, &perFrameDataBuffer);
     glNamedBufferStorage(
-      perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kBufferSize);
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -151,7 +151,7 @@ main(void)
     glCreateBuffers(1, &meshData);
 
     const aiScene *scene =
-      aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
+        aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
 
     if (!scene || !scene->HasMeshes()) {
         printf("Unable to load data/rubber_duck/scene.gltf\n");
@@ -184,8 +184,10 @@ main(void)
         std::vector<unsigned int> remappedIndices(indices.size());
         std::vector<vec3> remappedVertices(vertexCount);
 
-        meshopt_remapIndexBuffer(
-          remappedIndices.data(), indices.data(), indices.size(), remap.data());
+        meshopt_remapIndexBuffer(remappedIndices.data(),
+                                 indices.data(),
+                                 indices.size(),
+                                 remap.data());
         meshopt_remapVertexBuffer(remappedVertices.data(),
                                   positions.data(),
                                   positions.size(),
@@ -212,7 +214,7 @@ main(void)
 
         const float threshold = 0.2f;
         const size_t target_index_count =
-          size_t(remappedIndices.size() * threshold);
+            size_t(remappedIndices.size() * threshold);
         const float target_error = 1e-2f;
 
         indicesLod.resize(remappedIndices.size());
@@ -239,13 +241,13 @@ main(void)
                          GL_DYNAMIC_STORAGE_BIT);
     glNamedBufferSubData(meshData, 0, sizeIndices, indices.data());
     glNamedBufferSubData(
-      meshData, sizeIndices, sizeIndicesLod, indicesLod.data());
+        meshData, sizeIndices, sizeIndicesLod, indicesLod.data());
     glNamedBufferSubData(
-      meshData, sizeIndices + sizeIndicesLod, sizeVertices, positions.data());
+        meshData, sizeIndices + sizeIndicesLod, sizeVertices, positions.data());
 
     glVertexArrayElementBuffer(vao, meshData);
     glVertexArrayVertexBuffer(
-      vao, 0, meshData, sizeIndices + sizeIndicesLod, sizeof(vec3));
+        vao, 0, meshData, sizeIndices + sizeIndicesLod, sizeof(vec3));
     glEnableVertexArrayAttrib(vao, 0);
     glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(vao, 0, 0);
@@ -259,18 +261,18 @@ main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         const mat4 m1 =
-          glm::rotate(glm::translate(mat4(1.0f), vec3(-0.5f, -0.5f, -1.5f)),
-                      (float)glfwGetTime(),
-                      vec3(0.0f, 1.0f, 0.0f));
+            glm::rotate(glm::translate(mat4(1.0f), vec3(-0.5f, -0.5f, -1.5f)),
+                        (float)glfwGetTime(),
+                        vec3(0.0f, 1.0f, 0.0f));
         const mat4 m2 =
-          glm::rotate(glm::translate(mat4(1.0f), vec3(+0.5f, -0.5f, -1.5f)),
-                      (float)glfwGetTime(),
-                      vec3(0.0f, 1.0f, 0.0f));
+            glm::rotate(glm::translate(mat4(1.0f), vec3(+0.5f, -0.5f, -1.5f)),
+                        (float)glfwGetTime(),
+                        vec3(0.0f, 1.0f, 0.0f));
         const mat4 p = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
 
         const PerFrameData perFrameData1 = { .mvp = p * m1 };
         glNamedBufferSubData(
-          perFrameDataBuffer, 0, kBufferSize, &perFrameData1);
+            perFrameDataBuffer, 0, kBufferSize, &perFrameData1);
         glDrawElements(GL_TRIANGLES,
                        static_cast<unsigned>(indices.size()),
                        GL_UNSIGNED_INT,
@@ -278,7 +280,7 @@ main(void)
 
         const PerFrameData perFrameData2 = { .mvp = p * m2 };
         glNamedBufferSubData(
-          perFrameDataBuffer, 0, kBufferSize, &perFrameData2);
+            perFrameDataBuffer, 0, kBufferSize, &perFrameData2);
         glDrawElements(GL_TRIANGLES,
                        static_cast<unsigned>(indicesLod.size()),
                        GL_UNSIGNED_INT,

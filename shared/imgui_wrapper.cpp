@@ -7,8 +7,8 @@
 #pragma warning(disable : 4267) // conversion from 'size_t' to 'int', possible
                                 // loss of data
 #pragma warning(                                                               \
-    disable : 4305) // 'argument': truncation from 'double' to 'float'
-#endif              // _MSC_VER
+        disable : 4305) // 'argument': truncation from 'double' to 'float'
+#endif                  // _MSC_VER
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"

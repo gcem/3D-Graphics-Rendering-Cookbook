@@ -23,7 +23,7 @@ struct Renderer
                                     const void *data)
     {
         uploadBufferData(
-          ctx_.vkDev, uniforms_[currentImage].memory, offset, data, size);
+            ctx_.vkDev, uniforms_[currentImage].memory, offset, data, size);
     }
 
     void initPipeline(const std::vector<const char *> &shaders,
@@ -32,9 +32,9 @@ struct Renderer
                       uint32_t fragConstSize = 0)
     {
         pipelineLayout_ = ctx_.resources.addPipelineLayout(
-          descriptorSetLayout_, vtxConstSize, fragConstSize);
+            descriptorSetLayout_, vtxConstSize, fragConstSize);
         graphicsPipeline_ = ctx_.resources.addPipeline(
-          renderPass_.handle, pipelineLayout_, shaders, pInfo);
+            renderPass_.handle, pipelineLayout_, shaders, pInfo);
     }
 
     PipelineInfo initRenderPass(const PipelineInfo &pInfo,
@@ -61,16 +61,17 @@ struct Renderer
             outInfo.height = processingHeight;
 
             renderPass_ =
-              (renderPass.handle != VK_NULL_HANDLE)
-                ? renderPass
-                : ((isDepthFormat(outputs[0].format) && (outputs.size() == 1))
-                     ? ctx_.resources.addDepthRenderPass(outputs)
-                     : ctx_.resources.addRenderPass(
-                         outputs, RenderPassCreateInfo(), true));
+                (renderPass.handle != VK_NULL_HANDLE)
+                    ? renderPass
+                    : ((isDepthFormat(outputs[0].format) &&
+                        (outputs.size() == 1))
+                           ? ctx_.resources.addDepthRenderPass(outputs)
+                           : ctx_.resources.addRenderPass(
+                                 outputs, RenderPassCreateInfo(), true));
             framebuffer_ = ctx_.resources.addFramebuffer(renderPass_, outputs);
         } else {
-            renderPass_ =
-              (renderPass.handle != VK_NULL_HANDLE) ? renderPass : fallbackPass;
+            renderPass_ = (renderPass.handle != VK_NULL_HANDLE) ? renderPass
+                                                                : fallbackPass;
         }
         return outInfo;
     }
@@ -90,19 +91,19 @@ struct Renderer
                                          .height = processingHeight } };
 
         ctx_.beginRenderPass(
-          commandBuffer,
-          rp,
-          currentImage,
-          rect,
-          fb,
-          (renderPass_.info.clearColor_ ? 1u : 0u) +
-            (renderPass_.info.clearDepth_ ? 1u : 0u),
-          renderPass_.info.clearColor_
-            ? &clearValues[0]
-            : (renderPass_.info.clearDepth_ ? &clearValues[1] : nullptr));
+            commandBuffer,
+            rp,
+            currentImage,
+            rect,
+            fb,
+            (renderPass_.info.clearColor_ ? 1u : 0u) +
+                (renderPass_.info.clearDepth_ ? 1u : 0u),
+            renderPass_.info.clearColor_
+                ? &clearValues[0]
+                : (renderPass_.info.clearDepth_ ? &clearValues[1] : nullptr));
 
         vkCmdBindPipeline(
-          commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline_);
+            commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline_);
         vkCmdBindDescriptorSets(commandBuffer,
                                 VK_PIPELINE_BIND_POINT_GRAPHICS,
                                 pipelineLayout_,
@@ -127,7 +128,7 @@ struct Renderer
     {
         for (auto ds : descriptorSets_)
             updateTextureInDescriptorSetArray(
-              ctx_.vkDev, ds, newTexture, textureIndex, bindingIndex);
+                ctx_.vkDev, ds, newTexture, textureIndex, bindingIndex);
     }
 
 protected:

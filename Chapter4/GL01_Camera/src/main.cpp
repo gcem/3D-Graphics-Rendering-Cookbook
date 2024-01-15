@@ -62,7 +62,7 @@ main(void)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
     GLFWwindow *window =
-      glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
+        glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
@@ -86,16 +86,18 @@ main(void)
 
     GLuint perFrameDataBuffer;
     glCreateBuffers(1, &perFrameDataBuffer);
-    glNamedBufferStorage(
-      perFrameDataBuffer, kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+    glNamedBufferStorage(perFrameDataBuffer,
+                         kUniformBufferSize,
+                         nullptr,
+                         GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(
-      GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kUniformBufferSize);
+        GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kUniformBufferSize);
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glEnable(GL_DEPTH_TEST);
 
     const aiScene *scene =
-      aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
+        aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
 
     if (!scene || !scene->HasMeshes()) {
         printf("Unable to load data/rubber_duck/scene.gltf\n");
@@ -148,7 +150,7 @@ main(void)
     GLuint modelMatrices;
     glCreateBuffers(1, &modelMatrices);
     glNamedBufferStorage(
-      modelMatrices, sizeof(mat4) * 2, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        modelMatrices, sizeof(mat4) * 2, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, modelMatrices);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -158,7 +160,7 @@ main(void)
     {
         int w, h, comp;
         const uint8_t *img = stbi_load(
-          "data/rubber_duck/textures/Duck_baseColor.png", &w, &h, &comp, 3);
+            "data/rubber_duck/textures/Duck_baseColor.png", &w, &h, &comp, 3);
 
         glCreateTextures(GL_TEXTURE_2D, 1, &texture);
         glTextureParameteri(texture, GL_TEXTURE_MAX_LEVEL, 0);
@@ -166,7 +168,7 @@ main(void)
         glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTextureStorage2D(texture, 1, GL_RGB8, w, h);
         glTextureSubImage2D(
-          texture, 0, 0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, img);
+            texture, 0, 0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, img);
         glBindTextures(0, 1, &texture);
 
         stbi_image_free((void *)img);
@@ -177,7 +179,7 @@ main(void)
     {
         int w, h, comp;
         const float *img =
-          stbi_loadf("data/piazza_bologni_1k.hdr", &w, &h, &comp, 3);
+            stbi_loadf("data/piazza_bologni_1k.hdr", &w, &h, &comp, 3);
         Bitmap in(w, h, comp, eBitmapFormat_Float, img);
         Bitmap out = convertEquirectangularMapToVerticalCross(in);
         stbi_image_free((void *)img);
@@ -222,34 +224,34 @@ main(void)
     });
 
     glfwSetMouseButtonCallback(
-      window, [](auto *window, int button, int action, int mods) {
-          if (button == GLFW_MOUSE_BUTTON_LEFT)
-              mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+        window, [](auto *window, int button, int action, int mods) {
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+                mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (mods & GLFW_MOD_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (mods & GLFW_MOD_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     double timeStamp = glfwGetTime();
     float deltaSeconds = 0.0f;
@@ -274,9 +276,9 @@ main(void)
         const PerFrameData perFrameData = { .view = view,
                                             .proj = p,
                                             .cameraPos = glm::vec4(
-                                              camera.getPosition(), 1.0f) };
+                                                camera.getPosition(), 1.0f) };
         glNamedBufferSubData(
-          perFrameDataBuffer, 0, kUniformBufferSize, &perFrameData);
+            perFrameDataBuffer, 0, kUniformBufferSize, &perFrameData);
 
         const mat4 Matrices[2]{
             glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, -0.5f, -1.5f)),
@@ -289,13 +291,13 @@ main(void)
 
         progModel.useProgram();
         glDrawElementsInstancedBaseVertexBaseInstance(
-          GL_TRIANGLES,
-          static_cast<unsigned>(indices.size()),
-          GL_UNSIGNED_INT,
-          nullptr,
-          1,
-          0,
-          0);
+            GL_TRIANGLES,
+            static_cast<unsigned>(indices.size()),
+            GL_UNSIGNED_INT,
+            nullptr,
+            1,
+            0,
+            0);
 
         progCube.useProgram();
         glDrawArraysInstancedBaseInstance(GL_TRIANGLES, 0, 36, 1, 1);

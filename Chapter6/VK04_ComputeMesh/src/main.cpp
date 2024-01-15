@@ -90,18 +90,18 @@ initMesh()
     uint32_t bufferSize = vertexBufferSize + indexBufferSize;
 
     imgGen = std::make_unique<ComputedImage>(
-      vkDev,
-      "data/shaders/chapter06/VK04_compute_texture.comp",
-      1024,
-      1024,
-      false);
+        vkDev,
+        "data/shaders/chapter06/VK04_compute_texture.comp",
+        1024,
+        1024,
+        false);
     meshGen = std::make_unique<ComputedVertexBuffer>(
-      vkDev,
-      "data/shaders/chapter06/VK04_compute_mesh.comp",
-      indexBufferSize,
-      sizeof(MeshUniformBuffer),
-      12 * sizeof(float),
-      numU * numV);
+        vkDev,
+        "data/shaders/chapter06/VK04_compute_mesh.comp",
+        indexBufferSize,
+        sizeof(MeshUniformBuffer),
+        12 * sizeof(float),
+        numU * numV);
 
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
@@ -110,7 +110,7 @@ initMesh()
                  bufferSize,
                  VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
                  VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                   VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                     VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                  stagingBuffer,
                  stagingBufferMemory);
 
@@ -180,10 +180,10 @@ renderGUI(uint32_t imageIndex)
     ImGui::NewFrame();
 
     const ImGuiWindowFlags flags =
-      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
-      ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
-      ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs |
-      ImGuiWindowFlags_NoBackground;
+        ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs |
+        ImGuiWindowFlags_NoBackground;
 
     // Each torus knot is specified by a pair of coprime integers p and q.
     // https://en.wikipedia.org/wiki/Torus_knot
@@ -197,8 +197,8 @@ renderGUI(uint32_t imageIndex)
         ImGui::SliderFloat("Animation speed", &animationSpeed, 0.0f, 2.0f);
 
         for (size_t i = 0; i != PQ.size(); i++) {
-            std::string title =
-              std::to_string(PQ[i].first) + ", " + std::to_string(PQ[i].second);
+            std::string title = std::to_string(PQ[i].first) + ", " +
+                                std::to_string(PQ[i].second);
             if (ImGui::Button(title.c_str())) {
                 if (PQ[i] != morphQueue.back())
                     morphQueue.push_back(PQ[i]);
@@ -224,10 +224,10 @@ updateBuffers(uint32_t imageIndex)
 
     if (useColoredMesh)
         meshColor->updateUniformBuffer(
-          vkDev, imageIndex, glm::value_ptr(mtx), sizeof(mat4));
+            vkDev, imageIndex, glm::value_ptr(mtx), sizeof(mat4));
     else
         mesh->updateUniformBuffer(
-          vkDev, imageIndex, glm::value_ptr(mtx), sizeof(mat4));
+            vkDev, imageIndex, glm::value_ptr(mtx), sizeof(mat4));
 
     renderGUI(imageIndex);
 }
@@ -266,33 +266,33 @@ main()
     });
 
     glfwSetMouseButtonCallback(
-      window, [](auto *window, int button, int action, int mods) {
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
+        window, [](auto *window, int button, int action, int mods) {
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
 
-          if (button == GLFW_MOUSE_BUTTON_LEFT)
-              mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+                mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     createInstance(&vk.instance);
 
     BL_CHECK(
-      setupDebugCallbacks(vk.instance, &vk.messenger, &vk.reportCallback));
+        setupDebugCallbacks(vk.instance, &vk.messenger, &vk.reportCallback));
     VK_CHECK(
-      glfwCreateWindowSurface(vk.instance, window, nullptr, &vk.surface));
+        glfwCreateWindowSurface(vk.instance, window, nullptr, &vk.surface));
     BL_CHECK(initVulkanRenderDeviceWithCompute(
-      vk, vkDev, kScreenWidth, kScreenHeight, VkPhysicalDeviceFeatures{}));
+        vk, vkDev, kScreenWidth, kScreenHeight, VkPhysicalDeviceFeatures{}));
 
     initMesh();
 
@@ -322,7 +322,7 @@ main()
         meshGen->uploadUniformBuffer(sizeof(MeshUniformBuffer), &ubo);
 
         meshGen->fillComputeCommandBuffer(
-          nullptr, 0, meshGen->computedVertexCount / 2, 1, 1);
+            nullptr, 0, meshGen->computedVertexCount / 2, 1, 1);
         meshGen->submit();
         vkDeviceWaitIdle(vkDev.device);
 

@@ -57,5 +57,5 @@ private:
 
     static constexpr unsigned kMaxLinesCount = 65536;
     static constexpr unsigned kMaxLinesDataSize =
-      kMaxLinesCount * sizeof(VulkanCanvas::VertexData) * 2;
+        kMaxLinesCount * sizeof(VulkanCanvas::VertexData) * 2;
 };

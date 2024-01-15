@@ -98,18 +98,18 @@ main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window =
-      glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
+        glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     glfwMakeContextCurrent(window);
     gladLoadGL(glfwGetProcAddress);
@@ -139,7 +139,7 @@ main(void)
     GLuint perFrameDataBuffer;
     glCreateBuffers(1, &perFrameDataBuffer);
     glNamedBufferStorage(
-      perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kBufferSize);
 
     OPTICK_POP();
@@ -164,9 +164,9 @@ main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         const mat4 m =
-          glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, -3.5f)),
-                      (float)glfwGetTime(),
-                      vec3(1.0f, 1.0f, 1.0f));
+            glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, -3.5f)),
+                        (float)glfwGetTime(),
+                        vec3(1.0f, 1.0f, 1.0f));
         const mat4 p = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
 
         PerFrameData perFrameData = { .mvp = p * m, .isWireframe = false };
@@ -177,7 +177,7 @@ main(void)
             OPTICK_PUSH("Pass1");
             std::this_thread::sleep_for(std::chrono::milliseconds(2));
             glNamedBufferSubData(
-              perFrameDataBuffer, 0, kBufferSize, &perFrameData);
+                perFrameDataBuffer, 0, kBufferSize, &perFrameData);
 
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -189,7 +189,7 @@ main(void)
             std::this_thread::sleep_for(std::chrono::milliseconds(2));
             perFrameData.isWireframe = true;
             glNamedBufferSubData(
-              perFrameDataBuffer, 0, kBufferSize, &perFrameData);
+                perFrameDataBuffer, 0, kBufferSize, &perFrameData);
 
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawArrays(GL_TRIANGLES, 0, 36);

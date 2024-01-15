@@ -5,10 +5,10 @@
 // A port of GL infinite plane
 struct InfinitePlaneRenderer : public Renderer
 {
-    InfinitePlaneRenderer(
-      VulkanRenderContext &ctx,
-      const std::vector<VulkanTexture> &outputs = std::vector<VulkanTexture>{},
-      RenderPass screenRenderPass = RenderPass());
+    InfinitePlaneRenderer(VulkanRenderContext &ctx,
+                          const std::vector<VulkanTexture> &outputs =
+                              std::vector<VulkanTexture>{},
+                          RenderPass screenRenderPass = RenderPass());
 
     void fillCommandBuffer(VkCommandBuffer cmdBuffer,
                            size_t currentImage,

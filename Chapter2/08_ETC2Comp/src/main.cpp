@@ -16,7 +16,7 @@ main()
 {
     int w, h, comp;
     const uint8_t *img =
-      stbi_load("data/ch2_sample3_STB.jpg", &w, &h, &comp, 4);
+        stbi_load("data/ch2_sample3_STB.jpg", &w, &h, &comp, 4);
 
     std::vector<float> rgbaf;
 

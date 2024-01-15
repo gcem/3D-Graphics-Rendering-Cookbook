@@ -33,7 +33,7 @@ gli::texture
 convertLUTtoTexture(const float *data)
 {
     gli::texture lutTexture = gli::texture2d(
-      gli::FORMAT_RG16_SFLOAT_PACK16, gli::extent2d(brdfW, brdfH), 1);
+        gli::FORMAT_RG16_SFLOAT_PACK16, gli::extent2d(brdfW, brdfH), 1);
 
     for (int y = 0; y < brdfH; y++) {
         for (int x = 0; x < brdfW; x++) {
@@ -41,7 +41,7 @@ convertLUTtoTexture(const float *data)
             const gli::vec2 value(data[ofs * 2 + 0], data[ofs * 2 + 1]);
             const gli::texture::extent_type uv = { x, y, 0 };
             lutTexture.store<glm::uint32>(
-              uv, 0, 0, 0, gli::packHalf2x16(value));
+                uv, 0, 0, 0, gli::packHalf2x16(value));
         }
     }
 
@@ -58,7 +58,7 @@ main()
     if (!setupDebugCallbacks(vk.instance, &vk.messenger, &vk.reportCallback) ||
         glfwCreateWindowSurface(vk.instance, window, nullptr, &vk.surface) ||
         !initVulkanRenderDeviceWithCompute(
-          vk, vkDev, brdfW, brdfH, VkPhysicalDeviceFeatures{}))
+            vk, vkDev, brdfW, brdfH, VkPhysicalDeviceFeatures{}))
         exit(EXIT_FAILURE);
 
     printf("Calculating LUT texture...\n");

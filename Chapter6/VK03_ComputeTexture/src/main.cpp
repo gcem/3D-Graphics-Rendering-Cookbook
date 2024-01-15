@@ -35,19 +35,19 @@ main()
     window = initVulkanApp(kScreenWidth, kScreenHeight);
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     createInstance(&vk.instance);
 
     if (!setupDebugCallbacks(vk.instance, &vk.messenger, &vk.reportCallback) ||
         glfwCreateWindowSurface(vk.instance, window, nullptr, &vk.surface) ||
         !initVulkanRenderDeviceWithCompute(
-          vk, vkDev, kScreenWidth, kScreenHeight, VkPhysicalDeviceFeatures{}))
+            vk, vkDev, kScreenWidth, kScreenHeight, VkPhysicalDeviceFeatures{}))
         exit(EXIT_FAILURE);
 
     VulkanImage nullTexture = { .image = VK_NULL_HANDLE,
@@ -56,13 +56,13 @@ main()
     clear = std::make_unique<VulkanClear>(vkDev, nullTexture);
     finish = std::make_unique<VulkanFinish>(vkDev, nullTexture);
     imgGen = std::make_unique<ComputedImage>(
-      vkDev,
-      "data/shaders/chapter06/VK03_compute_texture.comp",
-      1024,
-      1024,
-      false);
+        vkDev,
+        "data/shaders/chapter06/VK03_compute_texture.comp",
+        1024,
+        1024,
+        false);
     quad = std::make_unique<VulkanSingleQuadRenderer>(
-      vkDev, imgGen->computed, imgGen->computedImageSampler);
+        vkDev, imgGen->computed, imgGen->computedImageSampler);
 
     do {
         float thisTime = (float)glfwGetTime();
@@ -75,7 +75,7 @@ main()
         vkDeviceWaitIdle(vkDev.device);
 
         drawFrame(
-          vkDev, [](uint32_t) {}, composeFrame);
+            vkDev, [](uint32_t) {}, composeFrame);
 
         glfwPollEvents();
 

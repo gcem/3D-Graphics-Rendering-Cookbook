@@ -22,143 +22,143 @@ struct HDRProcessor : public CompositeRenderer
       ,
 
       brightnessTex(
-        c.resources.addColorTexture(0,
-                                    0,
-                                    LuminosityFormat,
-                                    VK_FILTER_LINEAR,
-                                    VK_FILTER_LINEAR,
-                                    VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+          c.resources.addColorTexture(0,
+                                      0,
+                                      LuminosityFormat,
+                                      VK_FILTER_LINEAR,
+                                      VK_FILTER_LINEAR,
+                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       ,
 
       adaptedLuminanceTex1(
-        c.resources.addColorTexture(1,
-                                    1,
-                                    LuminosityFormat,
-                                    VK_FILTER_LINEAR,
-                                    VK_FILTER_LINEAR,
-                                    VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
-      , adaptedLuminanceTex2(
           c.resources.addColorTexture(1,
                                       1,
                                       LuminosityFormat,
                                       VK_FILTER_LINEAR,
                                       VK_FILTER_LINEAR,
                                       VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+      , adaptedLuminanceTex2(
+            c.resources.addColorTexture(1,
+                                        1,
+                                        LuminosityFormat,
+                                        VK_FILTER_LINEAR,
+                                        VK_FILTER_LINEAR,
+                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       ,
 
       bloomX1Tex(
-        c.resources.addColorTexture(0,
-                                    0,
-                                    LuminosityFormat,
-                                    VK_FILTER_LINEAR,
-                                    VK_FILTER_LINEAR,
-                                    VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+          c.resources.addColorTexture(0,
+                                      0,
+                                      LuminosityFormat,
+                                      VK_FILTER_LINEAR,
+                                      VK_FILTER_LINEAR,
+                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       , bloomY1Tex(
-          c.resources.addColorTexture(0,
-                                      0,
-                                      LuminosityFormat,
-                                      VK_FILTER_LINEAR,
-                                      VK_FILTER_LINEAR,
-                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+            c.resources.addColorTexture(0,
+                                        0,
+                                        LuminosityFormat,
+                                        VK_FILTER_LINEAR,
+                                        VK_FILTER_LINEAR,
+                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       , bloomX2Tex(
-          c.resources.addColorTexture(0,
-                                      0,
-                                      LuminosityFormat,
-                                      VK_FILTER_LINEAR,
-                                      VK_FILTER_LINEAR,
-                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+            c.resources.addColorTexture(0,
+                                        0,
+                                        LuminosityFormat,
+                                        VK_FILTER_LINEAR,
+                                        VK_FILTER_LINEAR,
+                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       , bloomY2Tex(
-          c.resources.addColorTexture(0,
-                                      0,
-                                      LuminosityFormat,
-                                      VK_FILTER_LINEAR,
-                                      VK_FILTER_LINEAR,
-                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+            c.resources.addColorTexture(0,
+                                        0,
+                                        LuminosityFormat,
+                                        VK_FILTER_LINEAR,
+                                        VK_FILTER_LINEAR,
+                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       ,
 
       streaks1Tex(
-        c.resources.addColorTexture(0,
-                                    0,
-                                    LuminosityFormat,
-                                    VK_FILTER_LINEAR,
-                                    VK_FILTER_LINEAR,
-                                    VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
-      , streaks2Tex(
           c.resources.addColorTexture(0,
                                       0,
                                       LuminosityFormat,
                                       VK_FILTER_LINEAR,
                                       VK_FILTER_LINEAR,
                                       VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+      , streaks2Tex(
+            c.resources.addColorTexture(0,
+                                        0,
+                                        LuminosityFormat,
+                                        VK_FILTER_LINEAR,
+                                        VK_FILTER_LINEAR,
+                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       ,
 
       // Output is an 8-bit RGB framebuffer
       streaksPatternTex(
-        c.resources.loadTexture2D("data/StreaksRotationPattern.bmp"))
+          c.resources.loadTexture2D("data/StreaksRotationPattern.bmp"))
       ,
 
       resultTex(c.resources.addColorTexture())
       ,
 
       brightness(
-        c,
-        DescriptorSetInfo{ .textures = { fsTextureAttachment(input) } },
-        { brightnessTex },
-        "data/shaders/chapter08/VK03_BrightPass.frag")
+          c,
+          DescriptorSetInfo{ .textures = { fsTextureAttachment(input) } },
+          { brightnessTex },
+          "data/shaders/chapter08/VK03_BrightPass.frag")
       ,
 
-      bloomX1(
-        c,
-        DescriptorSetInfo{ .textures = { fsTextureAttachment(brightnessTex) } },
-        { bloomX1Tex },
-        "data/shaders/chapter08/VK03_BloomX.frag")
-      , bloomY1(
-          c,
-          DescriptorSetInfo{ .textures = { fsTextureAttachment(bloomX1Tex) } },
-          { bloomY1Tex },
-          "data/shaders/chapter08/VK03_BloomY.frag")
-      , bloomX2(
-          c,
-          DescriptorSetInfo{ .textures = { fsTextureAttachment(bloomY1Tex) } },
-          { bloomX2Tex },
-          "data/shaders/chapter08/VK03_BloomX.frag")
-      , bloomY2(
-          c,
-          DescriptorSetInfo{ .textures = { fsTextureAttachment(bloomX2Tex) } },
-          { bloomY2Tex },
-          "data/shaders/chapter08/VK03_BloomY.frag")
+      bloomX1(c,
+              DescriptorSetInfo{
+                  .textures = { fsTextureAttachment(brightnessTex) } },
+              { bloomX1Tex },
+              "data/shaders/chapter08/VK03_BloomX.frag")
+      , bloomY1(c,
+                DescriptorSetInfo{
+                    .textures = { fsTextureAttachment(bloomX1Tex) } },
+                { bloomY1Tex },
+                "data/shaders/chapter08/VK03_BloomY.frag")
+      , bloomX2(c,
+                DescriptorSetInfo{
+                    .textures = { fsTextureAttachment(bloomY1Tex) } },
+                { bloomX2Tex },
+                "data/shaders/chapter08/VK03_BloomX.frag")
+      , bloomY2(c,
+                DescriptorSetInfo{
+                    .textures = { fsTextureAttachment(bloomX2Tex) } },
+                { bloomY2Tex },
+                "data/shaders/chapter08/VK03_BloomY.frag")
       ,
 
       streaks1(c,
                DescriptorSetInfo{
-                 .textures = { fsTextureAttachment(bloomY2Tex),
-                               fsTextureAttachment(streaksPatternTex) } },
+                   .textures = { fsTextureAttachment(bloomY2Tex),
+                                 fsTextureAttachment(streaksPatternTex) } },
                { streaks1Tex },
                "data/shaders/chapter08/VK03_Streaks.frag")
       , streaks2(c,
                  DescriptorSetInfo{
-                   .textures = { fsTextureAttachment(streaks1Tex),
-                                 fsTextureAttachment(streaksPatternTex) } },
+                     .textures = { fsTextureAttachment(streaks1Tex),
+                                   fsTextureAttachment(streaksPatternTex) } },
                  { streaks2Tex },
                  "data/shaders/chapter08/VK03_Streaks.frag")
       ,
 
       adaptationEven(
-        c,
-        DescriptorSetInfo{
-          .buffers = { uniformBuffer },
-          .textures = { fsTextureAttachment(avgLuminance),
-                        fsTextureAttachment(adaptedLuminanceTex1) } },
-        { adaptedLuminanceTex2 },
-        "data/shaders/chapter08/VK03_LightAdaptation.frag")
-      , adaptationOdd(
           c,
           DescriptorSetInfo{
-            .buffers = { uniformBuffer },
-            .textures = { fsTextureAttachment(avgLuminance),
-                          fsTextureAttachment(adaptedLuminanceTex2) } },
-          { adaptedLuminanceTex1 },
+              .buffers = { uniformBuffer },
+              .textures = { fsTextureAttachment(avgLuminance),
+                            fsTextureAttachment(adaptedLuminanceTex1) } },
+          { adaptedLuminanceTex2 },
           "data/shaders/chapter08/VK03_LightAdaptation.frag")
+      , adaptationOdd(
+            c,
+            DescriptorSetInfo{
+                .buffers = { uniformBuffer },
+                .textures = { fsTextureAttachment(avgLuminance),
+                              fsTextureAttachment(adaptedLuminanceTex2) } },
+            { adaptedLuminanceTex1 },
+            "data/shaders/chapter08/VK03_LightAdaptation.frag")
       ,
 
       adaptation1ToColor(c, adaptedLuminanceTex1)
@@ -171,18 +171,18 @@ struct HDRProcessor : public CompositeRenderer
 
       composerEven(c,
                    DescriptorSetInfo{
-                     .buffers = { uniformBuffer },
-                     .textures = { fsTextureAttachment(input),
-                                   fsTextureAttachment(adaptedLuminanceTex2),
-                                   fsTextureAttachment(streaks2Tex) } },
+                       .buffers = { uniformBuffer },
+                       .textures = { fsTextureAttachment(input),
+                                     fsTextureAttachment(adaptedLuminanceTex2),
+                                     fsTextureAttachment(streaks2Tex) } },
                    { resultTex },
                    "data/shaders/chapter08/VK03_HDR.frag")
       , composerOdd(c,
                     DescriptorSetInfo{
-                      .buffers = { uniformBuffer },
-                      .textures = { fsTextureAttachment(input),
-                                    fsTextureAttachment(adaptedLuminanceTex1),
-                                    fsTextureAttachment(streaks2Tex) } },
+                        .buffers = { uniformBuffer },
+                        .textures = { fsTextureAttachment(input),
+                                      fsTextureAttachment(adaptedLuminanceTex1),
+                                      fsTextureAttachment(streaks2Tex) } },
                     { resultTex },
                     "data/shaders/chapter08/VK03_HDR.frag")
       ,
@@ -249,7 +249,7 @@ struct HDRProcessor : public CompositeRenderer
         renderers_.emplace_back(adaptation1ToShader, false); // 26
 
         renderers_[21].enabled_ =
-          false; // disable adaptationProcessor at the beginning
+            false; // disable adaptationProcessor at the beginning
         renderers_[22].enabled_ = false;
         renderers_[23].enabled_ = false;
 

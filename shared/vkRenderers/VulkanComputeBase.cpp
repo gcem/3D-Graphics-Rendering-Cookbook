@@ -10,7 +10,7 @@ ComputeBase::ComputeBase(VulkanRenderDevice &vkDev,
                        inputSize,
                        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                         VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                           VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                        inBuffer,
                        inBufferMemory);
 
@@ -18,7 +18,7 @@ ComputeBase::ComputeBase(VulkanRenderDevice &vkDev,
                        outputSize,
                        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                         VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                           VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                        outBuffer,
                        outBufferMemory);
 
@@ -28,7 +28,7 @@ ComputeBase::ComputeBase(VulkanRenderDevice &vkDev,
     createComputeDescriptorSetLayout(vkDev.device, &dsLayout);
     createPipelineLayout(vkDev.device, dsLayout, &pipelineLayout);
     createComputePipeline(
-      vkDev.device, s.shaderModule, pipelineLayout, &pipeline);
+        vkDev.device, s.shaderModule, pipelineLayout, &pipeline);
     createComputeDescriptorSet(vkDev.device, dsLayout);
 
     vkDestroyShaderModule(vkDev.device, s.shaderModule, nullptr);
@@ -51,8 +51,8 @@ ComputeBase::~ComputeBase()
 
 bool
 ComputeBase::createComputeDescriptorSet(
-  VkDevice device,
-  VkDescriptorSetLayout descriptorSetLayout)
+    VkDevice device,
+    VkDescriptorSetLayout descriptorSetLayout)
 {
     // Descriptor pool
     VkDescriptorPoolSize descriptorPoolSize = {
@@ -69,7 +69,7 @@ ComputeBase::createComputeDescriptorSet(
     };
 
     VK_CHECK(vkCreateDescriptorPool(
-      device, &descriptorPoolCreateInfo, 0, &descriptorPool));
+        device, &descriptorPoolCreateInfo, 0, &descriptorPool));
 
     // Descriptor set
     VkDescriptorSetAllocateInfo descriptorSetAllocateInfo = {
@@ -81,7 +81,7 @@ ComputeBase::createComputeDescriptorSet(
     };
 
     VK_CHECK(vkAllocateDescriptorSets(
-      device, &descriptorSetAllocateInfo, &descriptorSet));
+        device, &descriptorSetAllocateInfo, &descriptorSet));
 
     // Finally, update descriptor set with concrete buffer pointers
     VkDescriptorBufferInfo inBufferInfo = { inBuffer, 0, VK_WHOLE_SIZE };

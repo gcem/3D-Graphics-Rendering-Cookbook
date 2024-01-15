@@ -16,7 +16,7 @@ struct MyApp : public CameraApp
       : CameraApp(-95, -95)
       , cubemap(ctx_.resources.loadCubeMap("data/immenstadter_horn_2k.hdr"))
       , cubemapIrr(ctx_.resources.loadCubeMap(
-          "data/immenstadter_horn_2k_irradiance.hdr"))
+            "data/immenstadter_horn_2k_irradiance.hdr"))
       ,
 
       HDRDepth(ctx_.resources.addDepthTexture())
@@ -37,28 +37,28 @@ struct MyApp : public CameraApp
       ,
 
       cubeRenderer(
-        ctx_,
-        cubemap,
-        { HDRLuminance, HDRDepth },
-        ctx_.resources.addRenderPass(
+          ctx_,
+          cubemap,
           { HDRLuminance, HDRDepth },
-          RenderPassCreateInfo{ .clearColor_ = true,
-                                .clearDepth_ = true,
-                                .flags_ = eRenderPassBit_First |
-                                          eRenderPassBit_Offscreen }))
+          ctx_.resources.addRenderPass(
+              { HDRLuminance, HDRDepth },
+              RenderPassCreateInfo{ .clearColor_ = true,
+                                    .clearDepth_ = true,
+                                    .flags_ = eRenderPassBit_First |
+                                              eRenderPassBit_Offscreen }))
       ,
 
       multiRenderer(
-        ctx_,
-        sceneData,
-        "data/shaders/chapter07/VK01.vert",
-        "data/shaders/chapter08/VK03_scene_IBL.frag",
-        { HDRLuminance, HDRDepth },
-        ctx_.resources.addRenderPass(
+          ctx_,
+          sceneData,
+          "data/shaders/chapter07/VK01.vert",
+          "data/shaders/chapter08/VK03_scene_IBL.frag",
           { HDRLuminance, HDRDepth },
-          RenderPassCreateInfo{ .clearColor_ = false,
-                                .clearDepth_ = false,
-                                .flags_ = eRenderPassBit_Offscreen }))
+          ctx_.resources.addRenderPass(
+              { HDRLuminance, HDRDepth },
+              RenderPassCreateInfo{ .clearColor_ = false,
+                                    .clearDepth_ = false,
+                                    .flags_ = eRenderPassBit_Offscreen }))
       ,
 
       // tone mapping (gamma correction / exposure)
@@ -125,12 +125,12 @@ struct MyApp : public CameraApp
         setVkImageName(ctx_.vkDev, hdr.getBloom1().image.image, "bloom1");
         setVkImageName(ctx_.vkDev, hdr.getBloom2().image.image, "bloom2");
         setVkImageName(
-          ctx_.vkDev, hdr.getBrightness().image.image, "bloomBright");
+            ctx_.vkDev, hdr.getBrightness().image.image, "bloomBright");
         setVkImageName(ctx_.vkDev, hdr.getResult().image.image, "bloomResult");
         setVkImageName(
-          ctx_.vkDev, hdr.getStreaks1().image.image, "bloomStreaks1");
+            ctx_.vkDev, hdr.getStreaks1().image.image, "bloomStreaks1");
         setVkImageName(
-          ctx_.vkDev, hdr.getStreaks2().image.image, "bloomStreaks2");
+            ctx_.vkDev, hdr.getStreaks2().image.image, "bloomStreaks2");
 
         onScreenRenderers_.emplace_back(cubeRenderer);
 
@@ -163,11 +163,11 @@ struct MyApp : public CameraApp
         ImGui::Checkbox("ShowDebug", &showDebug);
 
         ImGui::SliderFloat(
-          "BloomStrength: ", &hdrUniforms->bloomStrength, 0.1f, 2.0f);
+            "BloomStrength: ", &hdrUniforms->bloomStrength, 0.1f, 2.0f);
         ImGui::SliderFloat("MaxWhite: ", &hdrUniforms->maxWhite, 0.1f, 2.0f);
         ImGui::SliderFloat("Exposure: ", &hdrUniforms->exposure, 0.1f, 10.0f);
         ImGui::SliderFloat(
-          "Adaptation speed: ", &hdrUniforms->adaptationSpeed, 0.01f, 2.0f);
+            "Adaptation speed: ", &hdrUniforms->adaptationSpeed, 0.01f, 2.0f);
         ImGui::End();
 
         if (showPyramid) {

@@ -25,7 +25,7 @@ public:
     };
 
     const std::shared_ptr<GLTexture> dummyTexture_ =
-      std::make_shared<GLTexture>(GL_TEXTURE_2D, "data/const1.bmp");
+        std::make_shared<GLTexture>(GL_TEXTURE_2D, "data/const1.bmp");
 
     std::vector<std::string> textureFiles_;
     std::vector<LoadedImageData> loadedFiles_;
@@ -37,9 +37,9 @@ public:
 
     Scene scene_;
     std::vector<MaterialDescription>
-      materialsLoaded_; // materials loaded from scene
+        materialsLoaded_; // materials loaded from scene
     std::vector<MaterialDescription>
-      materials_; // materials uploaded to GPU buffers
+        materials_; // materials uploaded to GPU buffers
     std::vector<DrawData> shapes_;
 
     tf::Taskflow taskflow_;

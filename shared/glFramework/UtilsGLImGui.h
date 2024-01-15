@@ -47,18 +47,22 @@ public:
 
         glVertexArrayElementBuffer(vao_, elements_.getHandle());
         glVertexArrayVertexBuffer(
-          vao_, 0, vertices_.getHandle(), 0, sizeof(ImDrawVert));
+            vao_, 0, vertices_.getHandle(), 0, sizeof(ImDrawVert));
 
         glEnableVertexArrayAttrib(vao_, 0);
         glEnableVertexArrayAttrib(vao_, 1);
         glEnableVertexArrayAttrib(vao_, 2);
 
         glVertexArrayAttribFormat(
-          vao_, 0, 2, GL_FLOAT, GL_FALSE, IM_OFFSETOF(ImDrawVert, pos));
+            vao_, 0, 2, GL_FLOAT, GL_FALSE, IM_OFFSETOF(ImDrawVert, pos));
         glVertexArrayAttribFormat(
-          vao_, 1, 2, GL_FLOAT, GL_FALSE, IM_OFFSETOF(ImDrawVert, uv));
-        glVertexArrayAttribFormat(
-          vao_, 2, 4, GL_UNSIGNED_BYTE, GL_TRUE, IM_OFFSETOF(ImDrawVert, col));
+            vao_, 1, 2, GL_FLOAT, GL_FALSE, IM_OFFSETOF(ImDrawVert, uv));
+        glVertexArrayAttribFormat(vao_,
+                                  2,
+                                  4,
+                                  GL_UNSIGNED_BYTE,
+                                  GL_TRUE,
+                                  IM_OFFSETOF(ImDrawVert, col));
 
         glVertexArrayAttribBinding(vao_, 0, 0);
         glVertexArrayAttribBinding(vao_, 1, 0);
@@ -105,12 +109,12 @@ public:
             glNamedBufferSubData(vertices_.getHandle(),
                                  0,
                                  (GLsizeiptr)cmd_list->VtxBuffer.Size *
-                                   sizeof(ImDrawVert),
+                                     sizeof(ImDrawVert),
                                  cmd_list->VtxBuffer.Data);
             glNamedBufferSubData(elements_.getHandle(),
                                  0,
                                  (GLsizeiptr)cmd_list->IdxBuffer.Size *
-                                   sizeof(ImDrawIdx),
+                                     sizeof(ImDrawIdx),
                                  cmd_list->IdxBuffer.Data);
 
             for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++) {
@@ -122,11 +126,11 @@ public:
                           (int)(cr.w - cr.y));
                 glBindTextureUnit(0, (GLuint)(intptr_t)pcmd->TextureId);
                 glDrawElementsBaseVertex(
-                  GL_TRIANGLES,
-                  (GLsizei)pcmd->ElemCount,
-                  GL_UNSIGNED_SHORT,
-                  (void *)(intptr_t)(pcmd->IdxOffset * sizeof(ImDrawIdx)),
-                  (GLint)pcmd->VtxOffset);
+                    GL_TRIANGLES,
+                    (GLsizei)pcmd->ElemCount,
+                    GL_UNSIGNED_SHORT,
+                    (void *)(intptr_t)(pcmd->IdxOffset * sizeof(ImDrawIdx)),
+                    (GLint)pcmd->VtxOffset);
             }
         }
 
@@ -151,7 +155,7 @@ private:
         cfg.OversampleH = 4;
         cfg.OversampleV = 4;
         ImFont *Font = io.Fonts->AddFontFromFileTTF(
-          "data/OpenSans-Light.ttf", cfg.SizePixels, &cfg);
+            "data/OpenSans-Light.ttf", cfg.SizePixels, &cfg);
 
         unsigned char *pixels = nullptr;
         int width, height;
@@ -163,8 +167,15 @@ private:
         glTextureParameteri(texture_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTextureStorage2D(texture_, 1, GL_RGBA8, width, height);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTextureSubImage2D(
-          texture_, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        glTextureSubImage2D(texture_,
+                            0,
+                            0,
+                            0,
+                            width,
+                            height,
+                            GL_RGBA,
+                            GL_UNSIGNED_BYTE,
+                            pixels);
 
         io.Fonts->TexID = (ImTextureID)(intptr_t)texture_;
         io.FontDefault = Font;
@@ -180,7 +191,7 @@ private:
     GLShader fragment_ = GLShader(GL_FRAGMENT_SHADER, shaderCodeImGuiFragment);
     GLProgram program_ = GLProgram(vertex_, fragment_);
     GLBuffer perFrameDataBuffer_ =
-      GLBuffer(sizeof(glm::mat4), nullptr, GL_DYNAMIC_STORAGE_BIT);
+        GLBuffer(sizeof(glm::mat4), nullptr, GL_DYNAMIC_STORAGE_BIT);
 };
 
 void

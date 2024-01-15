@@ -102,7 +102,7 @@ recalculateGlobalTransforms(Scene &scene)
         for (const int &c : scene.changedAtThisFrame_[i]) {
             int p = scene.hierarchy_[c].parent_;
             scene.globalTransform_[c] =
-              scene.globalTransform_[p] * scene.localTransform_[c];
+                scene.globalTransform_[p] * scene.localTransform_[c];
         }
         scene.changedAtThisFrame_[i].clear();
     }
@@ -394,7 +394,7 @@ mergeScenes(Scene &scene,
         // transform old root nodes, if the transforms are given
         if (!rootTransforms.empty())
             scene.localTransform_[offs] =
-              rootTransforms[idx] * scene.localTransform_[offs];
+                rootTransforms[idx] * scene.localTransform_[offs];
 
         offs += nodeCount;
         idx++;
@@ -423,7 +423,7 @@ dumpSceneToDot(const char *fileName, const Scene &scene, int *visited)
                 extra = ", color = red";
         }
         fprintf(
-          f, "n%d [label=\"%s\" %s]\n", (int)i, name.c_str(), extra.c_str());
+            f, "n%d [label=\"%s\" %s]\n", (int)i, name.c_str(), extra.c_str());
     }
     for (size_t i = 0; i < scene.hierarchy_.size(); i++) {
         int p = scene.hierarchy_[i].parent_;
@@ -471,9 +471,9 @@ findLastNonDeletedItem(const Scene &scene,
         return -1;
 
     return (newIndices[node] == -1)
-             ? findLastNonDeletedItem(
-                 scene, newIndices, scene.hierarchy_[node].nextSibling_)
-             : newIndices[node];
+               ? findLastNonDeletedItem(
+                     scene, newIndices, scene.hierarchy_[node].nextSibling_)
+               : newIndices[node];
 }
 
 void
@@ -520,11 +520,11 @@ deleteSceneNodes(Scene &scene, const std::vector<uint32_t> &nodesToDelete)
         return Hierarchy{
             .parent_ = (h.parent_ != -1) ? newIndices[h.parent_] : -1,
             .firstChild_ =
-              findLastNonDeletedItem(scene, newIndices, h.firstChild_),
+                findLastNonDeletedItem(scene, newIndices, h.firstChild_),
             .nextSibling_ =
-              findLastNonDeletedItem(scene, newIndices, h.nextSibling_),
+                findLastNonDeletedItem(scene, newIndices, h.nextSibling_),
             .lastSibling_ =
-              findLastNonDeletedItem(scene, newIndices, h.lastSibling_)
+                findLastNonDeletedItem(scene, newIndices, h.lastSibling_)
         };
     };
     std::transform(scene.hierarchy_.begin(),

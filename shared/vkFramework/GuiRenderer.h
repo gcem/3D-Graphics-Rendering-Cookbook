@@ -6,10 +6,10 @@ struct Scene;
 
 struct GuiRenderer : public Renderer
 {
-    GuiRenderer(
-      VulkanRenderContext &ctx,
-      const std::vector<VulkanTexture> &textures = std::vector<VulkanTexture>{},
-      RenderPass renderPass = RenderPass());
+    GuiRenderer(VulkanRenderContext &ctx,
+                const std::vector<VulkanTexture> &textures =
+                    std::vector<VulkanTexture>{},
+                RenderPass renderPass = RenderPass());
     virtual ~GuiRenderer();
 
     void fillCommandBuffer(VkCommandBuffer commandBuffer,

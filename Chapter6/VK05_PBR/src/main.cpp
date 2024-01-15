@@ -47,13 +47,14 @@ updateBuffers(uint32_t imageIndex)
 
     const mat4 scale = glm::scale(mat4(1.0f), vec3(5.0f));
     const mat4 rot1 =
-      glm::rotate(mat4(1.0f), glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+        glm::rotate(mat4(1.0f), glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
     const mat4 rot2 =
-      glm::rotate(mat4(1.0f), glm::radians(180.0f), vec3(0.0f, 0.0f, 1.0f));
+        glm::rotate(mat4(1.0f), glm::radians(180.0f), vec3(0.0f, 0.0f, 1.0f));
     const mat4 rot = rot1 * rot2;
     const mat4 pos = glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, +1.0f));
-    const mat4 m = glm::rotate(
-      scale * rot * pos, (float)glfwGetTime() * -0.1f, vec3(0.0f, 0.0f, 1.0f));
+    const mat4 m = glm::rotate(scale * rot * pos,
+                               (float)glfwGetTime() * -0.1f,
+                               vec3(0.0f, 0.0f, 1.0f));
     const mat4 proj = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
     const mat4 mvp = proj * camera.getViewMatrix() * m;
 
@@ -80,61 +81,62 @@ main()
     window = initVulkanApp(kScreenWidth, kScreenHeight);
 
     glfwSetMouseButtonCallback(
-      window, [](auto *window, int button, int action, int mods) {
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          if (button == GLFW_MOUSE_BUTTON_LEFT)
-              mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+        window, [](auto *window, int button, int action, int mods) {
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+                mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     createInstance(&vk.instance);
 
     BL_CHECK(
-      setupDebugCallbacks(vk.instance, &vk.messenger, &vk.reportCallback));
+        setupDebugCallbacks(vk.instance, &vk.messenger, &vk.reportCallback));
     VK_CHECK(
-      glfwCreateWindowSurface(vk.instance, window, nullptr, &vk.surface));
+        glfwCreateWindowSurface(vk.instance, window, nullptr, &vk.surface));
     BL_CHECK(initVulkanRenderDeviceWithCompute(
-      vk, vkDev, kScreenWidth, kScreenHeight, VkPhysicalDeviceFeatures{}));
+        vk, vkDev, kScreenWidth, kScreenHeight, VkPhysicalDeviceFeatures{}));
 
     VulkanImage depthTexture;
     createDepthResources(
-      vkDev, vkDev.framebufferWidth, vkDev.framebufferHeight, depthTexture);
+        vkDev, vkDev.framebufferWidth, vkDev.framebufferHeight, depthTexture);
 
     clear = std::make_unique<VulkanClear>(vkDev, depthTexture);
     finish = std::make_unique<VulkanFinish>(vkDev, depthTexture);
 
     modelPBR = std::make_unique<PBRModelRenderer>(
-      vkDev,
-      (uint32_t)sizeof(UBO),
-      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf",
-      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_AO.jpg",
-      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_emissive.jpg",
-      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_albedo.jpg",
-      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/"
-      "Default_metalRoughness.jpg",
-      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_normal.jpg",
-      "data/piazza_bologni_1k.hdr",
-      "data/piazza_bologni_1k_irradiance.hdr",
-      depthTexture);
+        vkDev,
+        (uint32_t)sizeof(UBO),
+        "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf",
+        "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_AO.jpg",
+        "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/"
+        "Default_emissive.jpg",
+        "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_albedo.jpg",
+        "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/"
+        "Default_metalRoughness.jpg",
+        "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_normal.jpg",
+        "data/piazza_bologni_1k.hdr",
+        "data/piazza_bologni_1k_irradiance.hdr",
+        depthTexture);
 
     double lastTime = glfwGetTime();
 

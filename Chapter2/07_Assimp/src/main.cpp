@@ -62,18 +62,18 @@ main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window =
-      glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
+        glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     glfwMakeContextCurrent(window);
     gladLoadGL(glfwGetProcAddress);
@@ -101,7 +101,7 @@ main(void)
     GLuint perFrameDataBuffer;
     glCreateBuffers(1, &perFrameDataBuffer);
     glNamedBufferStorage(
-      perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kBufferSize);
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -113,7 +113,7 @@ main(void)
     glCreateBuffers(1, &meshData);
 
     const aiScene *scene =
-      aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
+        aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
 
     if (!scene || !scene->HasMeshes()) {
         printf("Unable to load data/rubber_duck/scene.gltf\n");
@@ -136,7 +136,7 @@ main(void)
     aiReleaseImport(scene);
 
     glNamedBufferStorage(
-      meshData, sizeof(vec3) * positions.size(), positions.data(), 0);
+        meshData, sizeof(vec3) * positions.size(), positions.data(), 0);
 
     glVertexArrayVertexBuffer(vao, 0, meshData, 0, sizeof(vec3));
     glEnableVertexArrayAttrib(vao, 0);
@@ -154,9 +154,9 @@ main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         const mat4 m =
-          glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, -0.5f, -1.5f)),
-                      (float)glfwGetTime(),
-                      vec3(0.0f, 1.0f, 0.0f));
+            glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, -0.5f, -1.5f)),
+                        (float)glfwGetTime(),
+                        vec3(0.0f, 1.0f, 0.0f));
         const mat4 p = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
 
         PerFrameData perFrameData = { .mvp = p * m, .isWireframe = false };

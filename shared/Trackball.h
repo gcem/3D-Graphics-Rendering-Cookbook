@@ -99,8 +99,9 @@ private:
     glm::vec3 projectOnSphere(glm::vec2 ScreenPoint)
     {
         // convert to -1.0...1.0 range
-        glm::vec3 proj(
-          +(2.0f * ScreenPoint.x - 1.0f), -(2.0f * ScreenPoint.y - 1.0f), 0.0f);
+        glm::vec3 proj(+(2.0f * ScreenPoint.x - 1.0f),
+                       -(2.0f * ScreenPoint.y - 1.0f),
+                       0.0f);
 
         const float Length = std::min(glm::length(proj), 1.0f);
 

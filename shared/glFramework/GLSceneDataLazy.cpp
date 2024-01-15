@@ -5,8 +5,8 @@
 
 static uint64_t
 getTextureHandleBindless(
-  uint64_t idx,
-  const std::vector<std::shared_ptr<GLTexture>> &textures)
+    uint64_t idx,
+    const std::vector<std::shared_ptr<GLTexture>> &textures)
 {
     if (idx == INVALID_TEXTURE)
         return 0;
@@ -32,15 +32,18 @@ GLSceneDataLazy::GLSceneDataLazy(const char *meshFile,
     loadedFiles_.reserve(textureFiles_.size());
 
     taskflow_.for_each_index(
-      0u, (uint32_t)textureFiles_.size(), 1u, [this](int idx) {
-          int w, h;
-          const uint8_t *img = stbi_load(
-            this->textureFiles_[idx].c_str(), &w, &h, nullptr, STBI_rgb_alpha);
-          if (img) {
-              std::lock_guard lock(loadedFilesMutex_);
-              loadedFiles_.emplace_back(LoadedImageData{ idx, w, h, img });
-          }
-      });
+        0u, (uint32_t)textureFiles_.size(), 1u, [this](int idx) {
+            int w, h;
+            const uint8_t *img = stbi_load(this->textureFiles_[idx].c_str(),
+                                           &w,
+                                           &h,
+                                           nullptr,
+                                           STBI_rgb_alpha);
+            if (img) {
+                std::lock_guard lock(loadedFilesMutex_);
+                loadedFiles_.emplace_back(LoadedImageData{ idx, w, h, img });
+            }
+        });
 
     executor_.run(taskflow_);
 }
@@ -62,7 +65,7 @@ GLSceneDataLazy::uploadLoadedTextures()
     }
 
     allMaterialTextures_[data.index_] =
-      std::make_shared<GLTexture>(data.w_, data.h_, data.img_);
+        std::make_shared<GLTexture>(data.w_, data.h_, data.img_);
 
     stbi_image_free((void *)data.img_);
 
@@ -83,15 +86,15 @@ GLSceneDataLazy::updateMaterials()
         auto &out = materials_[i];
         out = in;
         out.ambientOcclusionMap_ = getTextureHandleBindless(
-          in.ambientOcclusionMap_, allMaterialTextures_);
+            in.ambientOcclusionMap_, allMaterialTextures_);
         out.emissiveMap_ =
-          getTextureHandleBindless(in.emissiveMap_, allMaterialTextures_);
+            getTextureHandleBindless(in.emissiveMap_, allMaterialTextures_);
         out.albedoMap_ =
-          getTextureHandleBindless(in.albedoMap_, allMaterialTextures_);
+            getTextureHandleBindless(in.albedoMap_, allMaterialTextures_);
         out.metallicRoughnessMap_ = getTextureHandleBindless(
-          in.metallicRoughnessMap_, allMaterialTextures_);
+            in.metallicRoughnessMap_, allMaterialTextures_);
         out.normalMap_ =
-          getTextureHandleBindless(in.normalMap_, allMaterialTextures_);
+            getTextureHandleBindless(in.normalMap_, allMaterialTextures_);
     }
 }
 
@@ -105,12 +108,12 @@ GLSceneDataLazy::loadScene(const char *sceneFile)
         auto material = scene_.materialForNode_.find(c.first);
         if (material != scene_.materialForNode_.end()) {
             shapes_.push_back(DrawData{
-              .meshIndex = c.second,
-              .materialIndex = material->second,
-              .LOD = 0,
-              .indexOffset = meshData_.meshes_[c.second].indexOffset,
-              .vertexOffset = meshData_.meshes_[c.second].vertexOffset,
-              .transformIndex = c.first });
+                .meshIndex = c.second,
+                .materialIndex = material->second,
+                .LOD = 0,
+                .indexOffset = meshData_.meshes_[c.second].indexOffset,
+                .vertexOffset = meshData_.meshes_[c.second].vertexOffset,
+                .transformIndex = c.first });
         }
     }
 

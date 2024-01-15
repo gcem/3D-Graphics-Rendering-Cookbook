@@ -13,7 +13,7 @@ inline Bitmap
 convertEquirectangularMapToCubeMapFaces(const Bitmap &b)
 {
     return convertVerticalCrossToCubeMapFaces(
-      convertEquirectangularMapToVerticalCross(b));
+        convertEquirectangularMapToVerticalCross(b));
 }
 
 void

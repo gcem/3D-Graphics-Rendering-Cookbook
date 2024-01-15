@@ -34,7 +34,7 @@ uint32_t g_indexOffset = 0;
 uint32_t g_vertexOffset = 0;
 
 const uint32_t g_numElementsToStore =
-  3 + 3 + 2; // pos(vec3) + normal(vec3) + uv(vec2)
+    3 + 3 + 2; // pos(vec3) + normal(vec3) + uv(vec2)
 
 struct SceneConfig
 {
@@ -258,7 +258,7 @@ processLods(std::vector<uint32_t> &indices,
         indices.resize(numOptIndices);
 
         meshopt_optimizeVertexCache(
-          indices.data(), indices.data(), indices.size(), verticesCountIn);
+            indices.data(), indices.data(), indices.size(), verticesCountIn);
 
         printf("\n   LOD%i: %i indices %s",
                int(LOD),
@@ -276,7 +276,7 @@ convertAIMesh(const aiMesh *m, const SceneConfig &cfg)
 {
     const bool hasTexCoords = m->HasTextureCoords(0);
     const uint32_t streamElementSize =
-      static_cast<uint32_t>(g_numElementsToStore * sizeof(float));
+        static_cast<uint32_t>(g_numElementsToStore * sizeof(float));
 
     Mesh result = { .streamCount = 1,
                     .indexOffset = g_indexOffset,
@@ -297,7 +297,7 @@ convertAIMesh(const aiMesh *m, const SceneConfig &cfg)
         const aiVector3D v = m->mVertices[i];
         const aiVector3D n = m->mNormals[i];
         const aiVector3D t =
-          hasTexCoords ? m->mTextureCoords[0][i] : aiVector3D();
+            hasTexCoords ? m->mTextureCoords[0][i] : aiVector3D();
 
         if (cfg.calculateLODs) {
             srcVertices.push_back(v.x);
@@ -422,7 +422,7 @@ traverse(const aiScene *sourceScene,
         int mesh = (int)N->mMeshes[i];
         scene.meshes_[newSubNode] = mesh;
         scene.materialForNode_[newSubNode] =
-          sourceScene->mMeshes[mesh]->mMaterialIndex;
+            sourceScene->mMeshes[mesh]->mMaterialIndex;
 
         makePrefix(ofs);
         printf("Node[%d].SubNode[%d].mesh     = %d\n",
@@ -472,16 +472,16 @@ dumpMaterial(const std::vector<std::string> &files,
            (d.albedoMap_ < 0xFFFF) ? files[d.albedoMap_].c_str() : "");
     printf(" occlusion: %s\n",
            (d.ambientOcclusionMap_ < 0xFFFF)
-             ? files[d.ambientOcclusionMap_].c_str()
-             : "");
+               ? files[d.ambientOcclusionMap_].c_str()
+               : "");
     printf(" emission:  %s\n",
            (d.emissiveMap_ < 0xFFFF) ? files[d.emissiveMap_].c_str() : "");
     printf(" opacity:   %s\n",
            (d.opacityMap_ < 0xFFFF) ? files[d.opacityMap_].c_str() : "");
     printf(" MeR:       %s\n",
            (d.metallicRoughnessMap_ < 0xFFFF)
-             ? files[d.metallicRoughnessMap_].c_str()
-             : "");
+               ? files[d.metallicRoughnessMap_].c_str()
+               : "");
     printf(" Normal:    %s\n",
            (d.normalMap_ < 0xFFFF) ? files[d.normalMap_].c_str() : "");
 }
@@ -548,10 +548,10 @@ convertTexture(const std::string &file,
 
     const auto srcFile = replaceAll(basePath + file, "\\", "/");
     const auto newFile =
-      std::string("data/out_textures/") +
-      lowercaseString(replaceAll(replaceAll(srcFile, "..", "__"), "/", "__") +
-                      std::string("__rescaled")) +
-      std::string(".png");
+        std::string("data/out_textures/") +
+        lowercaseString(replaceAll(replaceAll(srcFile, "..", "__"), "/", "__") +
+                        std::string("__rescaled")) +
+        std::string(".png");
 
     // load this image
     int texWidth, texHeight, texChannels;
@@ -581,14 +581,14 @@ convertTexture(const std::string &file,
 
     if (opacityMapIndices.count(file) > 0) {
         const auto opacityMapFile = replaceAll(
-          basePath + opacityMaps[opacityMapIndices[file]], "\\", "/");
+            basePath + opacityMaps[opacityMapIndices[file]], "\\", "/");
         int opacityWidth, opacityHeight;
         stbi_uc *opacityPixels =
-          stbi_load(fixTextureFile(opacityMapFile).c_str(),
-                    &opacityWidth,
-                    &opacityHeight,
-                    nullptr,
-                    1);
+            stbi_load(fixTextureFile(opacityMapFile).c_str(),
+                      &opacityWidth,
+                      &opacityHeight,
+                      nullptr,
+                      1);
 
         if (!opacityPixels) {
             printf("Failed to load opacity mask [%s]\n",
@@ -604,7 +604,7 @@ convertTexture(const std::string &file,
             for (int y = 0; y != opacityHeight; y++)
                 for (int x = 0; x != opacityWidth; x++)
                     src[(y * opacityWidth + x) * texChannels + 3] =
-                      opacityPixels[y * opacityWidth + x];
+                        opacityPixels[y * opacityWidth + x];
 
         stbi_image_free(opacityPixels);
     }
@@ -636,10 +636,10 @@ convertTexture(const std::string &file,
 
 void
 convertAndDownscaleAllTextures(
-  const std::vector<MaterialDescription> &materials,
-  const std::string &basePath,
-  std::vector<std::string> &files,
-  std::vector<std::string> &opacityMaps)
+    const std::vector<MaterialDescription> &materials,
+    const std::string &basePath,
+    std::vector<std::string> &files,
+    std::vector<std::string> &opacityMaps)
 {
     std::unordered_map<std::string, uint32_t> opacityMapIndices(files.size());
 
@@ -677,13 +677,13 @@ readConfigFile(const char *cfgFileName)
 
     for (rapidjson::SizeType i = 0; i < document.Size(); i++) {
         configList.emplace_back(SceneConfig{
-          .fileName = document[i]["input_scene"].GetString(),
-          .outputMesh = document[i]["output_mesh"].GetString(),
-          .outputScene = document[i]["output_scene"].GetString(),
-          .outputMaterials = document[i]["output_materials"].GetString(),
-          .scale = (float)document[i]["scale"].GetDouble(),
-          .calculateLODs = document[i]["calculate_LODs"].GetBool(),
-          .mergeInstances = document[i]["merge_instances"].GetBool() });
+            .fileName = document[i]["input_scene"].GetString(),
+            .outputMesh = document[i]["output_mesh"].GetString(),
+            .outputScene = document[i]["output_scene"].GetString(),
+            .outputMaterials = document[i]["output_materials"].GetString(),
+            .scale = (float)document[i]["scale"].GetDouble(),
+            .calculateLODs = document[i]["calculate_LODs"].GetBool(),
+            .mergeInstances = document[i]["merge_instances"].GetBool() });
     }
 
     return configList;
@@ -704,15 +704,15 @@ processScene(const SceneConfig &cfg)
     // extract base model path
     const std::size_t pathSeparator = cfg.fileName.find_last_of("/\\");
     const std::string basePath = (pathSeparator != std::string::npos)
-                                   ? cfg.fileName.substr(0, pathSeparator + 1)
-                                   : std::string();
+                                     ? cfg.fileName.substr(0, pathSeparator + 1)
+                                     : std::string();
 
     const unsigned int flags =
-      0 | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate |
-      aiProcess_GenSmoothNormals | aiProcess_LimitBoneWeights |
-      aiProcess_SplitLargeMeshes | aiProcess_ImproveCacheLocality |
-      aiProcess_RemoveRedundantMaterials | aiProcess_FindDegenerates |
-      aiProcess_FindInvalidData | aiProcess_GenUVCoords;
+        0 | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate |
+        aiProcess_GenSmoothNormals | aiProcess_LimitBoneWeights |
+        aiProcess_SplitLargeMeshes | aiProcess_ImproveCacheLocality |
+        aiProcess_RemoveRedundantMaterials | aiProcess_FindDegenerates |
+        aiProcess_FindInvalidData | aiProcess_GenUVCoords;
 
     printf("Loading scene from '%s'...\n", cfg.fileName.c_str());
 
@@ -753,7 +753,7 @@ processScene(const SceneConfig &cfg)
         materialNames.push_back(std::string(mm->GetName().C_Str()));
 
         MaterialDescription D =
-          convertAIMaterialToDescription(mm, files, opacityMaps);
+            convertAIMaterialToDescription(mm, files, opacityMaps);
         materials.push_back(D);
         // dumpMaterial(files, D);
     }
@@ -808,7 +808,7 @@ mergeBistro()
                        allTextures);
 
     saveMaterials(
-      "data/meshes/bistro_all.materials", allMaterials, allTextures);
+        "data/meshes/bistro_all.materials", allMaterials, allTextures);
 
     printf("[Unmerged] scene items: %d\n", (int)scene.hierarchy_.size());
     mergeScene(scene, meshData, "Foliage_Linde_Tree_Large_Orange_Leaves");

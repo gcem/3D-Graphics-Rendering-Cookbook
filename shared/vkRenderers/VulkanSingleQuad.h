@@ -13,10 +13,10 @@ class VulkanSingleQuadRenderer : public RendererBase
 {
 public:
     VulkanSingleQuadRenderer(
-      VulkanRenderDevice &vkDev,
-      VulkanImage tex,
-      VkSampler sampler,
-      VkImageLayout desiredLayout = VK_IMAGE_LAYOUT_GENERAL);
+        VulkanRenderDevice &vkDev,
+        VulkanImage tex,
+        VkSampler sampler,
+        VkImageLayout desiredLayout = VK_IMAGE_LAYOUT_GENERAL);
     virtual ~VulkanSingleQuadRenderer();
 
     virtual void fillCommandBuffer(VkCommandBuffer commandBuffer,
@@ -26,8 +26,8 @@ private:
     VulkanRenderDevice &vkDev;
 
     bool createDescriptorSet(
-      VulkanRenderDevice &vkDev,
-      VkImageLayout desiredLayout = VK_IMAGE_LAYOUT_GENERAL);
+        VulkanRenderDevice &vkDev,
+        VkImageLayout desiredLayout = VK_IMAGE_LAYOUT_GENERAL);
 
     VulkanImage texture;
     VkSampler textureSampler;

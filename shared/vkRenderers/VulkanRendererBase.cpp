@@ -37,9 +37,9 @@ RendererBase::beginRenderPass(VkCommandBuffer commandBuffer,
     };
 
     vkCmdBeginRenderPass(
-      commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline(
-      commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline_);
+        commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline_);
     vkCmdBindDescriptorSets(commandBuffer,
                             VK_PIPELINE_BIND_POINT_GRAPHICS,
                             pipelineLayout_,

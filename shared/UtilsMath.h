@@ -152,36 +152,36 @@ isBoxInFrustum(glm::vec4 *frustumPlanes,
         int r = 0;
         r += (dot(frustumPlanes[i],
                   vec4(box.min_.x, box.min_.y, box.min_.z, 1.0f)) < 0.0)
-               ? 1
-               : 0;
+                 ? 1
+                 : 0;
         r += (dot(frustumPlanes[i],
                   vec4(box.max_.x, box.min_.y, box.min_.z, 1.0f)) < 0.0)
-               ? 1
-               : 0;
+                 ? 1
+                 : 0;
         r += (dot(frustumPlanes[i],
                   vec4(box.min_.x, box.max_.y, box.min_.z, 1.0f)) < 0.0)
-               ? 1
-               : 0;
+                 ? 1
+                 : 0;
         r += (dot(frustumPlanes[i],
                   vec4(box.max_.x, box.max_.y, box.min_.z, 1.0f)) < 0.0)
-               ? 1
-               : 0;
+                 ? 1
+                 : 0;
         r += (dot(frustumPlanes[i],
                   vec4(box.min_.x, box.min_.y, box.max_.z, 1.0f)) < 0.0)
-               ? 1
-               : 0;
+                 ? 1
+                 : 0;
         r += (dot(frustumPlanes[i],
                   vec4(box.max_.x, box.min_.y, box.max_.z, 1.0f)) < 0.0)
-               ? 1
-               : 0;
+                 ? 1
+                 : 0;
         r += (dot(frustumPlanes[i],
                   vec4(box.min_.x, box.max_.y, box.max_.z, 1.0f)) < 0.0)
-               ? 1
-               : 0;
+                 ? 1
+                 : 0;
         r += (dot(frustumPlanes[i],
                   vec4(box.max_.x, box.max_.y, box.max_.z, 1.0f)) < 0.0)
-               ? 1
-               : 0;
+                 ? 1
+                 : 0;
         if (r == 8)
             return false;
     }

@@ -65,26 +65,27 @@ main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window =
-      glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
+        glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_F9 && action == GLFW_PRESS) {
-              int width, height;
-              glfwGetFramebufferSize(window, &width, &height);
-              uint8_t *ptr = (uint8_t *)malloc(width * height * 4);
-              glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr);
-              stbi_write_png("screenshot.png", width, height, 4, ptr, 0);
-              free(ptr);
-          }
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_F9 && action == GLFW_PRESS) {
+                int width, height;
+                glfwGetFramebufferSize(window, &width, &height);
+                uint8_t *ptr = (uint8_t *)malloc(width * height * 4);
+                glReadPixels(
+                    0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr);
+                stbi_write_png("screenshot.png", width, height, 4, ptr, 0);
+                free(ptr);
+            }
+        });
 
     glfwMakeContextCurrent(window);
     gladLoadGL();
@@ -112,14 +113,14 @@ main(void)
     GLuint perFrameDataBuffer;
     glCreateBuffers(1, &perFrameDataBuffer);
     glNamedBufferStorage(
-      perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        perFrameDataBuffer, kBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, perFrameDataBuffer, 0, kBufferSize);
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     int w, h, comp;
     const uint8_t *img =
-      stbi_load("../../../data/ch2_sample3_STB.jpg", &w, &h, &comp, 3);
+        stbi_load("../../../data/ch2_sample3_STB.jpg", &w, &h, &comp, 3);
 
     GLuint texture;
     glCreateTextures(GL_TEXTURE_2D, 1, &texture);
@@ -141,14 +142,14 @@ main(void)
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        const mat4 m =
-          glm::rotate(mat4(1.0f), (float)glfwGetTime(), vec3(0.0f, 0.0f, 1.0f));
+        const mat4 m = glm::rotate(
+            mat4(1.0f), (float)glfwGetTime(), vec3(0.0f, 0.0f, 1.0f));
         const mat4 p = glm::ortho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
         const mat4 mvp = p * m;
 
         glUseProgram(program);
         glNamedBufferSubData(
-          perFrameDataBuffer, 0, kBufferSize, glm::value_ptr(mvp));
+            perFrameDataBuffer, 0, kBufferSize, glm::value_ptr(mvp));
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);

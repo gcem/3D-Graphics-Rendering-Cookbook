@@ -22,19 +22,19 @@ const uint32_t ShadowSize = 8192;
 */
 struct BaseMultiRenderer : public Renderer
 {
-    BaseMultiRenderer(
-      VulkanRenderContext &ctx,
-      VKSceneData &sceneData,
-      // indices of objects from sceneData's shape list
-      const std::vector<int> &objectIndices,
-      const char *vtxShaderFile = DefaultMeshVertexShader,
-      const char *fragShaderFile = DefaultMeshFragmentShader,
-      const std::vector<VulkanTexture> &outputs = std::vector<VulkanTexture>{},
-      RenderPass screenRenderPass = RenderPass(),
-      const std::vector<BufferAttachment> &auxBuffers =
-        std::vector<BufferAttachment>{},
-      const std::vector<TextureAttachment> &auxTextures =
-        std::vector<TextureAttachment>{});
+    BaseMultiRenderer(VulkanRenderContext &ctx,
+                      VKSceneData &sceneData,
+                      // indices of objects from sceneData's shape list
+                      const std::vector<int> &objectIndices,
+                      const char *vtxShaderFile = DefaultMeshVertexShader,
+                      const char *fragShaderFile = DefaultMeshFragmentShader,
+                      const std::vector<VulkanTexture> &outputs =
+                          std::vector<VulkanTexture>{},
+                      RenderPass screenRenderPass = RenderPass(),
+                      const std::vector<BufferAttachment> &auxBuffers =
+                          std::vector<BufferAttachment>{},
+                      const std::vector<TextureAttachment> &auxTextures =
+                          std::vector<TextureAttachment>{});
 
     void updateIndirectBuffers(size_t currentImage, bool *visibility = nullptr);
 
@@ -50,7 +50,7 @@ struct BaseMultiRenderer : public Renderer
     inline void setMatrices(const glm::mat4 &proj, const glm::mat4 &view)
     {
         const glm::mat4 m1 =
-          glm::scale(glm::mat4(1.f), glm::vec3(1.f, -1.f, 1.f));
+            glm::scale(glm::mat4(1.f), glm::vec3(1.f, -1.f, 1.f));
         ubo_.proj_ = proj;
         ubo_.view_ = view * m1;
     }
@@ -156,134 +156,136 @@ struct TransparentFragment
 */
 struct FinalMultiRenderer : public Renderer
 {
-    FinalMultiRenderer(
-      VulkanRenderContext &ctx,
-      VKSceneData &sceneData,
-      const std::vector<VulkanTexture> &outputs = std::vector<VulkanTexture>{})
+    FinalMultiRenderer(VulkanRenderContext &ctx,
+                       VKSceneData &sceneData,
+                       const std::vector<VulkanTexture> &outputs =
+                           std::vector<VulkanTexture>{})
       : Renderer(ctx)
       , shadowColor(ctx_.resources.addColorTexture(ShadowSize, ShadowSize))
       , shadowDepth(ctx_.resources.addDepthTexture(ShadowSize, ShadowSize))
       , lightParams(ctx_.resources.addStorageBuffer(sizeof(LightParamsBuffer)))
       , atomicBuffer(ctx_.resources.addStorageBuffer(sizeof(uint32_t)))
       , headsBuffer(ctx_.resources.addStorageBuffer(
-          ctx.vkDev.framebufferWidth * ctx.vkDev.framebufferHeight *
-          sizeof(uint32_t)))
+            ctx.vkDev.framebufferWidth * ctx.vkDev.framebufferHeight *
+            sizeof(uint32_t)))
       , oitBuffer(ctx_.resources.addStorageBuffer(ctx.vkDev.framebufferWidth *
                                                   ctx.vkDev.framebufferHeight *
                                                   sizeof(TransparentFragment)))
       , outputColor(ctx_.resources.addColorTexture(0, 0, LuminosityFormat))
       , sceneData_(sceneData)
       , opaqueRenderer(
-          ctx,
-          sceneData,
-          getOpaqueIndices(sceneData),
-          "data/shaders/chapter10/VK02_Shadow.vert",
-          "data/shaders/chapter10/VK02_Shadow.frag",
-          outputs,
-          ctx_.resources.addRenderPass(
+            ctx,
+            sceneData,
+            getOpaqueIndices(sceneData),
+            "data/shaders/chapter10/VK02_Shadow.vert",
+            "data/shaders/chapter10/VK02_Shadow.frag",
             outputs,
-            RenderPassCreateInfo{ .clearColor_ = false,
-                                  .clearDepth_ = false,
-                                  .flags_ = eRenderPassBit_Offscreen }),
-          { storageBufferAttachment(lightParams,
-                                    0,
-                                    sizeof(LightParamsBuffer),
-                                    VK_SHADER_STAGE_VERTEX_BIT |
-                                      VK_SHADER_STAGE_FRAGMENT_BIT) },
-          { fsTextureAttachment(shadowDepth) })
+            ctx_.resources.addRenderPass(
+                outputs,
+                RenderPassCreateInfo{ .clearColor_ = false,
+                                      .clearDepth_ = false,
+                                      .flags_ = eRenderPassBit_Offscreen }),
+            { storageBufferAttachment(lightParams,
+                                      0,
+                                      sizeof(LightParamsBuffer),
+                                      VK_SHADER_STAGE_VERTEX_BIT |
+                                          VK_SHADER_STAGE_FRAGMENT_BIT) },
+            { fsTextureAttachment(shadowDepth) })
 
       , transparentRenderer(
-          ctx,
-          sceneData,
-          getTransparentIndices(sceneData),
-          "data/shaders/chapter10/VK02_Shadow.vert",
-          "data/shaders/chapter10/VK02_Glass.frag",
-          outputs,
-          ctx_.resources.addRenderPass(
+            ctx,
+            sceneData,
+            getTransparentIndices(sceneData),
+            "data/shaders/chapter10/VK02_Shadow.vert",
+            "data/shaders/chapter10/VK02_Glass.frag",
             outputs,
-            RenderPassCreateInfo{ .clearColor_ = false,
-                                  .clearDepth_ = false,
-                                  .flags_ = eRenderPassBit_Offscreen }),
-          { storageBufferAttachment(lightParams,
-                                    0,
-                                    sizeof(LightParamsBuffer),
-                                    VK_SHADER_STAGE_VERTEX_BIT |
-                                      VK_SHADER_STAGE_FRAGMENT_BIT),
-            storageBufferAttachment(atomicBuffer,
-                                    0,
-                                    sizeof(uint32_t),
-                                    VK_SHADER_STAGE_FRAGMENT_BIT),
-            storageBufferAttachment(headsBuffer,
-                                    0,
-                                    ctx.vkDev.framebufferWidth *
-                                      ctx.vkDev.framebufferHeight *
+            ctx_.resources.addRenderPass(
+                outputs,
+                RenderPassCreateInfo{ .clearColor_ = false,
+                                      .clearDepth_ = false,
+                                      .flags_ = eRenderPassBit_Offscreen }),
+            { storageBufferAttachment(lightParams,
+                                      0,
+                                      sizeof(LightParamsBuffer),
+                                      VK_SHADER_STAGE_VERTEX_BIT |
+                                          VK_SHADER_STAGE_FRAGMENT_BIT),
+              storageBufferAttachment(atomicBuffer,
+                                      0,
                                       sizeof(uint32_t),
-                                    VK_SHADER_STAGE_FRAGMENT_BIT),
-            storageBufferAttachment(oitBuffer,
-                                    0,
-                                    ctx.vkDev.framebufferWidth *
-                                      ctx.vkDev.framebufferHeight *
-                                      sizeof(TransparentFragment),
-                                    VK_SHADER_STAGE_FRAGMENT_BIT) },
-          { fsTextureAttachment(shadowDepth) })
+                                      VK_SHADER_STAGE_FRAGMENT_BIT),
+              storageBufferAttachment(headsBuffer,
+                                      0,
+                                      ctx.vkDev.framebufferWidth *
+                                          ctx.vkDev.framebufferHeight *
+                                          sizeof(uint32_t),
+                                      VK_SHADER_STAGE_FRAGMENT_BIT),
+              storageBufferAttachment(oitBuffer,
+                                      0,
+                                      ctx.vkDev.framebufferWidth *
+                                          ctx.vkDev.framebufferHeight *
+                                          sizeof(TransparentFragment),
+                                      VK_SHADER_STAGE_FRAGMENT_BIT) },
+            { fsTextureAttachment(shadowDepth) })
 
       , shadowRenderer(
-          ctx_,
-          sceneData,
-          getOpaqueIndices(sceneData),
-          "data/shaders/chapter10/VK02_Depth.vert",
-          "data/shaders/chapter10/VK02_Depth.frag",
-          { shadowColor, shadowDepth },
-          ctx_.resources.addRenderPass(
+            ctx_,
+            sceneData,
+            getOpaqueIndices(sceneData),
+            "data/shaders/chapter10/VK02_Depth.vert",
+            "data/shaders/chapter10/VK02_Depth.frag",
             { shadowColor, shadowDepth },
-            RenderPassCreateInfo{ .clearColor_ = true,
-                                  .clearDepth_ = true,
-                                  .flags_ = eRenderPassBit_First |
-                                            eRenderPassBit_Offscreen }))
+            ctx_.resources.addRenderPass(
+                { shadowColor, shadowDepth },
+                RenderPassCreateInfo{ .clearColor_ = true,
+                                      .clearDepth_ = true,
+                                      .flags_ = eRenderPassBit_First |
+                                                eRenderPassBit_Offscreen }))
 
       , colorToAttachment(ctx_, outputs[0])
       , depthToAttachment(ctx_, outputs[1])
 
       , whBuffer(ctx_.resources.addUniformBuffer(sizeof(UBO)))
 
-      , clearOIT(
-          ctx_,
-          { .buffers = { uniformBufferAttachment(whBuffer,
-                                                 0,
-                                                 sizeof(ubo_),
-                                                 VK_SHADER_STAGE_FRAGMENT_BIT),
-                         storageBufferAttachment(
-                           headsBuffer,
-                           0,
-                           ctx.vkDev.framebufferWidth *
-                             ctx.vkDev.framebufferHeight * sizeof(uint32_t),
-                           VK_SHADER_STAGE_FRAGMENT_BIT) },
-            .textures = { fsTextureAttachment(outputs[0]) } },
-          { outputColor },
-          "data/shaders/chapter10/VK02_ClearBuffer.frag")
+      , clearOIT(ctx_,
+                 { .buffers = { uniformBufferAttachment(
+                                    whBuffer,
+                                    0,
+                                    sizeof(ubo_),
+                                    VK_SHADER_STAGE_FRAGMENT_BIT),
+                                storageBufferAttachment(
+                                    headsBuffer,
+                                    0,
+                                    ctx.vkDev.framebufferWidth *
+                                        ctx.vkDev.framebufferHeight *
+                                        sizeof(uint32_t),
+                                    VK_SHADER_STAGE_FRAGMENT_BIT) },
+                   .textures = { fsTextureAttachment(outputs[0]) } },
+                 { outputColor },
+                 "data/shaders/chapter10/VK02_ClearBuffer.frag")
 
-      , composeOIT(
-          ctx_,
-          { .buffers = { uniformBufferAttachment(whBuffer,
-                                                 0,
-                                                 sizeof(ubo_),
-                                                 VK_SHADER_STAGE_FRAGMENT_BIT),
-                         storageBufferAttachment(headsBuffer,
-                                                 0,
-                                                 ctx.vkDev.framebufferWidth *
-                                                   ctx.vkDev.framebufferHeight *
-                                                   sizeof(uint32_t),
-                                                 VK_SHADER_STAGE_FRAGMENT_BIT),
-                         storageBufferAttachment(
-                           oitBuffer,
-                           0,
-                           ctx.vkDev.framebufferWidth *
-                             ctx.vkDev.framebufferHeight *
-                             sizeof(TransparentFragment),
-                           VK_SHADER_STAGE_FRAGMENT_BIT) },
-            .textures = { fsTextureAttachment(outputs[0]) } },
-          { outputColor },
-          "data/shaders/chapter10/VK02_ComposeOIT.frag")
+      , composeOIT(ctx_,
+                   { .buffers = { uniformBufferAttachment(
+                                      whBuffer,
+                                      0,
+                                      sizeof(ubo_),
+                                      VK_SHADER_STAGE_FRAGMENT_BIT),
+                                  storageBufferAttachment(
+                                      headsBuffer,
+                                      0,
+                                      ctx.vkDev.framebufferWidth *
+                                          ctx.vkDev.framebufferHeight *
+                                          sizeof(uint32_t),
+                                      VK_SHADER_STAGE_FRAGMENT_BIT),
+                                  storageBufferAttachment(
+                                      oitBuffer,
+                                      0,
+                                      ctx.vkDev.framebufferWidth *
+                                          ctx.vkDev.framebufferHeight *
+                                          sizeof(TransparentFragment),
+                                      VK_SHADER_STAGE_FRAGMENT_BIT) },
+                     .textures = { fsTextureAttachment(outputs[0]) } },
+                   { outputColor },
+                   "data/shaders/chapter10/VK02_ComposeOIT.frag")
 
       , outputToAttachment(ctx_, outputColor)
       , outputToShader(ctx_, outputColor)
@@ -370,7 +372,7 @@ struct FinalMultiRenderer : public Renderer
 
         uint32_t zeroCount = 0;
         uploadBufferData(
-          ctx_.vkDev, atomicBuffer.memory, 0, &zeroCount, sizeof(uint32_t));
+            ctx_.vkDev, atomicBuffer.memory, 0, &zeroCount, sizeof(uint32_t));
 
         uploadBufferData(ctx_.vkDev, whBuffer.memory, 0, &ubo_, sizeof(ubo_));
     }

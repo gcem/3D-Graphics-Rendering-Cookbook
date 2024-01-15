@@ -54,7 +54,7 @@ main(void)
     const GLsizeiptr kUniformBufferSize = sizeof(PerFrameData);
 
     GLBuffer perFrameDataBuffer(
-      kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER,
                       kBufferIndex_PerFrameUniforms,
                       perFrameDataBuffer.getHandle(),
@@ -71,53 +71,53 @@ main(void)
     GLMesh mesh(sceneData);
 
     glfwSetCursorPosCallback(
-      app.getWindow(), [](auto *window, double x, double y) {
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
-          mouseState.pos.x = static_cast<float>(x / width);
-          mouseState.pos.y = static_cast<float>(y / height);
-          ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
-      });
+        app.getWindow(), [](auto *window, double x, double y) {
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            mouseState.pos.x = static_cast<float>(x / width);
+            mouseState.pos.y = static_cast<float>(y / height);
+            ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
+        });
 
     glfwSetMouseButtonCallback(
-      app.getWindow(), [](auto *window, int button, int action, int mods) {
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
+        app.getWindow(), [](auto *window, int button, int action, int mods) {
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
 
-          if (!io.WantCaptureMouse)
-              if (button == GLFW_MOUSE_BUTTON_LEFT)
-                  mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+            if (!io.WantCaptureMouse)
+                if (button == GLFW_MOUSE_BUTTON_LEFT)
+                    mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      app.getWindow(),
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        app.getWindow(),
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
 
-          if (key == GLFW_KEY_P && pressed)
-              g_FreezeCullingView = !g_FreezeCullingView;
-      });
+            if (key == GLFW_KEY_P && pressed)
+                g_FreezeCullingView = !g_FreezeCullingView;
+        });
 
     positioner.maxSpeed_ = 1.0f;
 
@@ -135,7 +135,7 @@ main(void)
 
     while (!glfwWindowShouldClose(app.getWindow())) {
         positioner.update(
-          app.getDeltaSeconds(), mouseState.pos, mouseState.pressedLeft);
+            app.getDeltaSeconds(), mouseState.pos, mouseState.pressedLeft);
 
         int width, height;
         glfwGetFramebufferSize(app.getWindow(), &width, &height);
@@ -143,7 +143,7 @@ main(void)
 
         glViewport(0, 0, width, height);
         glClearNamedFramebufferfv(
-          0, GL_COLOR, 0, glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+            0, GL_COLOR, 0, glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
         glClearNamedFramebufferfi(0, GL_DEPTH_STENCIL, 0, 1.0f, 0);
 
         const mat4 proj = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
@@ -153,9 +153,11 @@ main(void)
                                             .proj = proj,
                                             .light = mat4(0.0f),
                                             .cameraPos = glm::vec4(
-                                              camera.getPosition(), 1.0f) };
-        glNamedBufferSubData(
-          perFrameDataBuffer.getHandle(), 0, kUniformBufferSize, &perFrameData);
+                                                camera.getPosition(), 1.0f) };
+        glNamedBufferSubData(perFrameDataBuffer.getHandle(),
+                             0,
+                             kUniformBufferSize,
+                             &perFrameData);
 
         if (!g_FreezeCullingView)
             g_CullingView = camera.getViewMatrix();
@@ -169,14 +171,14 @@ main(void)
         int numVisibleMeshes = 0;
         {
             DrawElementsIndirectCommand *cmd =
-              mesh.bufferIndirect_.drawCommands_.data();
+                mesh.bufferIndirect_.drawCommands_.data();
             for (const auto &c : sceneData.shapes_) {
                 cmd->instanceCount_ =
-                  isBoxInFrustum(frustumPlanes,
-                                 frustumCorners,
-                                 sceneData.meshData_.boxes_[c.meshIndex])
-                    ? 1
-                    : 0;
+                    isBoxInFrustum(frustumPlanes,
+                                   frustumCorners,
+                                   sceneData.meshData_.boxes_[c.meshIndex])
+                        ? 1
+                        : 0;
                 numVisibleMeshes += (cmd++)->instanceCount_;
             }
             mesh.bufferIndirect_.uploadIndirectBuffer();
@@ -184,7 +186,7 @@ main(void)
 
         if (g_DrawBoxes) {
             DrawElementsIndirectCommand *cmd =
-              mesh.bufferIndirect_.drawCommands_.data();
+                mesh.bufferIndirect_.drawCommands_.data();
             for (const auto &c : sceneData.shapes_)
                 drawBox3dGL(canvas,
                             mat4(1.0f),
@@ -214,7 +216,7 @@ main(void)
 
         if (g_FreezeCullingView)
             renderCameraFrustumGL(
-              canvas, g_CullingView, proj, vec4(1, 1, 0, 1), 100);
+                canvas, g_CullingView, proj, vec4(1, 1, 0, 1), 100);
         canvas.flush();
 
         ImGuiIO &io = ImGui::GetIO();

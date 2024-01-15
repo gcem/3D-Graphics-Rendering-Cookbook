@@ -96,18 +96,18 @@ main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window =
-      glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
+        glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     glfwMakeContextCurrent(window);
     gladLoadGL();
@@ -134,8 +134,8 @@ main(void)
     GLint uniformBufferAlignment;
     glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &uniformBufferAlignment);
     const GLsizeiptr perFrameDataAlignedSize =
-      (sizeof(PerFrameData) + uniformBufferAlignment - 1) &
-      ~(unsigned int)(uniformBufferAlignment - 1);
+        (sizeof(PerFrameData) + uniformBufferAlignment - 1) &
+        ~(unsigned int)(uniformBufferAlignment - 1);
 
     GLuint perFrameDataBuffer;
     glCreateBuffers(1, &perFrameDataBuffer);
@@ -160,9 +160,9 @@ main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         const mat4 m =
-          glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, -6.5f)),
-                      (float)glfwGetTime(),
-                      vec3(1.0f, 1.0f, 1.0f));
+            glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, -6.5f)),
+                        (float)glfwGetTime(),
+                        vec3(1.0f, 1.0f, 1.0f));
         const mat4 p = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
         const mat4 mvp = p * m;
 
@@ -172,7 +172,7 @@ main(void)
         };
 
         glNamedBufferSubData(
-          perFrameDataBuffer, 0, perFrameDataAlignedSize * 2, &perFrameData);
+            perFrameDataBuffer, 0, perFrameDataAlignedSize * 2, &perFrameData);
 
         glBindBufferRange(GL_UNIFORM_BUFFER,
                           0,

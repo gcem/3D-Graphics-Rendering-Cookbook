@@ -2,24 +2,24 @@
 #include <stb/stb_image.h>
 
 BaseMultiRenderer::BaseMultiRenderer(
-  VulkanRenderContext &ctx,
-  VKSceneData &sceneData,
-  const std::vector<int> &objectIndices,
-  const char *vertShaderFile,
-  const char *fragShaderFile,
-  const std::vector<VulkanTexture> &outputs,
-  RenderPass screenRenderPass,
-  const std::vector<BufferAttachment> &auxBuffers,
-  const std::vector<TextureAttachment> &auxTextures)
+    VulkanRenderContext &ctx,
+    VKSceneData &sceneData,
+    const std::vector<int> &objectIndices,
+    const char *vertShaderFile,
+    const char *fragShaderFile,
+    const std::vector<VulkanTexture> &outputs,
+    RenderPass screenRenderPass,
+    const std::vector<BufferAttachment> &auxBuffers,
+    const std::vector<TextureAttachment> &auxTextures)
   : Renderer(ctx)
   , sceneData_(sceneData)
   , indices_(objectIndices)
 {
     const PipelineInfo pInfo = initRenderPass(
-      PipelineInfo{}, outputs, screenRenderPass, ctx.screenRenderPass);
+        PipelineInfo{}, outputs, screenRenderPass, ctx.screenRenderPass);
 
     const uint32_t indirectDataSize =
-      (uint32_t)sceneData_.shapes_.size() * sizeof(VkDrawIndirectCommand);
+        (uint32_t)sceneData_.shapes_.size() * sizeof(VkDrawIndirectCommand);
 
     const size_t imgCount = ctx.vkDev.swapchainImages.size();
     uniforms_.resize(imgCount);
@@ -29,7 +29,7 @@ BaseMultiRenderer::BaseMultiRenderer(
     descriptorSets_.resize(imgCount);
 
     const uint32_t shapesSize =
-      (uint32_t)sceneData_.shapes_.size() * sizeof(DrawData);
+        (uint32_t)sceneData_.shapes_.size() * sizeof(DrawData);
     const uint32_t uniformBufferSize = sizeof(ubo_);
 
     std::vector<TextureAttachment> textureAttachments;
@@ -37,7 +37,7 @@ BaseMultiRenderer::BaseMultiRenderer(
         textureAttachments.push_back(fsTextureAttachment(sceneData_.envMap_));
     if (sceneData_.envMapIrradiance_.width)
         textureAttachments.push_back(
-          fsTextureAttachment(sceneData_.envMapIrradiance_));
+            fsTextureAttachment(sceneData_.envMapIrradiance_));
     if (sceneData_.brdfLUT_.width)
         textureAttachments.push_back(fsTextureAttachment(sceneData_.brdfLUT_));
 
@@ -62,7 +62,7 @@ BaseMultiRenderer::BaseMultiRenderer(
 
     descriptorSetLayout_ = ctx.resources.addDescriptorSetLayout(dsInfo);
     descriptorPool_ =
-      ctx.resources.addDescriptorPool(dsInfo, (uint32_t)imgCount);
+        ctx.resources.addDescriptorPool(dsInfo, (uint32_t)imgCount);
 
     for (size_t i = 0; i != imgCount; i++) {
         uniforms_[i] = ctx.resources.addUniformBuffer(uniformBufferSize);
@@ -79,8 +79,8 @@ BaseMultiRenderer::BaseMultiRenderer(
         dsInfo.buffers[0].buffer = uniforms_[i];
         dsInfo.buffers[3].buffer = shape_[i];
 
-        descriptorSets_[i] =
-          ctx.resources.addDescriptorSet(descriptorPool_, descriptorSetLayout_);
+        descriptorSets_[i] = ctx.resources.addDescriptorSet(
+            descriptorPool_, descriptorSetLayout_);
         ctx.resources.updateDescriptorSet(descriptorSets_[i], dsInfo);
     }
 
@@ -125,16 +125,16 @@ BaseMultiRenderer::updateIndirectBuffers(size_t currentImage, bool *visibility)
                 (void **)&data);
 
     const uint32_t size =
-      (uint32_t)indices_.size(); // (uint32_t)sceneData_.shapes_.size();
+        (uint32_t)indices_.size(); // (uint32_t)sceneData_.shapes_.size();
 
     for (uint32_t i = 0; i != size; i++) {
         const uint32_t j = sceneData_.shapes_[indices_[i]].meshIndex;
 
         const uint32_t lod = sceneData_.shapes_[indices_[i]].LOD;
         data[i] = { .vertexCount =
-                      sceneData_.meshData_.meshes_[j].getLODIndicesCount(lod),
+                        sceneData_.meshData_.meshes_[j].getLODIndicesCount(lod),
                     .instanceCount =
-                      visibility ? (visibility[indices_[i]] ? 1u : 0u) : 1u,
+                        visibility ? (visibility[indices_[i]] ? 1u : 0u) : 1u,
                     .firstVertex = 0,
                     .firstInstance = (uint32_t)indices_[i] };
     }
@@ -158,7 +158,7 @@ FinalMultiRenderer::checkLoadedTextures()
     }
 
     auto newTexture = ctx_.resources.addRGBATexture(
-      data.w_, data.h_, const_cast<uint8_t *>(data.img_));
+        data.w_, data.h_, const_cast<uint8_t *>(data.img_));
 
     transparentRenderer.updateTexture(data.index_, newTexture, 14);
     opaqueRenderer.updateTexture(data.index_, newTexture, 11);

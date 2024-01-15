@@ -12,7 +12,7 @@ struct PACKED_STRUCT CameraProperties
 };
 
 static_assert(sizeof(CameraProperties) ==
-                (3 * 4 * sizeof(gpuvec4) + sizeof(gpuvec4)),
+                  (3 * 4 * sizeof(gpuvec4) + sizeof(gpuvec4)),
               "Invalid sizeof(CameraProperties), should be 3 * sizeof(mat4) + "
               "sizeof(gpuvec4)");
 

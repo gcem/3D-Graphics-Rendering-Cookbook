@@ -29,9 +29,9 @@ public:
               uint32_t verticesSize)
       : numIndices_((uint32_t)indices.size())
       , bufferIndices_(indices.size() ? std::make_unique<GLBuffer>(
-                                          indices.size() * sizeof(uint32_t),
-                                          indices.data(),
-                                          0)
+                                            indices.size() * sizeof(uint32_t),
+                                            indices.data(),
+                                            0)
                                       : nullptr)
       , bufferVertices_(std::make_unique<GLBuffer>(verticesSize,
                                                    vertexData,
@@ -48,7 +48,7 @@ public:
         std::vector<uint32_t> indices;
         {
             const aiScene *scene =
-              aiImportFile(fileName, aiProcess_Triangulate);
+                aiImportFile(fileName, aiProcess_Triangulate);
             if (!scene || !scene->HasMeshes()) {
                 printf("Unable to load '%s'\n", fileName);
                 exit(255);
@@ -71,10 +71,10 @@ public:
         const size_t kSizeIndices = sizeof(uint32_t) * indices.size();
         const size_t kSizeVertices = sizeof(VertexData) * vertices.size();
         numIndices_ = (uint32_t)indices.size();
-        bufferIndices_ =
-          std::make_unique<GLBuffer>((uint32_t)kSizeIndices, indices.data(), 0);
+        bufferIndices_ = std::make_unique<GLBuffer>(
+            (uint32_t)kSizeIndices, indices.data(), 0);
         bufferVertices_ = std::make_unique<GLBuffer>(
-          (uint32_t)kSizeVertices, vertices.data(), 0);
+            (uint32_t)kSizeVertices, vertices.data(), 0);
         glCreateVertexArrays(1, &vao_);
         glVertexArrayElementBuffer(vao_, bufferIndices_->getHandle());
     }
@@ -83,15 +83,15 @@ public:
     {
         glBindVertexArray(vao_);
         glBindBufferBase(
-          GL_SHADER_STORAGE_BUFFER, 1, bufferVertices_->getHandle());
+            GL_SHADER_STORAGE_BUFFER, 1, bufferVertices_->getHandle());
         glDrawElements(
-          mode, static_cast<GLsizei>(numIndices_), GL_UNSIGNED_INT, nullptr);
+            mode, static_cast<GLsizei>(numIndices_), GL_UNSIGNED_INT, nullptr);
     }
     void drawArrays(GLenum mode, GLint first, GLint count)
     {
         glBindVertexArray(vao_);
         glBindBufferBase(
-          GL_SHADER_STORAGE_BUFFER, 1, bufferVertices_->getHandle());
+            GL_SHADER_STORAGE_BUFFER, 1, bufferVertices_->getHandle());
         glDrawArrays(mode, first, count);
     }
 
@@ -138,9 +138,9 @@ private:
     };
     std::vector<VertexData> lines_;
     GLShader shdLinesVertex_ =
-      GLShader("data/shaders/chapter08/GL01_lines.vert");
+        GLShader("data/shaders/chapter08/GL01_lines.vert");
     GLShader shdLinesFragment_ =
-      GLShader("data/shaders/chapter08/GL01_lines.frag");
+        GLShader("data/shaders/chapter08/GL01_lines.frag");
     GLProgram progLines_ = GLProgram(shdLinesVertex_, shdLinesFragment_);
     GLMeshPVP mesh_ = GLMeshPVP({}, nullptr, sizeof(VertexData) * kMaxLines);
 };

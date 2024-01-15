@@ -1,6 +1,7 @@
 ---
 BasedOnStyle: Mozilla
 IndentWidth: '4'
+ContinuationIndentWidth: '4'
 UseTab: Never
 AccessModifierOffset: '-4'
 

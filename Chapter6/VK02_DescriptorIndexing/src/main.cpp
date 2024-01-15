@@ -33,9 +33,9 @@ updateAnimations()
 {
     for (size_t i = 0; i < animations.size();) {
         animations[i].textureIndex =
-          animations[i].flipbookOffset +
-          (uint32_t)(kAnimationFPS *
-                     ((glfwGetTime() - animations[i].startTime)));
+            animations[i].flipbookOffset +
+            (uint32_t)(kAnimationFPS *
+                       ((glfwGetTime() - animations[i].startTime)));
         if (animations[i].textureIndex - animations[i].flipbookOffset >
             (kNumFlipbookFrames - 1))
             animations.erase(animations.begin() + i);
@@ -50,12 +50,12 @@ fillQuadsBuffer(VulkanRenderDevice &vkDev,
                 size_t currentImage)
 {
     const float aspect =
-      (float)vkDev.framebufferWidth / (float)vkDev.framebufferHeight;
+        (float)vkDev.framebufferWidth / (float)vkDev.framebufferHeight;
     const float quadSize = 0.5f;
 
     quadRenderer.clear();
     quadRenderer.quad(
-      -quadSize, -quadSize * aspect, quadSize, quadSize * aspect);
+        -quadSize, -quadSize * aspect, quadSize, quadSize * aspect);
     quadRenderer.updateBuffer(vkDev, currentImage);
 }
 
@@ -71,13 +71,13 @@ initVulkan()
         exit(EXIT_FAILURE);
 
     VkPhysicalDeviceDescriptorIndexingFeaturesEXT
-      physicalDeviceDescriptorIndexingFeatures = {
-          .sType =
-            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT,
-          .shaderSampledImageArrayNonUniformIndexing = VK_TRUE,
-          .descriptorBindingVariableDescriptorCount = VK_TRUE,
-          .runtimeDescriptorArray = VK_TRUE,
-      };
+        physicalDeviceDescriptorIndexingFeatures = {
+            .sType =
+                VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT,
+            .shaderSampledImageArrayNonUniformIndexing = VK_TRUE,
+            .descriptorBindingVariableDescriptorCount = VK_TRUE,
+            .runtimeDescriptorArray = VK_TRUE,
+        };
 
     const VkPhysicalDeviceFeatures deviceFeatures = {
         .shaderSampledImageArrayDynamicIndexing = VK_TRUE
@@ -147,7 +147,7 @@ composeFrame(VkCommandBuffer commandBuffer, uint32_t imageIndex)
 
     for (size_t i = 0; i < animations.size(); i++) {
         quadRenderer->pushConstants(
-          commandBuffer, animations[i].textureIndex, animations[i].position);
+            commandBuffer, animations[i].textureIndex, animations[i].position);
         quadRenderer->fillCommandBuffer(commandBuffer, imageIndex);
     }
 
@@ -166,28 +166,28 @@ main()
                              });
 
     glfwSetMouseButtonCallback(
-      window, [](GLFWwindow *window, int button, int action, int mods) {
-          if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-              const float mx =
-                (mouseX / (float)vkDev.framebufferWidth) * 2.0f - 1.0f;
-              const float my =
-                (mouseY / (float)vkDev.framebufferHeight) * 2.0f - 1.0f;
+        window, [](GLFWwindow *window, int button, int action, int mods) {
+            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+                const float mx =
+                    (mouseX / (float)vkDev.framebufferWidth) * 2.0f - 1.0f;
+                const float my =
+                    (mouseY / (float)vkDev.framebufferHeight) * 2.0f - 1.0f;
 
-              animations.push_back(
-                AnimationState{ .position = vec2(mx, my),
-                                .startTime = glfwGetTime(),
-                                .textureIndex = 0,
-                                .flipbookOffset = kNumFlipbookFrames *
-                                                  (uint32_t)(rand() % 3) });
-          }
-      });
+                animations.push_back(
+                    AnimationState{ .position = vec2(mx, my),
+                                    .startTime = glfwGetTime(),
+                                    .textureIndex = 0,
+                                    .flipbookOffset = kNumFlipbookFrames *
+                                                      (uint32_t)(rand() % 3) });
+            }
+        });
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     initVulkan();
 
@@ -195,7 +195,7 @@ main()
 
     while (!glfwWindowShouldClose(window)) {
         drawFrame(
-          vkDev, [](uint32_t) {}, composeFrame);
+            vkDev, [](uint32_t) {}, composeFrame);
         glfwPollEvents();
     }
 

@@ -19,11 +19,11 @@ PBRModelRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
         descriptorSetLayoutBinding(0,
                                    VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
                                    VK_SHADER_STAGE_VERTEX_BIT |
-                                     VK_SHADER_STAGE_FRAGMENT_BIT),
+                                       VK_SHADER_STAGE_FRAGMENT_BIT),
         descriptorSetLayoutBinding(
-          1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
 
         descriptorSetLayoutBinding(3,
                                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
@@ -62,7 +62,7 @@ PBRModelRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
+        vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
 
     std::vector<VkDescriptorSetLayout> layouts(vkDev.swapchainImages.size(),
                                                descriptorSetLayout_);
@@ -72,14 +72,14 @@ PBRModelRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
         .pNext = nullptr,
         .descriptorPool = descriptorPool_,
         .descriptorSetCount =
-          static_cast<uint32_t>(vkDev.swapchainImages.size()),
+            static_cast<uint32_t>(vkDev.swapchainImages.size()),
         .pSetLayouts = layouts.data()
     };
 
     descriptorSets_.resize(vkDev.swapchainImages.size());
 
     VK_CHECK(vkAllocateDescriptorSets(
-      vkDev.device, &allocInfo, descriptorSets_.data()));
+        vkDev.device, &allocInfo, descriptorSets_.data()));
 
     for (size_t i = 0; i < vkDev.swapchainImages.size(); i++) {
         VkDescriptorSet ds = descriptorSets_[i];
@@ -137,11 +137,11 @@ PBRModelRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
 
         const std::array<VkWriteDescriptorSet, 11> descriptorWrites = {
             bufferWriteDescriptorSet(
-              ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
+                ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
             bufferWriteDescriptorSet(
-              ds, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
+                ds, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
             bufferWriteDescriptorSet(
-              ds, &bufferInfo3, 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
+                ds, &bufferInfo3, 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
             imageWriteDescriptorSet(ds, &imageInfoAO, 3),
             imageWriteDescriptorSet(ds, &imageInfoEmissive, 4),
             imageWriteDescriptorSet(ds, &imageInfoAlbedo, 5),
@@ -184,7 +184,7 @@ PBRModelRenderer::updateUniformBuffer(VulkanRenderDevice &vkDev,
                                       const size_t dataSize)
 {
     uploadBufferData(
-      vkDev, uniformBuffersMemory_[currentImage], 0, data, dataSize);
+        vkDev, uniformBuffersMemory_[currentImage], 0, data, dataSize);
 }
 
 static void
@@ -193,7 +193,7 @@ loadTexture(VulkanRenderDevice &vkDev,
             VulkanTexture &texture)
 {
     createTextureImage(
-      vkDev, fileName, texture.image.image, texture.image.imageMemory);
+        vkDev, fileName, texture.image.image, texture.image.imageMemory);
     createImageView(vkDev.device,
                     texture.image.image,
                     VK_FORMAT_R8G8B8A8_UNORM,
@@ -216,7 +216,7 @@ loadCubeMap(VulkanRenderDevice &vkDev,
                                   cubemap.image.imageMemory);
     else
         createCubeTextureImage(
-          vkDev, fileName, cubemap.image.image, cubemap.image.imageMemory);
+            vkDev, fileName, cubemap.image.image, cubemap.image.imageMemory);
 
     createImageView(vkDev.device,
                     cubemap.image.image,
@@ -291,7 +291,7 @@ PBRModelRenderer::PBRModelRenderer(VulkanRenderDevice &vkDev,
                          VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
 
     if (!createColorAndDepthRenderPass(
-          vkDev, true, &renderPass_, RenderPassCreateInfo()) ||
+            vkDev, true, &renderPass_, RenderPassCreateInfo()) ||
         !createUniformBuffers(vkDev, uniformBufferSize) ||
         !createColorAndDepthFramebuffers(vkDev,
                                          renderPass_,
@@ -300,7 +300,7 @@ PBRModelRenderer::PBRModelRenderer(VulkanRenderDevice &vkDev,
         !createDescriptorPool(vkDev, 1, 2, 8, &descriptorPool_) ||
         !createDescriptorSet(vkDev, uniformBufferSize) ||
         !createPipelineLayout(
-          vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
+            vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
         !createGraphicsPipeline(vkDev,
                                 renderPass_,
                                 pipelineLayout_,

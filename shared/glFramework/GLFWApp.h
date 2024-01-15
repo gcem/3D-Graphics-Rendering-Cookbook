@@ -32,7 +32,7 @@ public:
         const GLFWvidmode *info = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
         window_ = glfwCreateWindow(
-          info->width, info->height, "Simple example", nullptr, nullptr);
+            info->width, info->height, "Simple example", nullptr, nullptr);
 
         if (!window_) {
             glfwTerminate();

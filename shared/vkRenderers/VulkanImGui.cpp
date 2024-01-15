@@ -18,11 +18,11 @@ ImGuiRenderer::createDescriptorSet(VulkanRenderDevice &vkDev)
 {
     const std::array<VkDescriptorSetLayoutBinding, 4> bindings = {
         descriptorSetLayoutBinding(
-          0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(3,
                                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                    VK_SHADER_STAGE_FRAGMENT_BIT)
@@ -37,7 +37,7 @@ ImGuiRenderer::createDescriptorSet(VulkanRenderDevice &vkDev)
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
+        vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
 
     std::vector<VkDescriptorSetLayout> layouts(vkDev.swapchainImages.size(),
                                                descriptorSetLayout_);
@@ -47,14 +47,14 @@ ImGuiRenderer::createDescriptorSet(VulkanRenderDevice &vkDev)
         .pNext = nullptr,
         .descriptorPool = descriptorPool_,
         .descriptorSetCount =
-          static_cast<uint32_t>(vkDev.swapchainImages.size()),
+            static_cast<uint32_t>(vkDev.swapchainImages.size()),
         .pSetLayouts = layouts.data()
     };
 
     descriptorSets_.resize(vkDev.swapchainImages.size());
 
     VK_CHECK(vkAllocateDescriptorSets(
-      vkDev.device, &allocInfo, descriptorSets_.data()));
+        vkDev.device, &allocInfo, descriptorSets_.data()));
 
     for (size_t i = 0; i < vkDev.swapchainImages.size(); i++) {
         VkDescriptorSet ds = descriptorSets_[i];
@@ -75,11 +75,11 @@ ImGuiRenderer::createDescriptorSet(VulkanRenderDevice &vkDev)
 
         const std::array<VkWriteDescriptorSet, 4> descriptorWrites = {
             bufferWriteDescriptorSet(
-              ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
+                ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
             bufferWriteDescriptorSet(
-              ds, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
+                ds, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
             bufferWriteDescriptorSet(
-              ds, &bufferInfo3, 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
+                ds, &bufferInfo3, 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
             imageWriteDescriptorSet(ds, &imageInfo, 3)
         };
 
@@ -98,16 +98,16 @@ ImGuiRenderer::createMultiDescriptorSet(VulkanRenderDevice &vkDev)
 {
     const std::array<VkDescriptorSetLayoutBinding, 4> bindings = {
         descriptorSetLayoutBinding(
-          0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          3,
-          VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-          VK_SHADER_STAGE_FRAGMENT_BIT,
-          static_cast<uint32_t>(1 + extTextures_.size()))
+            3,
+            VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            VK_SHADER_STAGE_FRAGMENT_BIT,
+            static_cast<uint32_t>(1 + extTextures_.size()))
     };
 
     const VkDescriptorSetLayoutCreateInfo layoutInfo = {
@@ -119,7 +119,7 @@ ImGuiRenderer::createMultiDescriptorSet(VulkanRenderDevice &vkDev)
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
+        vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
 
     std::vector<VkDescriptorSetLayout> layouts(vkDev.swapchainImages.size(),
                                                descriptorSetLayout_);
@@ -129,14 +129,14 @@ ImGuiRenderer::createMultiDescriptorSet(VulkanRenderDevice &vkDev)
         .pNext = nullptr,
         .descriptorPool = descriptorPool_,
         .descriptorSetCount =
-          static_cast<uint32_t>(vkDev.swapchainImages.size()),
+            static_cast<uint32_t>(vkDev.swapchainImages.size()),
         .pSetLayouts = layouts.data()
     };
 
     descriptorSets_.resize(vkDev.swapchainImages.size());
 
     VK_CHECK(vkAllocateDescriptorSets(
-      vkDev.device, &allocInfo, descriptorSets_.data()));
+        vkDev.device, &allocInfo, descriptorSets_.data()));
 
     // use the font texture initialized in the constructor
     std::vector<VkDescriptorImageInfo> textureDescriptors = {
@@ -147,13 +147,13 @@ ImGuiRenderer::createMultiDescriptorSet(VulkanRenderDevice &vkDev)
 
     for (size_t i = 0; i < extTextures_.size(); i++) {
         textureDescriptors.push_back({
-          .sampler = extTextures_[i].sampler,
-          .imageView = extTextures_[i].image.imageView,
-          .imageLayout =
-            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL /// TODO: select type from
-                                                     /// VulkanTexture object
-                                                     /// (GENERAL or
-                                                     /// SHADER_READ_ONLY_OPTIMAL)
+            .sampler = extTextures_[i].sampler,
+            .imageView = extTextures_[i].image.imageView,
+            .imageLayout =
+                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL /// TODO: select type
+                                                         /// from VulkanTexture
+                                                         /// object (GENERAL or
+                                                         /// SHADER_READ_ONLY_OPTIMAL)
         });
     }
 
@@ -171,19 +171,20 @@ ImGuiRenderer::createMultiDescriptorSet(VulkanRenderDevice &vkDev)
 
         const std::array<VkWriteDescriptorSet, 4> descriptorWrites = {
             bufferWriteDescriptorSet(
-              ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
+                ds, &bufferInfo, 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER),
             bufferWriteDescriptorSet(
-              ds, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
+                ds, &bufferInfo2, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
             bufferWriteDescriptorSet(
-              ds, &bufferInfo3, 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
+                ds, &bufferInfo3, 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
             VkWriteDescriptorSet{
-              .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-              .dstSet = descriptorSets_[i],
-              .dstBinding = 3,
-              .dstArrayElement = 0,
-              .descriptorCount = static_cast<uint32_t>(1 + extTextures_.size()),
-              .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-              .pImageInfo = textureDescriptors.data() },
+                .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                .dstSet = descriptorSets_[i],
+                .dstBinding = 3,
+                .dstArrayElement = 0,
+                .descriptorCount =
+                    static_cast<uint32_t>(1 + extTextures_.size()),
+                .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                .pImageInfo = textureDescriptors.data() },
         };
 
         vkUpdateDescriptorSets(vkDev.device,
@@ -263,8 +264,8 @@ ImGuiRenderer::fillCommandBuffer(VkCommandBuffer commandBuffer,
 
     ImVec2 clipOff = drawData->DisplayPos; // (0,0) unless using multi-viewports
     ImVec2 clipScale =
-      drawData->FramebufferScale; // (1,1) unless using retina display which are
-                                  // often (2,2)
+        drawData->FramebufferScale; // (1,1) unless using retina display which
+                                    // are often (2,2)
 
     int vtxOffset = 0;
     int idxOffset = 0;
@@ -388,7 +389,7 @@ ImGuiRenderer::ImGuiRenderer(VulkanRenderDevice &vkDev)
     // Resource loading
     ImGuiIO &io = ImGui::GetIO();
     createFontTexture(
-      io, "data/OpenSans-Light.ttf", vkDev, font_.image, font_.imageMemory);
+        io, "data/OpenSans-Light.ttf", vkDev, font_.image, font_.imageMemory);
 
     createImageView(vkDev.device,
                     font_.image,
@@ -411,7 +412,7 @@ ImGuiRenderer::ImGuiRenderer(VulkanRenderDevice &vkDev)
                           bufferSize_,
                           VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                           storageBuffer_[i],
                           storageBufferMemory_[i])) {
             printf("ImGuiRenderer: createBuffer() failed\n");
@@ -421,14 +422,14 @@ ImGuiRenderer::ImGuiRenderer(VulkanRenderDevice &vkDev)
 
     // Pipeline creation
     if (!createColorAndDepthRenderPass(
-          vkDev, false, &renderPass_, RenderPassCreateInfo()) ||
+            vkDev, false, &renderPass_, RenderPassCreateInfo()) ||
         !createColorAndDepthFramebuffers(
-          vkDev, renderPass_, VK_NULL_HANDLE, swapchainFramebuffers_) ||
+            vkDev, renderPass_, VK_NULL_HANDLE, swapchainFramebuffers_) ||
         !createUniformBuffers(vkDev, sizeof(mat4)) ||
         !createDescriptorPool(vkDev, 1, 2, 1, &descriptorPool_) ||
         !createDescriptorSet(vkDev) ||
         !createPipelineLayout(
-          vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
+            vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
         !createGraphicsPipeline(vkDev,
                                 renderPass_,
                                 pipelineLayout_,
@@ -452,7 +453,7 @@ ImGuiRenderer::ImGuiRenderer(VulkanRenderDevice &vkDev,
     // Resource loading
     ImGuiIO &io = ImGui::GetIO();
     createFontTexture(
-      io, "data/OpenSans-Light.ttf", vkDev, font_.image, font_.imageMemory);
+        io, "data/OpenSans-Light.ttf", vkDev, font_.image, font_.imageMemory);
 
     createImageView(vkDev.device,
                     font_.image,
@@ -475,7 +476,7 @@ ImGuiRenderer::ImGuiRenderer(VulkanRenderDevice &vkDev,
                           bufferSize_,
                           VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                           storageBuffer_[i],
                           storageBufferMemory_[i])) {
             printf("ImGuiRenderer: createBuffer() failed\n");
@@ -485,9 +486,9 @@ ImGuiRenderer::ImGuiRenderer(VulkanRenderDevice &vkDev,
 
     // Pipeline creation
     if (!createColorAndDepthRenderPass(
-          vkDev, false, &renderPass_, RenderPassCreateInfo()) ||
+            vkDev, false, &renderPass_, RenderPassCreateInfo()) ||
         !createColorAndDepthFramebuffers(
-          vkDev, renderPass_, VK_NULL_HANDLE, swapchainFramebuffers_) ||
+            vkDev, renderPass_, VK_NULL_HANDLE, swapchainFramebuffers_) ||
         !createUniformBuffers(vkDev, sizeof(mat4)) ||
         !createDescriptorPool(vkDev,
                               1,

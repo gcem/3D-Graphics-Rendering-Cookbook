@@ -56,7 +56,7 @@ public:
     {
         glBindVertexArray(vao_);
         glBindBufferBase(
-          GL_SHADER_STORAGE_BUFFER, 1, bufferVertices_.getHandle());
+            GL_SHADER_STORAGE_BUFFER, 1, bufferVertices_.getHandle());
         glDrawElements(GL_TRIANGLES,
                        static_cast<GLsizei>(numIndices_),
                        GL_UNSIGNED_INT,
@@ -85,7 +85,7 @@ main(void)
     const GLsizeiptr kUniformBufferSize = sizeof(PerFrameData);
 
     GLBuffer perFrameDataBuffer(
-      kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER,
                       0,
                       perFrameDataBuffer.getHandle(),
@@ -102,8 +102,8 @@ main(void)
     GLProgram program(shaderVertex, shaderFragment);
 
     const aiScene *scene = aiImportFile(
-      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf",
-      aiProcess_Triangulate);
+        "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf",
+        aiProcess_Triangulate);
 
     if (!scene || !scene->HasMeshes()) {
         printf("Unable to load "
@@ -147,20 +147,20 @@ main(void)
                    (uint32_t)kSizeVertices);
 
     GLTexture texAO(
-      GL_TEXTURE_2D,
-      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_AO.jpg");
+        GL_TEXTURE_2D,
+        "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_AO.jpg");
     GLTexture texEmissive(GL_TEXTURE_2D,
                           "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/"
                           "Default_emissive.jpg");
-    GLTexture texAlbedo(
-      GL_TEXTURE_2D,
-      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_albedo.jpg");
+    GLTexture texAlbedo(GL_TEXTURE_2D,
+                        "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/"
+                        "Default_albedo.jpg");
     GLTexture texMeR(GL_TEXTURE_2D,
                      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/"
                      "Default_metalRoughness.jpg");
-    GLTexture texNormal(
-      GL_TEXTURE_2D,
-      "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/Default_normal.jpg");
+    GLTexture texNormal(GL_TEXTURE_2D,
+                        "deps/src/glTF-Sample-Models/2.0/DamagedHelmet/glTF/"
+                        "Default_normal.jpg");
 
     const GLuint textures[] = { texAO.getHandle(),
                                 texEmissive.getHandle(),
@@ -188,46 +188,46 @@ main(void)
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, modelMatrices.getHandle());
 
     glfwSetCursorPosCallback(
-      app.getWindow(), [](auto *window, double x, double y) {
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
-          mouseState.pos.x = static_cast<float>(x / width);
-          mouseState.pos.y = static_cast<float>(y / height);
-      });
+        app.getWindow(), [](auto *window, double x, double y) {
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            mouseState.pos.x = static_cast<float>(x / width);
+            mouseState.pos.y = static_cast<float>(y / height);
+        });
 
     glfwSetMouseButtonCallback(
-      app.getWindow(), [](auto *window, int button, int action, int mods) {
-          if (button == GLFW_MOUSE_BUTTON_LEFT)
-              mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+        app.getWindow(), [](auto *window, int button, int action, int mods) {
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+                mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     positioner.maxSpeed_ = 5.0f;
 
     glfwSetKeyCallback(
-      app.getWindow(),
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (mods & GLFW_MOD_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          else
-              positioner.movement_.fastSpeed_ = false;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        app.getWindow(),
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (mods & GLFW_MOD_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            else
+                positioner.movement_.fastSpeed_ = false;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     double timeStamp = glfwGetTime();
     float deltaSeconds = 0.0f;
@@ -252,19 +252,21 @@ main(void)
         const PerFrameData perFrameData = { .view = view,
                                             .proj = p,
                                             .cameraPos = glm::vec4(
-                                              camera.getPosition(), 1.0f) };
-        glNamedBufferSubData(
-          perFrameDataBuffer.getHandle(), 0, kUniformBufferSize, &perFrameData);
+                                                camera.getPosition(), 1.0f) };
+        glNamedBufferSubData(perFrameDataBuffer.getHandle(),
+                             0,
+                             kUniformBufferSize,
+                             &perFrameData);
 
         const mat4 scale = glm::scale(mat4(1.0f), vec3(5.0f));
-        const mat4 rot =
-          glm::rotate(mat4(1.0f), glm::radians(90.0f), vec3(1.0f, 0.0f, 0.0f));
+        const mat4 rot = glm::rotate(
+            mat4(1.0f), glm::radians(90.0f), vec3(1.0f, 0.0f, 0.0f));
         const mat4 pos = glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, -1.0f));
         const mat4 m = glm::rotate(scale * rot * pos,
                                    (float)glfwGetTime() * 0.1f,
                                    vec3(0.0f, 0.0f, 1.0f));
         glNamedBufferSubData(
-          modelMatrices.getHandle(), 0, sizeof(mat4), value_ptr(m));
+            modelMatrices.getHandle(), 0, sizeof(mat4), value_ptr(m));
 
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);

@@ -69,23 +69,23 @@ private:
 };
 
 constexpr const char *DefaultMeshVertexShader =
-  "data/shaders/chapter07/VK01.vert";
+    "data/shaders/chapter07/VK01.vert";
 constexpr const char *DefaultMeshFragmentShader =
-  "data/shaders/chapter07/VK01.frag";
+    "data/shaders/chapter07/VK01.frag";
 
 struct MultiRenderer : public Renderer
 {
-    MultiRenderer(
-      VulkanRenderContext &ctx,
-      VKSceneData &sceneData,
-      const char *vtxShaderFile = DefaultMeshVertexShader,
-      const char *fragShaderFile = DefaultMeshFragmentShader,
-      const std::vector<VulkanTexture> &outputs = std::vector<VulkanTexture>{},
-      RenderPass screenRenderPass = RenderPass(),
-      const std::vector<BufferAttachment> &auxBuffers =
-        std::vector<BufferAttachment>{},
-      const std::vector<TextureAttachment> &auxTextures =
-        std::vector<TextureAttachment>{});
+    MultiRenderer(VulkanRenderContext &ctx,
+                  VKSceneData &sceneData,
+                  const char *vtxShaderFile = DefaultMeshVertexShader,
+                  const char *fragShaderFile = DefaultMeshFragmentShader,
+                  const std::vector<VulkanTexture> &outputs =
+                      std::vector<VulkanTexture>{},
+                  RenderPass screenRenderPass = RenderPass(),
+                  const std::vector<BufferAttachment> &auxBuffers =
+                      std::vector<BufferAttachment>{},
+                  const std::vector<TextureAttachment> &auxTextures =
+                      std::vector<TextureAttachment>{});
 
     void fillCommandBuffer(VkCommandBuffer cmdBuffer,
                            size_t currentImage,
@@ -98,7 +98,7 @@ struct MultiRenderer : public Renderer
     inline void setMatrices(const glm::mat4 &proj, const glm::mat4 &view)
     {
         const glm::mat4 m1 =
-          glm::scale(glm::mat4(1.f), glm::vec3(1.f, -1.f, 1.f));
+            glm::scale(glm::mat4(1.f), glm::vec3(1.f, -1.f, 1.f));
         ubo_.proj_ = proj;
         ubo_.view_ = view * m1;
     }

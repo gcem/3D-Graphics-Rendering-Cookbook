@@ -58,7 +58,7 @@ main(void)
     const GLsizeiptr kUniformBufferSize = sizeof(PerFrameData);
 
     GLBuffer perFrameDataBuffer(
-      kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER,
                       0,
                       perFrameDataBuffer.getHandle(),
@@ -89,8 +89,9 @@ main(void)
         { vec3(+2, +2, 0), vec3(0, 0, 1), vec2(1, 1) },
         { vec3(+2, -2, 0), vec3(0, 0, 1), vec2(1, 0) },
     };
-    GLMeshPVP plane(
-      indices, vertices.data(), uint32_t(sizeof(VertexData) * vertices.size()));
+    GLMeshPVP plane(indices,
+                    vertices.data(),
+                    uint32_t(sizeof(VertexData) * vertices.size()));
     GLTexture texAlbedoPlane(GL_TEXTURE_2D, "data/ch2_sample3_STB.jpg");
 
     const std::vector<GLMeshPVP *> meshesToDraw = { &mesh, &plane };
@@ -104,54 +105,54 @@ main(void)
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, modelMatrices.getHandle());
 
     glfwSetCursorPosCallback(
-      app.getWindow(), [](auto *window, double x, double y) {
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
-          mouseState.pos.x = static_cast<float>(x / width);
-          mouseState.pos.y = static_cast<float>(y / height);
-          ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
-      });
+        app.getWindow(), [](auto *window, double x, double y) {
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            mouseState.pos.x = static_cast<float>(x / width);
+            mouseState.pos.y = static_cast<float>(y / height);
+            ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
+        });
 
     glfwSetMouseButtonCallback(
-      app.getWindow(), [](auto *window, int button, int action, int mods) {
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
+        app.getWindow(), [](auto *window, int button, int action, int mods) {
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
 
-          if (!io.WantCaptureMouse)
-              if (button == GLFW_MOUSE_BUTTON_LEFT)
-                  mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+            if (!io.WantCaptureMouse)
+                if (button == GLFW_MOUSE_BUTTON_LEFT)
+                    mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     positioner.maxSpeed_ = 5.0f;
 
     glfwSetKeyCallback(
-      app.getWindow(),
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (mods & GLFW_MOD_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          else
-              positioner.movement_.fastSpeed_ = false;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        app.getWindow(),
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (mods & GLFW_MOD_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            else
+                positioner.movement_.fastSpeed_ = false;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     double timeStamp = glfwGetTime();
     float deltaSeconds = 0.0f;
@@ -176,36 +177,37 @@ main(void)
 
         // 0. Calculate light parameters
         const glm::mat4 rotY =
-          glm::rotate(mat4(1.f), g_LightYAngle, glm::vec3(0, 1, 0));
+            glm::rotate(mat4(1.f), g_LightYAngle, glm::vec3(0, 1, 0));
         const glm::mat4 rotX =
-          glm::rotate(rotY, g_LightXAngle, glm::vec3(1, 0, 0));
+            glm::rotate(rotY, g_LightXAngle, glm::vec3(1, 0, 0));
         const glm::vec4 lightPos = rotX * glm::vec4(0, 0, g_LightDist, 1.0f);
         const mat4 lightProj = glm::perspective(
-          glm::radians(g_LightAngle), 1.0f, g_LightNear, g_LightFar);
+            glm::radians(g_LightAngle), 1.0f, g_LightNear, g_LightFar);
         const mat4 lightView =
-          glm::lookAt(glm::vec3(lightPos), vec3(0), vec3(0, 1, 0));
+            glm::lookAt(glm::vec3(lightPos), vec3(0), vec3(0, 1, 0));
 
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
 
         // 1. Render shadow map
         {
-            const PerFrameData perFrameData = { .view = lightView,
-                                                .proj = lightProj,
-                                                .cameraPos = glm::vec4(
-                                                  camera.getPosition(), 1.0f) };
+            const PerFrameData perFrameData = {
+                .view = lightView,
+                .proj = lightProj,
+                .cameraPos = glm::vec4(camera.getPosition(), 1.0f)
+            };
             glNamedBufferSubData(perFrameDataBuffer.getHandle(),
                                  0,
                                  kUniformBufferSize,
                                  &perFrameData);
             shadowMap.bind();
             glClearNamedFramebufferfv(
-              shadowMap.getHandle(),
-              GL_COLOR,
-              0,
-              glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+                shadowMap.getHandle(),
+                GL_COLOR,
+                0,
+                glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
             glClearNamedFramebufferfi(
-              shadowMap.getHandle(), GL_DEPTH_STENCIL, 0, 1.0f, 0);
+                shadowMap.getHandle(), GL_DEPTH_STENCIL, 0, 1.0f, 0);
             progShadowMap.useProgram();
             for (const auto &m : meshesToDraw)
                 m->drawElements();
@@ -225,23 +227,25 @@ main(void)
             .light = lightProj * lightView,
             .cameraPos = vec4(camera.getPosition(), 1.0f),
             .lightAngles = vec4(
-              cosf(glm::radians(0.5f * g_LightAngle)),
-              cosf(glm::radians(0.5f * (g_LightAngle - g_LightInnerAngle))),
-              1.0f,
-              1.0f),
+                cosf(glm::radians(0.5f * g_LightAngle)),
+                cosf(glm::radians(0.5f * (g_LightAngle - g_LightInnerAngle))),
+                1.0f,
+                1.0f),
             .lightPos = lightPos
         };
-        glNamedBufferSubData(
-          perFrameDataBuffer.getHandle(), 0, kUniformBufferSize, &perFrameData);
+        glNamedBufferSubData(perFrameDataBuffer.getHandle(),
+                             0,
+                             kUniformBufferSize,
+                             &perFrameData);
 
         const mat4 scale = glm::scale(mat4(1.0f), vec3(3.0f));
-        const mat4 rot =
-          glm::rotate(mat4(1.0f), glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
+        const mat4 rot = glm::rotate(
+            mat4(1.0f), glm::radians(-90.0f), vec3(1.0f, 0.0f, 0.0f));
         const mat4 pos = glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, +1.0f));
         const mat4 m =
-          glm::rotate(scale * rot * pos, angle, vec3(0.0f, 0.0f, 1.0f));
+            glm::rotate(scale * rot * pos, angle, vec3(0.0f, 0.0f, 1.0f));
         glNamedBufferSubData(
-          modelMatrices.getHandle(), 0, sizeof(mat4), value_ptr(m));
+            modelMatrices.getHandle(), 0, sizeof(mat4), value_ptr(m));
 
         const GLuint textures[] = { texAlbedoDuck.getHandle(),
                                     texAlbedoPlane.getHandle() };
@@ -257,7 +261,7 @@ main(void)
         glDrawArraysInstancedBaseInstance(GL_TRIANGLES, 0, 6, 1, 0);
 
         renderCameraFrustumGL(
-          canvas, lightView, lightProj, vec4(0.0f, 1.0f, 0.0f, 1.0f));
+            canvas, lightView, lightProj, vec4(0.0f, 1.0f, 0.0f, 1.0f));
         canvas.flush();
 
         ImGuiIO &io = ImGui::GetIO();
@@ -269,7 +273,7 @@ main(void)
         ImGui::Text("Light parameters", nullptr);
         ImGui::SliderFloat("Proj::Light angle", &g_LightAngle, 15.0f, 170.0f);
         ImGui::SliderFloat(
-          "Proj::Light inner angle", &g_LightInnerAngle, 1.0f, 15.0f);
+            "Proj::Light inner angle", &g_LightInnerAngle, 1.0f, 15.0f);
         ImGui::SliderFloat("Proj::Near", &g_LightNear, 0.1f, 5.0f);
         ImGui::SliderFloat("Proj::Far", &g_LightFar, 0.1f, 100.0f);
         ImGui::SliderFloat("Pos::Dist", &g_LightDist, 0.5f, 100.0f);

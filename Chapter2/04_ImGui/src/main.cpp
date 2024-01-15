@@ -25,31 +25,31 @@ main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window =
-      glfwCreateWindow(1280, 720, "Simple example", nullptr, nullptr);
+        glfwCreateWindow(1280, 720, "Simple example", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     glfwSetCursorPosCallback(window, [](auto *window, double x, double y) {
         ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
     });
 
     glfwSetMouseButtonCallback(
-      window, [](auto *window, int button, int action, int mods) {
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
-      });
+        window, [](auto *window, int button, int action, int mods) {
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
+        });
 
     glfwMakeContextCurrent(window);
     gladLoadGL(glfwGetProcAddress);
@@ -61,12 +61,12 @@ main()
     GLuint handleVBO;
     glCreateBuffers(1, &handleVBO);
     glNamedBufferStorage(
-      handleVBO, 128 * 1024, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        handleVBO, 128 * 1024, nullptr, GL_DYNAMIC_STORAGE_BIT);
 
     GLuint handleElements;
     glCreateBuffers(1, &handleElements);
     glNamedBufferStorage(
-      handleElements, 256 * 1024, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        handleElements, 256 * 1024, nullptr, GL_DYNAMIC_STORAGE_BIT);
 
     glVertexArrayElementBuffer(vao, handleElements);
     glVertexArrayVertexBuffer(vao, 0, handleVBO, 0, sizeof(ImDrawVert));
@@ -76,11 +76,11 @@ main()
     glEnableVertexArrayAttrib(vao, 2);
 
     glVertexArrayAttribFormat(
-      vao, 0, 2, GL_FLOAT, GL_FALSE, IM_OFFSETOF(ImDrawVert, pos));
+        vao, 0, 2, GL_FLOAT, GL_FALSE, IM_OFFSETOF(ImDrawVert, pos));
     glVertexArrayAttribFormat(
-      vao, 1, 2, GL_FLOAT, GL_FALSE, IM_OFFSETOF(ImDrawVert, uv));
+        vao, 1, 2, GL_FLOAT, GL_FALSE, IM_OFFSETOF(ImDrawVert, uv));
     glVertexArrayAttribFormat(
-      vao, 2, 4, GL_UNSIGNED_BYTE, GL_TRUE, IM_OFFSETOF(ImDrawVert, col));
+        vao, 2, 4, GL_UNSIGNED_BYTE, GL_TRUE, IM_OFFSETOF(ImDrawVert, col));
 
     glVertexArrayAttribBinding(vao, 0, 0);
     glVertexArrayAttribBinding(vao, 1, 0);
@@ -136,7 +136,7 @@ main()
     GLuint perFrameDataBuffer;
     glCreateBuffers(1, &perFrameDataBuffer);
     glNamedBufferStorage(
-      perFrameDataBuffer, sizeof(mat4), nullptr, GL_DYNAMIC_STORAGE_BIT);
+        perFrameDataBuffer, sizeof(mat4), nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferBase(GL_UNIFORM_BUFFER, 0, perFrameDataBuffer);
 
     ImGui::CreateContext();
@@ -153,7 +153,7 @@ main()
     cfg.OversampleH = 4;
     cfg.OversampleV = 4;
     ImFont *Font = io.Fonts->AddFontFromFileTTF(
-      "data/OpenSans-Light.ttf", cfg.SizePixels, &cfg);
+        "data/OpenSans-Light.ttf", cfg.SizePixels, &cfg);
 
     unsigned char *pixels = nullptr;
     int width, height;
@@ -167,7 +167,7 @@ main()
     glTextureStorage2D(texture, 1, GL_RGBA8, width, height);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTextureSubImage2D(
-      texture, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        texture, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     glBindTextures(0, 1, &texture);
 
     io.Fonts->TexID = (ImTextureID)(intptr_t)texture;
@@ -203,20 +203,22 @@ main()
         const float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
         const mat4 orthoProjection = glm::ortho(L, R, B, T);
 
-        glNamedBufferSubData(
-          perFrameDataBuffer, 0, sizeof(mat4), glm::value_ptr(orthoProjection));
+        glNamedBufferSubData(perFrameDataBuffer,
+                             0,
+                             sizeof(mat4),
+                             glm::value_ptr(orthoProjection));
 
         for (int n = 0; n < draw_data->CmdListsCount; n++) {
             const ImDrawList *cmd_list = draw_data->CmdLists[n];
             glNamedBufferSubData(handleVBO,
                                  0,
                                  (GLsizeiptr)cmd_list->VtxBuffer.Size *
-                                   sizeof(ImDrawVert),
+                                     sizeof(ImDrawVert),
                                  cmd_list->VtxBuffer.Data);
             glNamedBufferSubData(handleElements,
                                  0,
                                  (GLsizeiptr)cmd_list->IdxBuffer.Size *
-                                   sizeof(ImDrawIdx),
+                                     sizeof(ImDrawIdx),
                                  cmd_list->IdxBuffer.Data);
 
             for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++) {
@@ -228,11 +230,11 @@ main()
                           (int)(cr.w - cr.y));
                 glBindTextureUnit(0, (GLuint)(intptr_t)pcmd->TextureId);
                 glDrawElementsBaseVertex(
-                  GL_TRIANGLES,
-                  (GLsizei)pcmd->ElemCount,
-                  GL_UNSIGNED_SHORT,
-                  (void *)(intptr_t)(pcmd->IdxOffset * sizeof(ImDrawIdx)),
-                  (GLint)pcmd->VtxOffset);
+                    GL_TRIANGLES,
+                    (GLsizei)pcmd->ElemCount,
+                    GL_UNSIGNED_SHORT,
+                    (void *)(intptr_t)(pcmd->IdxOffset * sizeof(ImDrawIdx)),
+                    (GLint)pcmd->VtxOffset);
             }
         }
 

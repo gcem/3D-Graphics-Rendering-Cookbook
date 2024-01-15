@@ -14,7 +14,7 @@ struct MyApp : public CameraApp
       : CameraApp(-95, -95)
       , envMap(ctx_.resources.loadCubeMap("data/piazza_bologni_1k.hdr"))
       , irrMap(
-          ctx_.resources.loadCubeMap("data/piazza_bologni_1k_irradiance.hdr"))
+            ctx_.resources.loadCubeMap("data/piazza_bologni_1k_irradiance.hdr"))
       , sceneData(ctx_,
                   "data/meshes/test_graph.meshes",
                   "data/meshes/test_graph.scene",
@@ -30,7 +30,7 @@ struct MyApp : public CameraApp
         onScreenRenderers_.emplace_back(imgui, false);
 
         sceneData.scene_.localTransform_[0] = glm::rotate(
-          glm::mat4(1.f), (float)(M_PI / 2.f), glm::vec3(1.f, 0.f, 0.0f));
+            glm::mat4(1.f), (float)(M_PI / 2.f), glm::vec3(1.f, 0.f, 0.0f));
     }
 
     void drawUI() override
@@ -91,14 +91,14 @@ private:
 
         std::string name = getNodeName(sceneData.scene_, node);
         std::string label =
-          name.empty() ? (std::string("Node") + std::to_string(node)) : name;
+            name.empty() ? (std::string("Node") + std::to_string(node)) : name;
         label = "Node: " + label;
 
         ImGui::Begin("Editor");
         ImGui::Text("%s", label.c_str());
 
         glm::mat4 globalTransform =
-          sceneData.scene_.globalTransform_[node]; // fetch global transform
+            sceneData.scene_.globalTransform_[node]; // fetch global transform
         glm::mat4 srcTransform = globalTransform;
         glm::mat4 localTransform = sceneData.scene_.localTransform_[node];
 
@@ -107,10 +107,10 @@ private:
 
         editTransform(cameraView, cameraProjection, globalTransform);
         glm::mat4 deltaTransform =
-          glm::inverse(srcTransform) *
-          globalTransform; // calculate delta for edited global transform
+            glm::inverse(srcTransform) *
+            globalTransform; // calculate delta for edited global transform
         sceneData.scene_.localTransform_[node] =
-          localTransform * deltaTransform; // modify local transform
+            localTransform * deltaTransform; // modify local transform
         markAsChanged(sceneData.scene_, node);
 
         ImGui::Separator();

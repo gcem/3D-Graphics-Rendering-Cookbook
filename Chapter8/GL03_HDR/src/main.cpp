@@ -54,7 +54,7 @@ main(void)
     GLProgram progGrid(shdGridVertex, shdGridFragment);
 
     GLShader shdFullScreenQuadVertex(
-      "data/shaders/chapter08/GL02_FullScreenQuad.vert");
+        "data/shaders/chapter08/GL02_FullScreenQuad.vert");
 
     GLShader shdCombineHDR("data/shaders/chapter08/GL03_HDR.frag");
     GLProgram progCombineHDR(shdFullScreenQuadVertex, shdCombineHDR);
@@ -73,7 +73,7 @@ main(void)
     const GLsizeiptr kUniformBufferSize = sizeof(PerFrameData);
 
     GLBuffer perFrameDataBuffer(
-      kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER,
                       kBufferIndex_PerFrameUniforms,
                       perFrameDataBuffer.getHandle(),
@@ -99,50 +99,50 @@ main(void)
     GLMesh mesh2(sceneData2);
 
     glfwSetCursorPosCallback(
-      app.getWindow(), [](auto *window, double x, double y) {
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
-          mouseState.pos.x = static_cast<float>(x / width);
-          mouseState.pos.y = static_cast<float>(y / height);
-          ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
-      });
+        app.getWindow(), [](auto *window, double x, double y) {
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            mouseState.pos.x = static_cast<float>(x / width);
+            mouseState.pos.y = static_cast<float>(y / height);
+            ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
+        });
 
     glfwSetMouseButtonCallback(
-      app.getWindow(), [](auto *window, int button, int action, int mods) {
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
+        app.getWindow(), [](auto *window, int button, int action, int mods) {
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
 
-          if (!io.WantCaptureMouse)
-              if (button == GLFW_MOUSE_BUTTON_LEFT)
-                  mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+            if (!io.WantCaptureMouse)
+                if (button == GLFW_MOUSE_BUTTON_LEFT)
+                    mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      app.getWindow(),
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        app.getWindow(),
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     positioner.maxSpeed_ = 1.0f;
 
@@ -204,7 +204,7 @@ main(void)
                                   0,
                                   glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
         glClearNamedFramebufferfi(
-          framebuffer.getHandle(), GL_DEPTH_STENCIL, 0, 1.0f, 0);
+            framebuffer.getHandle(), GL_DEPTH_STENCIL, 0, 1.0f, 0);
 
         const mat4 p = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
         const mat4 view = camera.getViewMatrix();
@@ -212,9 +212,11 @@ main(void)
         const PerFrameData perFrameData = { .view = view,
                                             .proj = p,
                                             .cameraPos = glm::vec4(
-                                              camera.getPosition(), 1.0f) };
-        glNamedBufferSubData(
-          perFrameDataBuffer.getHandle(), 0, kUniformBufferSize, &perFrameData);
+                                                camera.getPosition(), 1.0f) };
+        glNamedBufferSubData(perFrameDataBuffer.getHandle(),
+                             0,
+                             kUniformBufferSize,
+                             &perFrameData);
 
         // 1. Render scene
         glDisable(GL_BLEND);
@@ -331,7 +333,7 @@ main(void)
         ImGui::SliderFloat("Exposure", &g_HDRParams.exposure_, 0.1f, 2.0f);
         ImGui::SliderFloat("Max White", &g_HDRParams.maxWhite_, 0.5f, 2.0f);
         ImGui::SliderFloat(
-          "Bloom strength", &g_HDRParams.bloomStrength_, 0.0f, 2.0f);
+            "Bloom strength", &g_HDRParams.bloomStrength_, 0.0f, 2.0f);
         ImGui::PopItemFlag();
         ImGui::PopStyleVar();
         ImGui::End();

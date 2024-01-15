@@ -18,85 +18,85 @@ struct LuminanceCalculator : public CompositeRenderer
       ,
 
       lumTex64(
-        c.resources.addColorTexture(LuminosityWidth,
-                                    LuminosityHeight,
-                                    LuminosityFormat,
-                                    VK_FILTER_LINEAR,
-                                    VK_FILTER_LINEAR,
-                                    VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+          c.resources.addColorTexture(LuminosityWidth,
+                                      LuminosityHeight,
+                                      LuminosityFormat,
+                                      VK_FILTER_LINEAR,
+                                      VK_FILTER_LINEAR,
+                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       , lumTex32(
-          c.resources.addColorTexture(LuminosityWidth / 2,
-                                      LuminosityHeight / 2,
-                                      LuminosityFormat,
-                                      VK_FILTER_LINEAR,
-                                      VK_FILTER_LINEAR,
-                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+            c.resources.addColorTexture(LuminosityWidth / 2,
+                                        LuminosityHeight / 2,
+                                        LuminosityFormat,
+                                        VK_FILTER_LINEAR,
+                                        VK_FILTER_LINEAR,
+                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       , lumTex16(
-          c.resources.addColorTexture(LuminosityWidth / 4,
-                                      LuminosityHeight / 4,
-                                      LuminosityFormat,
-                                      VK_FILTER_LINEAR,
-                                      VK_FILTER_LINEAR,
-                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+            c.resources.addColorTexture(LuminosityWidth / 4,
+                                        LuminosityHeight / 4,
+                                        LuminosityFormat,
+                                        VK_FILTER_LINEAR,
+                                        VK_FILTER_LINEAR,
+                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       , lumTex08(
-          c.resources.addColorTexture(LuminosityWidth / 8,
-                                      LuminosityHeight / 8,
-                                      LuminosityFormat,
-                                      VK_FILTER_LINEAR,
-                                      VK_FILTER_LINEAR,
-                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+            c.resources.addColorTexture(LuminosityWidth / 8,
+                                        LuminosityHeight / 8,
+                                        LuminosityFormat,
+                                        VK_FILTER_LINEAR,
+                                        VK_FILTER_LINEAR,
+                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       , lumTex04(
-          c.resources.addColorTexture(LuminosityWidth / 16,
-                                      LuminosityHeight / 16,
-                                      LuminosityFormat,
-                                      VK_FILTER_LINEAR,
-                                      VK_FILTER_LINEAR,
-                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+            c.resources.addColorTexture(LuminosityWidth / 16,
+                                        LuminosityHeight / 16,
+                                        LuminosityFormat,
+                                        VK_FILTER_LINEAR,
+                                        VK_FILTER_LINEAR,
+                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       , lumTex02(
-          c.resources.addColorTexture(LuminosityWidth / 32,
-                                      LuminosityHeight / 32,
-                                      LuminosityFormat,
-                                      VK_FILTER_LINEAR,
-                                      VK_FILTER_LINEAR,
-                                      VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
+            c.resources.addColorTexture(LuminosityWidth / 32,
+                                        LuminosityHeight / 32,
+                                        LuminosityFormat,
+                                        VK_FILTER_LINEAR,
+                                        VK_FILTER_LINEAR,
+                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE))
       , lumTex01(lumTex)
       ,
 
       src_To_64(
-        c,
-        DescriptorSetInfo{ .textures = { fsTextureAttachment(source) } },
-        { lumTex64 },
-        "data/shaders/chapter08/VK03_downscale2x2.frag")
+          c,
+          DescriptorSetInfo{ .textures = { fsTextureAttachment(source) } },
+          { lumTex64 },
+          "data/shaders/chapter08/VK03_downscale2x2.frag")
       , lum64_To_32(
-          c,
-          DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex64) } },
-          { lumTex32 },
-          "data/shaders/chapter08/VK03_downscale2x2.frag")
+            c,
+            DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex64) } },
+            { lumTex32 },
+            "data/shaders/chapter08/VK03_downscale2x2.frag")
       , lum32_To_16(
-          c,
-          DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex32) } },
-          { lumTex16 },
-          "data/shaders/chapter08/VK03_downscale2x2.frag")
+            c,
+            DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex32) } },
+            { lumTex16 },
+            "data/shaders/chapter08/VK03_downscale2x2.frag")
       , lum16_To_08(
-          c,
-          DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex16) } },
-          { lumTex08 },
-          "data/shaders/chapter08/VK03_downscale2x2.frag")
+            c,
+            DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex16) } },
+            { lumTex08 },
+            "data/shaders/chapter08/VK03_downscale2x2.frag")
       , lum08_To_04(
-          c,
-          DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex08) } },
-          { lumTex04 },
-          "data/shaders/chapter08/VK03_downscale2x2.frag")
+            c,
+            DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex08) } },
+            { lumTex04 },
+            "data/shaders/chapter08/VK03_downscale2x2.frag")
       , lum04_To_02(
-          c,
-          DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex04) } },
-          { lumTex02 },
-          "data/shaders/chapter08/VK03_downscale2x2.frag")
+            c,
+            DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex04) } },
+            { lumTex02 },
+            "data/shaders/chapter08/VK03_downscale2x2.frag")
       , lum02_To_01(
-          c,
-          DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex02) } },
-          { lumTex01 },
-          "data/shaders/chapter08/VK03_downscale2x2.frag")
+            c,
+            DescriptorSetInfo{ .textures = { fsTextureAttachment(lumTex02) } },
+            { lumTex01 },
+            "data/shaders/chapter08/VK03_downscale2x2.frag")
       ,
 
       lum64ToColor(c, lumTex64)

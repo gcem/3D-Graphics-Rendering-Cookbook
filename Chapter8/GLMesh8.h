@@ -28,8 +28,8 @@ public:
                          data.materials_.data(),
                          0)
       , bufferIndirect_(sizeof(DrawElementsIndirectCommand) *
-                            data.shapes_.size() +
-                          sizeof(GLsizei),
+                                data.shapes_.size() +
+                            sizeof(GLsizei),
                         nullptr,
                         GL_DYNAMIC_STORAGE_BIT)
       , bufferModelMatrices_(sizeof(glm::mat4) * data.shapes_.size(),
@@ -54,13 +54,13 @@ public:
         // normal
         glEnableVertexArrayAttrib(vao_, 2);
         glVertexArrayAttribFormat(
-          vao_, 2, 3, GL_FLOAT, GL_TRUE, sizeof(vec3) + sizeof(vec2));
+            vao_, 2, 3, GL_FLOAT, GL_TRUE, sizeof(vec3) + sizeof(vec2));
         glVertexArrayAttribBinding(vao_, 2, 0);
 
         std::vector<uint8_t> drawCommands;
 
         drawCommands.resize(sizeof(DrawElementsIndirectCommand) *
-                              data.shapes_.size() +
+                                data.shapes_.size() +
                             sizeof(GLsizei));
 
         // store the number of draw commands in the very beginning of the buffer
@@ -68,16 +68,16 @@ public:
         memcpy(drawCommands.data(), &numCommands, sizeof(numCommands));
 
         DrawElementsIndirectCommand *cmd =
-          std::launder(reinterpret_cast<DrawElementsIndirectCommand *>(
-            drawCommands.data() + sizeof(GLsizei)));
+            std::launder(reinterpret_cast<DrawElementsIndirectCommand *>(
+                drawCommands.data() + sizeof(GLsizei)));
 
         // prepare indirect commands buffer
         for (size_t i = 0; i != data.shapes_.size(); i++) {
             const uint32_t meshIdx = data.shapes_[i].meshIndex;
             const uint32_t lod = data.shapes_[i].LOD;
             *cmd++ = { .count_ =
-                         data.meshData_.meshes_[meshIdx].getLODIndicesCount(
-                           lod),
+                           data.meshData_.meshes_[meshIdx].getLODIndicesCount(
+                               lod),
                        .instanceCount_ = 1,
                        .firstIndex_ = data.shapes_[i].indexOffset,
                        .baseVertex_ = data.shapes_[i].vertexOffset,

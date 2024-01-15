@@ -51,13 +51,13 @@ main(void)
     GLShader shaderFragOIT("data/shaders/chapter10/GL03_mesh_oit.frag");
     GLProgram programOIT(shaderVert, shaderFragOIT);
     GLShader shdFullScreenQuadVert(
-      "data/shaders/chapter08/GL02_FullScreenQuad.vert");
+        "data/shaders/chapter08/GL02_FullScreenQuad.vert");
     GLShader shdCombineOIT("data/shaders/chapter10/GL03_OIT.frag");
     GLProgram progCombineOIT(shdFullScreenQuadVert, shdCombineOIT);
 
     const GLsizeiptr kUniformBufferSize = sizeof(PerFrameData);
     GLBuffer perFrameDataBuffer(
-      kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER,
                       kBufferIndex_PerFrameUniforms,
                       perFrameDataBuffer.getHandle(),
@@ -74,50 +74,50 @@ main(void)
     GLMesh mesh(sceneData);
 
     glfwSetCursorPosCallback(
-      app.getWindow(), [](auto *window, double x, double y) {
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
-          mouseState.pos.x = static_cast<float>(x / width);
-          mouseState.pos.y = static_cast<float>(y / height);
-          ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
-      });
+        app.getWindow(), [](auto *window, double x, double y) {
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            mouseState.pos.x = static_cast<float>(x / width);
+            mouseState.pos.y = static_cast<float>(y / height);
+            ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
+        });
 
     glfwSetMouseButtonCallback(
-      app.getWindow(), [](auto *window, int button, int action, int mods) {
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
+        app.getWindow(), [](auto *window, int button, int action, int mods) {
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
 
-          if (!io.WantCaptureMouse)
-              if (button == GLFW_MOUSE_BUTTON_LEFT)
-                  mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+            if (!io.WantCaptureMouse)
+                if (button == GLFW_MOUSE_BUTTON_LEFT)
+                    mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      app.getWindow(),
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        app.getWindow(),
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     positioner.maxSpeed_ = 1.0f;
 
@@ -134,15 +134,15 @@ main(void)
     };
 
     mesh.bufferIndirect_.selectTo(
-      meshesOpaque,
-      [&isTransparent](const DrawElementsIndirectCommand &c) -> bool {
-          return !isTransparent(c);
-      });
+        meshesOpaque,
+        [&isTransparent](const DrawElementsIndirectCommand &c) -> bool {
+            return !isTransparent(c);
+        });
     mesh.bufferIndirect_.selectTo(
-      meshesTransparent,
-      [&isTransparent](const DrawElementsIndirectCommand &c) -> bool {
-          return isTransparent(c);
-      });
+        meshesTransparent,
+        [&isTransparent](const DrawElementsIndirectCommand &c) -> bool {
+            return isTransparent(c);
+        });
 
     struct TransparentFragment
     {
@@ -158,14 +158,14 @@ main(void)
     const uint32_t kMaxOITFragments = 16 * 1024 * 1024;
     const uint32_t kBufferIndex_TransparencyLists = kBufferIndex_Materials + 1;
     GLBuffer oitAtomicCounter(
-      sizeof(uint32_t), nullptr, GL_DYNAMIC_STORAGE_BIT);
+        sizeof(uint32_t), nullptr, GL_DYNAMIC_STORAGE_BIT);
     GLBuffer oitTransparencyLists(sizeof(TransparentFragment) *
-                                    kMaxOITFragments,
+                                      kMaxOITFragments,
                                   nullptr,
                                   GL_DYNAMIC_STORAGE_BIT);
     GLTexture oitHeads(GL_TEXTURE_2D, width, height, GL_R32UI);
     glBindImageTexture(
-      0, oitHeads.getHandle(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32UI);
+        0, oitHeads.getHandle(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32UI);
     glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, oitAtomicCounter.getHandle());
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER,
                      kBufferIndex_TransparencyLists,
@@ -174,15 +174,18 @@ main(void)
     auto clearTransparencyBuffers = [&oitAtomicCounter, &oitHeads]() {
         const uint32_t minusOne = 0xFFFFFFFF;
         const uint32_t zero = 0;
-        glClearTexImage(
-          oitHeads.getHandle(), 0, GL_RED_INTEGER, GL_UNSIGNED_INT, &minusOne);
+        glClearTexImage(oitHeads.getHandle(),
+                        0,
+                        GL_RED_INTEGER,
+                        GL_UNSIGNED_INT,
+                        &minusOne);
         glNamedBufferSubData(
-          oitAtomicCounter.getHandle(), 0, sizeof(uint32_t), &zero);
+            oitAtomicCounter.getHandle(), 0, sizeof(uint32_t), &zero);
     };
 
     while (!glfwWindowShouldClose(app.getWindow())) {
         positioner.update(
-          app.getDeltaSeconds(), mouseState.pos, mouseState.pressedLeft);
+            app.getDeltaSeconds(), mouseState.pos, mouseState.pressedLeft);
 
         int width, height;
         glfwGetFramebufferSize(app.getWindow(), &width, &height);
@@ -194,18 +197,20 @@ main(void)
                                   0,
                                   glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
         glClearNamedFramebufferfi(
-          framebuffer.getHandle(), GL_DEPTH_STENCIL, 0, 1.0f, 0);
+            framebuffer.getHandle(), GL_DEPTH_STENCIL, 0, 1.0f, 0);
 
         const mat4 proj = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
         const mat4 view = camera.getViewMatrix();
         PerFrameData perFrameData = { .view = view,
                                       .proj = proj,
                                       .light = mat4(0.0f),
-                                      .cameraPos =
-                                        glm::vec4(camera.getPosition(), 1.0f) };
+                                      .cameraPos = glm::vec4(
+                                          camera.getPosition(), 1.0f) };
 
-        glNamedBufferSubData(
-          perFrameDataBuffer.getHandle(), 0, kUniformBufferSize, &perFrameData);
+        glNamedBufferSubData(perFrameDataBuffer.getHandle(),
+                             0,
+                             kUniformBufferSize,
+                             &perFrameData);
 
         clearTransparencyBuffers();
 

@@ -69,11 +69,11 @@ createDescriptorSet()
 {
     const std::array<VkDescriptorSetLayoutBinding, 4> bindings = {
         descriptorSetLayoutBinding(
-          0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(
-          2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
+            2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT),
         descriptorSetLayoutBinding(3,
                                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                    VK_SHADER_STAGE_FRAGMENT_BIT)
@@ -88,7 +88,7 @@ createDescriptorSet()
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &vkState.descriptorSetLayout));
+        vkDev.device, &layoutInfo, nullptr, &vkState.descriptorSetLayout));
 
     std::vector<VkDescriptorSetLayout> layouts(vkDev.swapchainImages.size(),
                                                vkState.descriptorSetLayout);
@@ -98,28 +98,28 @@ createDescriptorSet()
         .pNext = nullptr,
         .descriptorPool = vkState.descriptorPool,
         .descriptorSetCount =
-          static_cast<uint32_t>(vkDev.swapchainImages.size()),
+            static_cast<uint32_t>(vkDev.swapchainImages.size()),
         .pSetLayouts = layouts.data()
     };
 
     vkState.descriptorSets.resize(vkDev.swapchainImages.size());
 
     VK_CHECK(vkAllocateDescriptorSets(
-      vkDev.device, &allocInfo, vkState.descriptorSets.data()));
+        vkDev.device, &allocInfo, vkState.descriptorSets.data()));
 
     for (size_t i = 0; i < vkDev.swapchainImages.size(); i++) {
-        const VkDescriptorBufferInfo bufferInfo = { .buffer =
-                                                      vkState.uniformBuffers[i],
-                                                    .offset = 0,
-                                                    .range =
-                                                      sizeof(UniformBuffer) };
+        const VkDescriptorBufferInfo bufferInfo = {
+            .buffer = vkState.uniformBuffers[i],
+            .offset = 0,
+            .range = sizeof(UniformBuffer)
+        };
         const VkDescriptorBufferInfo bufferInfo2 = { .buffer =
-                                                       vkState.storageBuffer,
+                                                         vkState.storageBuffer,
                                                      .offset = 0,
                                                      .range =
-                                                       vertexBufferSize };
+                                                         vertexBufferSize };
         const VkDescriptorBufferInfo bufferInfo3 = { .buffer =
-                                                       vkState.storageBuffer,
+                                                         vkState.storageBuffer,
                                                      .offset = vertexBufferSize,
                                                      .range = indexBufferSize };
         const VkDescriptorImageInfo imageInfo = {
@@ -130,37 +130,37 @@ createDescriptorSet()
 
         const std::array<VkWriteDescriptorSet, 4> descriptorWrites = {
             VkWriteDescriptorSet{
-              .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-              .dstSet = vkState.descriptorSets[i],
-              .dstBinding = 0,
-              .dstArrayElement = 0,
-              .descriptorCount = 1,
-              .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-              .pBufferInfo = &bufferInfo },
+                .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                .dstSet = vkState.descriptorSets[i],
+                .dstBinding = 0,
+                .dstArrayElement = 0,
+                .descriptorCount = 1,
+                .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                .pBufferInfo = &bufferInfo },
             VkWriteDescriptorSet{
-              .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-              .dstSet = vkState.descriptorSets[i],
-              .dstBinding = 1,
-              .dstArrayElement = 0,
-              .descriptorCount = 1,
-              .descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-              .pBufferInfo = &bufferInfo2 },
+                .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                .dstSet = vkState.descriptorSets[i],
+                .dstBinding = 1,
+                .dstArrayElement = 0,
+                .descriptorCount = 1,
+                .descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                .pBufferInfo = &bufferInfo2 },
             VkWriteDescriptorSet{
-              .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-              .dstSet = vkState.descriptorSets[i],
-              .dstBinding = 2,
-              .dstArrayElement = 0,
-              .descriptorCount = 1,
-              .descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-              .pBufferInfo = &bufferInfo3 },
+                .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                .dstSet = vkState.descriptorSets[i],
+                .dstBinding = 2,
+                .dstArrayElement = 0,
+                .descriptorCount = 1,
+                .descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                .pBufferInfo = &bufferInfo3 },
             VkWriteDescriptorSet{
-              .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-              .dstSet = vkState.descriptorSets[i],
-              .dstBinding = 3,
-              .dstArrayElement = 0,
-              .descriptorCount = 1,
-              .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-              .pImageInfo = &imageInfo },
+                .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                .dstSet = vkState.descriptorSets[i],
+                .dstBinding = 3,
+                .dstArrayElement = 0,
+                .descriptorCount = 1,
+                .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                .pImageInfo = &imageInfo },
         };
 
         vkUpdateDescriptorSets(vkDev.device,
@@ -205,7 +205,7 @@ fillCommandBuffers(size_t i)
     };
 
     vkCmdBeginRenderPass(
-      vkDev.commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        vkDev.commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
     vkCmdBindPipeline(vkDev.commandBuffers[i],
                       VK_PIPELINE_BIND_POINT_GRAPHICS,
@@ -260,7 +260,7 @@ createUniformBuffers()
                           bufferSize,
                           VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                           vkState.uniformBuffers[i],
                           vkState.uniformBuffersMemory[i])) {
             printf("Fail: buffers\n");
@@ -314,20 +314,21 @@ initVulkan()
     createTextureSampler(vkDev.device, &vkState.textureSampler);
 
     createDepthResources(
-      vkDev, kScreenWidth, kScreenHeight, vkState.depthTexture);
+        vkDev, kScreenWidth, kScreenHeight, vkState.depthTexture);
 
     if (!createDescriptorPool(vkDev, 1, 2, 1, &vkState.descriptorPool) ||
         !createDescriptorSet() ||
         !createColorAndDepthRenderPass(
-          vkDev,
-          true,
-          &vkState.renderPass,
-          RenderPassCreateInfo{ .clearColor_ = true,
-                                .clearDepth_ = true,
-                                .flags_ = eRenderPassBit_First |
-                                          eRenderPassBit_Last }) ||
-        !createPipelineLayout(
-          vkDev.device, vkState.descriptorSetLayout, &vkState.pipelineLayout) ||
+            vkDev,
+            true,
+            &vkState.renderPass,
+            RenderPassCreateInfo{ .clearColor_ = true,
+                                  .clearDepth_ = true,
+                                  .flags_ = eRenderPassBit_First |
+                                            eRenderPassBit_Last }) ||
+        !createPipelineLayout(vkDev.device,
+                              vkState.descriptorSetLayout,
+                              &vkState.pipelineLayout) ||
         !createGraphicsPipeline(vkDev,
                                 vkState.renderPass,
                                 vkState.pipelineLayout,
@@ -360,7 +361,7 @@ terminateVulkan()
     }
 
     vkDestroyDescriptorSetLayout(
-      vkDev.device, vkState.descriptorSetLayout, nullptr);
+        vkDev.device, vkState.descriptorSetLayout, nullptr);
     vkDestroyDescriptorPool(vkDev.device, vkState.descriptorPool, nullptr);
 
     for (auto framebuffer : vkState.swapchainFramebuffers) {
@@ -403,10 +404,10 @@ drawOverlay()
     const float ratio = width / (float)height;
 
     const mat4 m1 =
-      glm::rotate(glm::translate(mat4(1.0f), vec3(0.f, 0.5f, -1.5f)) *
-                    glm::rotate(mat4(1.f), glm::pi<float>(), vec3(1, 0, 0)),
-                  (float)glfwGetTime(),
-                  vec3(0.0f, 1.0f, 0.0f));
+        glm::rotate(glm::translate(mat4(1.0f), vec3(0.f, 0.5f, -1.5f)) *
+                        glm::rotate(mat4(1.f), glm::pi<float>(), vec3(1, 0, 0)),
+                    (float)glfwGetTime(),
+                    vec3(0.0f, 1.0f, 0.0f));
     const mat4 p = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
 
     const UniformBuffer ubo{ .mvp = p * m1 };
@@ -426,7 +427,7 @@ drawOverlay()
                               .pWaitDstStageMask = waitStages,
                               .commandBufferCount = 1,
                               .pCommandBuffers =
-                                &vkDev.commandBuffers[imageIndex],
+                                  &vkDev.commandBuffers[imageIndex],
                               .signalSemaphoreCount = 1,
                               .pSignalSemaphores = &vkDev.renderSemaphore };
 
@@ -463,18 +464,18 @@ main()
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     window = glfwCreateWindow(
-      kScreenWidth, kScreenHeight, "VulkanApp", nullptr, nullptr);
+        kScreenWidth, kScreenHeight, "VulkanApp", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     initVulkan();
 

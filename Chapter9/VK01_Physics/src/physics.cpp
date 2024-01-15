@@ -15,15 +15,15 @@ Physics::addBox(const glm::vec3 &halfSize,
     boxTransform.push_back(glm::mat4(1.0f));
 
     btCollisionShape *collisionShape =
-      new btBoxShape(Vec3ToBulletVec3(halfSize));
+        new btBoxShape(Vec3ToBulletVec3(halfSize));
     btDefaultMotionState *motionState = new btDefaultMotionState(
-      btTransform(orientation, Vec3ToBulletVec3(position)));
+        btTransform(orientation, Vec3ToBulletVec3(position)));
 
     btVector3 localInertia(0, 0, 0);
     collisionShape->calculateLocalInertia(mass, localInertia);
 
     btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(
-      mass, motionState, collisionShape, localInertia);
+        mass, motionState, collisionShape, localInertia);
 
     rigidBodyCI.m_friction = 0.1f;
     rigidBodyCI.m_rollingFriction = 0.1f;

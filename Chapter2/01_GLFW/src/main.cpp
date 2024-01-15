@@ -57,18 +57,18 @@ main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window =
-      glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
+        glfwCreateWindow(1024, 768, "Simple example", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-      });
+        window,
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+        });
 
     glfwMakeContextCurrent(window);
     gladLoadGL();
@@ -100,10 +100,10 @@ main(void)
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     glfwSetFramebufferSizeCallback(
-      window, [](GLFWwindow *window, int width, int height) {
-          // TODO does this need synchronization with the rendering loop?
-          glViewport(0, 0, width, height);
-      });
+        window, [](GLFWwindow *window, int width, int height) {
+            // TODO does this need synchronization with the rendering loop?
+            glViewport(0, 0, width, height);
+        });
 
     while (!glfwWindowShouldClose(window)) {
         // int width, height;

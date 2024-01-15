@@ -54,7 +54,7 @@ public:
         if (mousePressed) {
             const glm::vec2 delta = mousePos - mousePos_;
             const glm::quat deltaQuat = glm::quat(
-              glm::vec3(-mouseSpeed_ * delta.y, mouseSpeed_ * delta.x, 0.0f));
+                glm::vec3(-mouseSpeed_ * delta.y, mouseSpeed_ * delta.x, 0.0f));
             cameraOrientation_ = deltaQuat * cameraOrientation_;
             cameraOrientation_ = glm::normalize(cameraOrientation_);
             setUpVector(up_);
@@ -90,15 +90,15 @@ public:
         if (accel == glm::vec3(0)) {
             // decelerate naturally according to the damping value
             moveSpeed_ -=
-              moveSpeed_ *
-              std::min((1.0f / damping_) * static_cast<float>(deltaSeconds),
-                       1.0f);
+                moveSpeed_ *
+                std::min((1.0f / damping_) * static_cast<float>(deltaSeconds),
+                         1.0f);
         } else {
             // acceleration
             moveSpeed_ +=
-              accel * acceleration_ * static_cast<float>(deltaSeconds);
+                accel * acceleration_ * static_cast<float>(deltaSeconds);
             const float maxSpeed =
-              movement_.fastSpeed_ ? maxSpeed_ * fastCoef_ : maxSpeed_;
+                movement_.fastSpeed_ ? maxSpeed_ * fastCoef_ : maxSpeed_;
             if (glm::length(moveSpeed_) > maxSpeed)
                 moveSpeed_ = glm::normalize(moveSpeed_) * maxSpeed;
         }
@@ -124,7 +124,7 @@ public:
         const glm::mat4 view = getViewMatrix();
         const glm::vec3 dir = -glm::vec3(view[0][2], view[1][2], view[2][2]);
         cameraOrientation_ =
-          glm::lookAt(cameraPosition_, cameraPosition_ + dir, up);
+            glm::lookAt(cameraPosition_, cameraPosition_ + dir, up);
     }
 
     inline void lookAt(const glm::vec3 &pos,
@@ -178,8 +178,8 @@ public:
                 const glm::vec2 &mousePos,
                 bool mousePressed)
     {
-        positionCurrent_ +=
-          dampingLinear_ * deltaSeconds * (positionDesired_ - positionCurrent_);
+        positionCurrent_ += dampingLinear_ * deltaSeconds *
+                            (positionDesired_ - positionCurrent_);
 
         // normalization is required to avoid "spinning" around the object 2pi
         // times
@@ -196,7 +196,7 @@ public:
         const glm::vec3 a = glm::radians(anglesCurrent_);
 
         currentTransform_ =
-          glm::translate(glm::yawPitchRoll(a.y, a.x, a.z), -positionCurrent_);
+            glm::translate(glm::yawPitchRoll(a.y, a.x, a.z), -positionCurrent_);
     }
 
     void setPosition(const glm::vec3 &p) { positionCurrent_ = p; }
@@ -252,7 +252,7 @@ private:
                                        const glm::vec3 &anglesDesired)
     {
         const glm::vec3 d =
-          clipAngles(anglesCurrent) - clipAngles(anglesDesired);
+            clipAngles(anglesCurrent) - clipAngles(anglesDesired);
         return glm::vec3(clipAngle(d.x), clipAngle(d.y), clipAngle(d.z));
     }
 };

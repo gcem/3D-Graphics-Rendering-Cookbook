@@ -25,15 +25,15 @@ GLSceneData::GLSceneData(const char *meshFile,
 
     for (auto &mtl : materials_) {
         mtl.ambientOcclusionMap_ = getTextureHandleBindless(
-          mtl.ambientOcclusionMap_, allMaterialTextures_);
+            mtl.ambientOcclusionMap_, allMaterialTextures_);
         mtl.emissiveMap_ =
-          getTextureHandleBindless(mtl.emissiveMap_, allMaterialTextures_);
+            getTextureHandleBindless(mtl.emissiveMap_, allMaterialTextures_);
         mtl.albedoMap_ =
-          getTextureHandleBindless(mtl.albedoMap_, allMaterialTextures_);
+            getTextureHandleBindless(mtl.albedoMap_, allMaterialTextures_);
         mtl.metallicRoughnessMap_ = getTextureHandleBindless(
-          mtl.metallicRoughnessMap_, allMaterialTextures_);
+            mtl.metallicRoughnessMap_, allMaterialTextures_);
         mtl.normalMap_ =
-          getTextureHandleBindless(mtl.normalMap_, allMaterialTextures_);
+            getTextureHandleBindless(mtl.normalMap_, allMaterialTextures_);
     }
 }
 
@@ -47,12 +47,12 @@ GLSceneData::loadScene(const char *sceneFile)
         auto material = scene_.materialForNode_.find(c.first);
         if (material != scene_.materialForNode_.end()) {
             shapes_.push_back(DrawData{
-              .meshIndex = c.second,
-              .materialIndex = material->second,
-              .LOD = 0,
-              .indexOffset = meshData_.meshes_[c.second].indexOffset,
-              .vertexOffset = meshData_.meshes_[c.second].vertexOffset,
-              .transformIndex = c.first });
+                .meshIndex = c.second,
+                .materialIndex = material->second,
+                .LOD = 0,
+                .indexOffset = meshData_.meshes_[c.second].indexOffset,
+                .vertexOffset = meshData_.meshes_[c.second].vertexOffset,
+                .transformIndex = c.first });
         }
     }
 

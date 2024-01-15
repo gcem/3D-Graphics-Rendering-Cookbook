@@ -22,17 +22,17 @@ CubemapRenderer::CubemapRenderer(VulkanRenderContext &ctx,
   : Renderer(ctx)
 {
     const PipelineInfo pInfo = initRenderPass(
-      PipelineInfo{}, outputs, screenRenderPass, ctx.screenRenderPass);
+        PipelineInfo{}, outputs, screenRenderPass, ctx.screenRenderPass);
 
     const size_t imgCount = ctx.vkDev.swapchainImages.size();
     descriptorSets_.resize(imgCount);
     uniforms_.resize(imgCount);
 
     DescriptorSetInfo dsInfo = { .buffers = { uniformBufferAttachment(
-                                   VulkanBuffer{},
-                                   0,
-                                   sizeof(UniformBuffer),
-                                   VK_SHADER_STAGE_VERTEX_BIT) },
+                                     VulkanBuffer{},
+                                     0,
+                                     sizeof(UniformBuffer),
+                                     VK_SHADER_STAGE_VERTEX_BIT) },
                                  .textures = { fsTextureAttachment(texture) } };
 
     descriptorSetLayout_ = ctx_.resources.addDescriptorSetLayout(dsInfo);
@@ -42,8 +42,8 @@ CubemapRenderer::CubemapRenderer(VulkanRenderContext &ctx,
         uniforms_[i] = ctx.resources.addUniformBuffer(sizeof(UniformBuffer));
         dsInfo.buffers[0].buffer = uniforms_[i];
 
-        descriptorSets_[i] =
-          ctx.resources.addDescriptorSet(descriptorPool_, descriptorSetLayout_);
+        descriptorSets_[i] = ctx.resources.addDescriptorSet(
+            descriptorPool_, descriptorSetLayout_);
         ctx.resources.updateDescriptorSet(descriptorSets_[i], dsInfo);
     }
 

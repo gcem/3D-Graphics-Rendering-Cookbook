@@ -32,13 +32,13 @@ public:
         glNamedBufferSubData(bufferIndirect_.getHandle(),
                              0,
                              sizeof(DrawElementsIndirectCommand) *
-                               drawCommands_.size(),
+                                 drawCommands_.size(),
                              drawCommands_.data());
     }
 
     void selectTo(
-      GLIndirectBuffer &buf,
-      const std::function<bool(const DrawElementsIndirectCommand &)> &pred)
+        GLIndirectBuffer &buf,
+        const std::function<bool(const DrawElementsIndirectCommand &)> &pred)
     {
         buf.drawCommands_.clear();
         for (const auto &c : drawCommands_) {
@@ -92,7 +92,7 @@ public:
         // normal
         glEnableVertexArrayAttrib(vao_, 2);
         glVertexArrayAttribFormat(
-          vao_, 2, 3, GL_FLOAT, GL_TRUE, sizeof(vec3) + sizeof(vec2));
+            vao_, 2, 3, GL_FLOAT, GL_TRUE, sizeof(vec3) + sizeof(vec2));
         glVertexArrayAttribBinding(vao_, 2, 0);
 
         std::vector<glm::mat4> matrices(data.shapes_.size());
@@ -103,15 +103,15 @@ public:
             const uint32_t lod = data.shapes_[i].LOD;
             bufferIndirect_.drawCommands_[i] = {
                 .count_ =
-                  data.meshData_.meshes_[meshIdx].getLODIndicesCount(lod),
+                    data.meshData_.meshes_[meshIdx].getLODIndicesCount(lod),
                 .instanceCount_ = 1,
                 .firstIndex_ = data.shapes_[i].indexOffset,
                 .baseVertex_ = data.shapes_[i].vertexOffset,
                 .baseInstance_ =
-                  data.shapes_[i].materialIndex + (uint32_t(i) << 16)
+                    data.shapes_[i].materialIndex + (uint32_t(i) << 16)
             };
             matrices[i] =
-              data.scene_.globalTransform_[data.shapes_[i].transformIndex];
+                data.scene_.globalTransform_[data.shapes_[i].transformIndex];
         }
 
         bufferIndirect_.uploadIndirectBuffer();
@@ -127,7 +127,7 @@ public:
         glNamedBufferSubData(bufferMaterials_.getHandle(),
                              0,
                              sizeof(MaterialDescription) *
-                               data.materials_.size(),
+                                 data.materials_.size(),
                              data.materials_.data());
     }
 
@@ -143,8 +143,11 @@ public:
                          bufferModelMatrices_.getHandle());
         glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
                      (buffer ? *buffer : bufferIndirect_).getHandle());
-        glMultiDrawElementsIndirect(
-          GL_TRIANGLES, GL_UNSIGNED_INT, nullptr, (GLsizei)numDrawCommands, 0);
+        glMultiDrawElementsIndirect(GL_TRIANGLES,
+                                    GL_UNSIGNED_INT,
+                                    nullptr,
+                                    (GLsizei)numDrawCommands,
+                                    0);
     }
 
     ~GLMesh() { glDeleteVertexArrays(1, &vao_); }

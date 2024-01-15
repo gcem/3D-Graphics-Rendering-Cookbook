@@ -45,11 +45,11 @@ mergeIndexArray(MeshData &md,
     uint32_t copyOffset = 0, mergeOffset = shiftMeshIndices(md, meshesToMerge);
 
     const uint32_t mergedMeshIndex =
-      uint32_t(md.meshes_.size() - meshesToMerge.size());
+        uint32_t(md.meshes_.size() - meshesToMerge.size());
     uint32_t newIndex = 0u;
     for (uint32_t midx = 0u; midx < uint32_t(md.meshes_.size()); midx++) {
-        const bool shouldMerge =
-          std::binary_search(meshesToMerge.begin(), meshesToMerge.end(), midx);
+        const bool shouldMerge = std::binary_search(
+            meshesToMerge.begin(), meshesToMerge.end(), midx);
 
         oldToNew[midx] = shouldMerge ? mergedMeshIndex : newIndex;
         newIndex += shouldMerge ? 0 : 1;
@@ -80,10 +80,10 @@ mergeScene(Scene &scene, MeshData &meshData, const std::string &materialName)
 {
     // Find material index
     int oldMaterial =
-      (int)std::distance(std::begin(scene.materialNames_),
-                         std::find(std::begin(scene.materialNames_),
-                                   std::end(scene.materialNames_),
-                                   materialName));
+        (int)std::distance(std::begin(scene.materialNames_),
+                           std::find(std::begin(scene.materialNames_),
+                                     std::end(scene.materialNames_),
+                                     materialName));
 
     std::vector<uint32_t> toDelete;
 

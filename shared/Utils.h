@@ -53,16 +53,17 @@ eraseSelected(std::vector<T> &v, const std::vector<Index> &selection)
     // cut off the elements moved to the end of the vector by
     // std::stable_partition
     v.resize(std::distance(
-      v.begin(),
-      // the stable_partition moves any element whose index is in 'selection' to
-      // the end
-      std::stable_partition(
-        v.begin(), v.end(), [&selection, &v](const T &item) {
-            return !std::binary_search(
-              selection.begin(),
-              selection.end(),
-              /* std::distance(std::find(v.begin(), v.end(), item), v.begin()) -
-                 if you don't like the pointer arithmetic below */
-              static_cast<Index>(static_cast<const T *>(&item) - &v[0]));
-        })));
+        v.begin(),
+        // the stable_partition moves any element whose index is in 'selection'
+        // to the end
+        std::stable_partition(
+            v.begin(), v.end(), [&selection, &v](const T &item) {
+                return !std::binary_search(
+                    selection.begin(),
+                    selection.end(),
+                    /* std::distance(std::find(v.begin(), v.end(), item),
+                       v.begin()) - if you don't like the pointer arithmetic
+                       below */
+                    static_cast<Index>(static_cast<const T *>(&item) - &v[0]));
+            })));
 }

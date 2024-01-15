@@ -4,11 +4,11 @@
 
 struct CubemapRenderer : public Renderer
 {
-    CubemapRenderer(
-      VulkanRenderContext &ctx,
-      VulkanTexture texture,
-      const std::vector<VulkanTexture> &outputs = std::vector<VulkanTexture>{},
-      RenderPass screenRenderPass = RenderPass());
+    CubemapRenderer(VulkanRenderContext &ctx,
+                    VulkanTexture texture,
+                    const std::vector<VulkanTexture> &outputs =
+                        std::vector<VulkanTexture>{},
+                    RenderPass screenRenderPass = RenderPass());
 
     void fillCommandBuffer(VkCommandBuffer cmdBuffer,
                            size_t currentImage,

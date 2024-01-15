@@ -20,10 +20,10 @@ struct AtomicRenderer : public Renderer
       : Renderer(ctx)
     {
         const PipelineInfo pInfo =
-          initRenderPass(PipelineInfo{},
-                         { ctx.resources.addColorTexture() },
-                         RenderPass(),
-                         ctx.screenRenderPass_NoDepth);
+            initRenderPass(PipelineInfo{},
+                           { ctx.resources.addColorTexture() },
+                           RenderPass(),
+                           ctx.screenRenderPass_NoDepth);
 
         uint32_t W = ctx.vkDev.framebufferWidth;
         uint32_t H = ctx.vkDev.framebufferHeight;
@@ -43,12 +43,12 @@ struct AtomicRenderer : public Renderer
                                                  W * H * sizeof(node),
                                                  VK_SHADER_STAGE_FRAGMENT_BIT),
                          uniformBufferAttachment(
-                           sizeBuffer, 0, 8, VK_SHADER_STAGE_FRAGMENT_BIT) }
+                             sizeBuffer, 0, 8, VK_SHADER_STAGE_FRAGMENT_BIT) }
         };
 
         descriptorSetLayout_ = ctx.resources.addDescriptorSetLayout(dsInfo);
         descriptorPool_ =
-          ctx.resources.addDescriptorPool(dsInfo, (uint32_t)imgCount);
+            ctx.resources.addDescriptorPool(dsInfo, (uint32_t)imgCount);
 
         for (size_t i = 0; i < imgCount; i++) {
             atomics_[i] = ctx.resources.addStorageBuffer(sizeof(uint32_t));
@@ -57,7 +57,7 @@ struct AtomicRenderer : public Renderer
             dsInfo.buffers[1].buffer = output_[i];
 
             descriptorSets_[i] = ctx.resources.addDescriptorSet(
-              descriptorPool_, descriptorSetLayout_);
+                descriptorPool_, descriptorSetLayout_);
             ctx.resources.updateDescriptorSet(descriptorSets_[i], dsInfo);
         }
 
@@ -105,7 +105,7 @@ struct AnimRenderer : public Renderer
       , pointBuffers_(pointBuffers)
     {
         initRenderPass(
-          PipelineInfo{}, {}, RenderPass(), ctx.screenRenderPass_NoDepth);
+            PipelineInfo{}, {}, RenderPass(), ctx.screenRenderPass_NoDepth);
 
         const size_t imgCount = ctx.vkDev.swapchainImages.size();
         descriptorSets_.resize(imgCount);
@@ -115,30 +115,30 @@ struct AnimRenderer : public Renderer
 
         DescriptorSetInfo dsInfo = {
             .buffers = { storageBufferAttachment(
-                           VulkanBuffer{},
-                           0,
-                           W * H * sizeof(node),
-                           VK_SHADER_STAGE_VERTEX_BIT |
-                             VK_SHADER_STAGE_FRAGMENT_BIT),
+                             VulkanBuffer{},
+                             0,
+                             W * H * sizeof(node),
+                             VK_SHADER_STAGE_VERTEX_BIT |
+                                 VK_SHADER_STAGE_FRAGMENT_BIT),
                          uniformBufferAttachment(
-                           sizeBuffer, 0, 8, VK_SHADER_STAGE_VERTEX_BIT) }
+                             sizeBuffer, 0, 8, VK_SHADER_STAGE_VERTEX_BIT) }
         };
 
         descriptorSetLayout_ = ctx.resources.addDescriptorSetLayout(dsInfo);
         descriptorPool_ =
-          ctx.resources.addDescriptorPool(dsInfo, (uint32_t)imgCount);
+            ctx.resources.addDescriptorPool(dsInfo, (uint32_t)imgCount);
 
         for (size_t i = 0; i < imgCount; i++) {
             dsInfo.buffers[0].buffer = pointBuffers_[i];
             descriptorSets_[i] = ctx.resources.addDescriptorSet(
-              descriptorPool_, descriptorSetLayout_);
+                descriptorPool_, descriptorSetLayout_);
             ctx.resources.updateDescriptorSet(descriptorSets_[i], dsInfo);
         }
 
         initPipeline(
-          { "data/shaders/chapter10/VK01_AtomicVisualize.vert",
-            "data/shaders/chapter10/VK01_AtomicVisualize.frag" },
-          PipelineInfo{ .topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST });
+            { "data/shaders/chapter10/VK01_AtomicVisualize.vert",
+              "data/shaders/chapter10/VK01_AtomicVisualize.frag" },
+            PipelineInfo{ .topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST });
     }
 
     void fillCommandBuffer(VkCommandBuffer commandBuffer,
@@ -147,8 +147,8 @@ struct AnimRenderer : public Renderer
                            VkRenderPass rp = VK_NULL_HANDLE) override
     {
         uint32_t pointCount =
-          uint32_t(ctx_.vkDev.framebufferWidth * ctx_.vkDev.framebufferHeight *
-                   g_Percentage);
+            uint32_t(ctx_.vkDev.framebufferWidth *
+                     ctx_.vkDev.framebufferHeight * g_Percentage);
 
         if (pointCount == 0)
             return;

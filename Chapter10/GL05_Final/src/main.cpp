@@ -91,7 +91,7 @@ main(void)
     GLProgram program(shaderVert, shaderFrag);
     // generic postprocessing
     GLShader shdFullScreenQuadVert(
-      "data/shaders/chapter08/GL02_FullScreenQuad.vert");
+        "data/shaders/chapter08/GL02_FullScreenQuad.vert");
     // OIT
     GLShader shaderFragOIT("data/shaders/chapter10/GL03_mesh_oit.frag");
     GLProgram programOIT(shaderVert, shaderFragOIT);
@@ -103,7 +103,7 @@ main(void)
     // SSAO
     GLShader shdSSAOFrag("data/shaders/chapter08/GL02_SSAO.frag");
     GLShader shdCombineSSAOFrag(
-      "data/shaders/chapter08/GL02_SSAO_combine.frag");
+        "data/shaders/chapter08/GL02_SSAO_combine.frag");
     GLProgram progSSAO(shdFullScreenQuadVert, shdSSAOFrag);
     GLProgram progCombineSSAO(shdFullScreenQuadVert, shdCombineSSAOFrag);
     // blur
@@ -128,27 +128,27 @@ main(void)
     const GLuint kMaxNumObjects = 128 * 1024;
     const GLsizeiptr kUniformBufferSize = sizeof(PerFrameData);
     const GLsizeiptr kBoundingBoxesBufferSize =
-      sizeof(BoundingBox) * kMaxNumObjects;
+        sizeof(BoundingBox) * kMaxNumObjects;
     const GLuint kBufferIndex_BoundingBoxes = kBufferIndex_PerFrameUniforms + 1;
     const GLuint kBufferIndex_DrawCommands = kBufferIndex_PerFrameUniforms + 2;
     const GLuint kBufferIndex_NumVisibleMeshes =
-      kBufferIndex_PerFrameUniforms + 3;
+        kBufferIndex_PerFrameUniforms + 3;
     GLBuffer perFrameDataBuffer(
-      kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER,
                       kBufferIndex_PerFrameUniforms,
                       perFrameDataBuffer.getHandle(),
                       0,
                       kUniformBufferSize);
     GLBuffer boundingBoxesBuffer(
-      kBoundingBoxesBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kBoundingBoxesBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     GLBuffer numVisibleMeshesBuffer(sizeof(uint32_t),
                                     nullptr,
                                     GL_MAP_READ_BIT | GL_MAP_WRITE_BIT |
-                                      GL_MAP_PERSISTENT_BIT |
-                                      GL_MAP_COHERENT_BIT);
+                                        GL_MAP_PERSISTENT_BIT |
+                                        GL_MAP_COHERENT_BIT);
     volatile uint32_t *numVisibleMeshesPtr = (uint32_t *)glMapNamedBuffer(
-      numVisibleMeshesBuffer.getHandle(), GL_READ_WRITE);
+        numVisibleMeshesBuffer.getHandle(), GL_READ_WRITE);
     assert(numVisibleMeshesPtr);
     if (!numVisibleMeshesPtr) {
         printf("numVisibleMeshesPtr == nullptr\n");
@@ -165,52 +165,52 @@ main(void)
     GLMesh mesh(sceneData);
 
     glfwSetCursorPosCallback(
-      app.getWindow(), [](auto *window, double x, double y) {
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
-          mouseState.pos.x = static_cast<float>(x / width);
-          mouseState.pos.y = static_cast<float>(y / height);
-          ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
-      });
+        app.getWindow(), [](auto *window, double x, double y) {
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            mouseState.pos.x = static_cast<float>(x / width);
+            mouseState.pos.y = static_cast<float>(y / height);
+            ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
+        });
 
     glfwSetMouseButtonCallback(
-      app.getWindow(), [](auto *window, int button, int action, int mods) {
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
+        app.getWindow(), [](auto *window, int button, int action, int mods) {
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
 
-          if (!io.WantCaptureMouse)
-              if (button == GLFW_MOUSE_BUTTON_LEFT)
-                  mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+            if (!io.WantCaptureMouse)
+                if (button == GLFW_MOUSE_BUTTON_LEFT)
+                    mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      app.getWindow(),
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-          if (key == GLFW_KEY_P && pressed)
-              g_FreezeCullingView = !g_FreezeCullingView;
-      });
+        app.getWindow(),
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+            if (key == GLFW_KEY_P && pressed)
+                g_FreezeCullingView = !g_FreezeCullingView;
+        });
 
     positioner.maxSpeed_ = 1.0f;
 
@@ -229,15 +229,15 @@ main(void)
     };
 
     mesh.bufferIndirect_.selectTo(
-      meshesOpaque,
-      [&isTransparent](const DrawElementsIndirectCommand &c) -> bool {
-          return !isTransparent(c);
-      });
+        meshesOpaque,
+        [&isTransparent](const DrawElementsIndirectCommand &c) -> bool {
+            return !isTransparent(c);
+        });
     mesh.bufferIndirect_.selectTo(
-      meshesTransparent,
-      [&isTransparent](const DrawElementsIndirectCommand &c) -> bool {
-          return isTransparent(c);
-      });
+        meshesTransparent,
+        [&isTransparent](const DrawElementsIndirectCommand &c) -> bool {
+            return isTransparent(c);
+        });
 
     struct TransparentFragment
     {
@@ -249,7 +249,7 @@ main(void)
     int width, height;
     glfwGetFramebufferSize(app.getWindow(), &width, &height);
     GLFramebuffer opaqueFramebuffer(
-      width, height, GL_RGBA16F, GL_DEPTH_COMPONENT24);
+        width, height, GL_RGBA16F, GL_DEPTH_COMPONENT24);
     GLFramebuffer framebuffer(width, height, GL_RGBA16F, GL_DEPTH_COMPONENT24);
     GLFramebuffer luminance(64, 64, GL_RGBA16F, 0);
     GLFramebuffer brightPass(256, 256, GL_RGBA16F, 0);
@@ -287,23 +287,26 @@ main(void)
     const uint32_t kMaxOITFragments = 16 * 1024 * 1024;
     const GLuint kBufferIndex_TransparencyLists = kBufferIndex_Materials + 1;
     GLBuffer oitAtomicCounter(
-      sizeof(uint32_t), nullptr, GL_DYNAMIC_STORAGE_BIT);
+        sizeof(uint32_t), nullptr, GL_DYNAMIC_STORAGE_BIT);
     GLBuffer oitTransparencyLists(sizeof(TransparentFragment) *
-                                    kMaxOITFragments,
+                                      kMaxOITFragments,
                                   nullptr,
                                   GL_DYNAMIC_STORAGE_BIT);
     GLTexture oitHeads(GL_TEXTURE_2D, width, height, GL_R32UI);
     glBindImageTexture(
-      0, oitHeads.getHandle(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32UI);
+        0, oitHeads.getHandle(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32UI);
     glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, oitAtomicCounter.getHandle());
 
     auto clearTransparencyBuffers = [&oitAtomicCounter, &oitHeads]() {
         const uint32_t minusOne = 0xFFFFFFFF;
         const uint32_t zero = 0;
-        glClearTexImage(
-          oitHeads.getHandle(), 0, GL_RED_INTEGER, GL_UNSIGNED_INT, &minusOne);
+        glClearTexImage(oitHeads.getHandle(),
+                        0,
+                        GL_RED_INTEGER,
+                        GL_UNSIGNED_INT,
+                        &minusOne);
         glNamedBufferSubData(
-          oitAtomicCounter.getHandle(), 0, sizeof(uint32_t), &zero);
+            oitAtomicCounter.getHandle(), 0, sizeof(uint32_t), &zero);
     };
 
     std::vector<BoundingBox> reorderedBoxes;
@@ -356,7 +359,7 @@ main(void)
             mesh.updateMaterialsBuffer(sceneData);
 
         positioner.update(
-          app.getDeltaSeconds(), mouseState.pos, mouseState.pressedLeft);
+            app.getDeltaSeconds(), mouseState.pos, mouseState.pressedLeft);
 
         int width, height;
         glfwGetFramebufferSize(app.getWindow(), &width, &height);
@@ -368,7 +371,7 @@ main(void)
                                   0,
                                   glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
         glClearNamedFramebufferfi(
-          opaqueFramebuffer.getHandle(), GL_DEPTH_STENCIL, 0, 1.0f, 0);
+            opaqueFramebuffer.getHandle(), GL_DEPTH_STENCIL, 0, 1.0f, 0);
 
         if (!g_FreezeCullingView)
             g_CullingView = camera.getViewMatrix();
@@ -378,13 +381,13 @@ main(void)
 
         // calculate light parameters for shadow mapping
         const glm::mat4 rot1 = glm::rotate(
-          mat4(1.f), glm::radians(g_LightTheta), glm::vec3(0, 0, 1));
+            mat4(1.f), glm::radians(g_LightTheta), glm::vec3(0, 0, 1));
         const glm::mat4 rot2 =
-          glm::rotate(rot1, glm::radians(g_LightPhi), glm::vec3(1, 0, 0));
+            glm::rotate(rot1, glm::radians(g_LightPhi), glm::vec3(1, 0, 0));
         const vec3 lightDir =
-          glm::normalize(vec3(rot2 * vec4(0.0f, -1.0f, 0.0f, 1.0f)));
+            glm::normalize(vec3(rot2 * vec4(0.0f, -1.0f, 0.0f, 1.0f)));
         const mat4 lightView =
-          glm::lookAt(glm::vec3(0.0f), lightDir, vec3(0, 0, 1));
+            glm::lookAt(glm::vec3(0.0f), lightDir, vec3(0, 0, 1));
         const BoundingBox box = bigBox.getTransformed(lightView);
         const mat4 lightProj = glm::ortho(box.min_.x,
                                           box.max_.x,
@@ -418,8 +421,8 @@ main(void)
                              numVisibleMeshesBuffer.getHandle());
 
             perFrameData.numShapesToCull =
-              g_EnableGPUCulling ? (uint32_t)meshesOpaque.drawCommands_.size()
-                                 : 0u;
+                g_EnableGPUCulling ? (uint32_t)meshesOpaque.drawCommands_.size()
+                                   : 0u;
             glNamedBufferSubData(perFrameDataBuffer.getHandle(),
                                  0,
                                  kUniformBufferSize,
@@ -428,12 +431,12 @@ main(void)
                              kBufferIndex_DrawCommands,
                              meshesOpaque.getHandle());
             glDispatchCompute(
-              1 + (GLuint)meshesOpaque.drawCommands_.size() / 64, 1, 1);
+                1 + (GLuint)meshesOpaque.drawCommands_.size() / 64, 1, 1);
 
             perFrameData.numShapesToCull =
-              g_EnableGPUCulling
-                ? (uint32_t)meshesTransparent.drawCommands_.size()
-                : 0u;
+                g_EnableGPUCulling
+                    ? (uint32_t)meshesTransparent.drawCommands_.size()
+                    : 0u;
             glNamedBufferSubData(perFrameDataBuffer.getHandle(),
                                  0,
                                  kUniformBufferSize,
@@ -442,7 +445,7 @@ main(void)
                              kBufferIndex_DrawCommands,
                              meshesTransparent.getHandle());
             glDispatchCompute(
-              1 + (GLuint)meshesTransparent.drawCommands_.size() / 64, 1, 1);
+                1 + (GLuint)meshesTransparent.drawCommands_.size() / 64, 1, 1);
 
             glMemoryBarrier(GL_COMMAND_BARRIER_BIT |
                             GL_SHADER_STORAGE_BARRIER_BIT |
@@ -466,12 +469,12 @@ main(void)
                                  kUniformBufferSize,
                                  &perFrameDataShadows);
             glClearNamedFramebufferfv(
-              shadowMap.getHandle(),
-              GL_COLOR,
-              0,
-              glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+                shadowMap.getHandle(),
+                GL_COLOR,
+                0,
+                glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
             glClearNamedFramebufferfi(
-              shadowMap.getHandle(), GL_DEPTH_STENCIL, 0, 1.0f, 0);
+                shadowMap.getHandle(), GL_DEPTH_STENCIL, 0, 1.0f, 0);
             shadowMap.bind();
             progShadowMap.useProgram();
             mesh.draw(mesh.bufferIndirect_.drawCommands_.size());
@@ -482,8 +485,10 @@ main(void)
             // disable shadows
             perFrameData.light = mat4(0.0f);
         }
-        glNamedBufferSubData(
-          perFrameDataBuffer.getHandle(), 0, kUniformBufferSize, &perFrameData);
+        glNamedBufferSubData(perFrameDataBuffer.getHandle(),
+                             0,
+                             kUniformBufferSize,
+                             &perFrameData);
 
         // 1. Render scene
         opaqueFramebuffer.bind();
@@ -504,7 +509,7 @@ main(void)
         }
         if (g_DrawBoxes) {
             DrawElementsIndirectCommand *cmd =
-              mesh.bufferIndirect_.drawCommands_.data();
+                mesh.bufferIndirect_.drawCommands_.data();
             for (const auto &c : sceneData.shapes_)
                 drawBox3dGL(canvas,
                             mat4(1.0f),
@@ -513,8 +518,13 @@ main(void)
         }
         drawBox3dGL(canvas, mat4(1.0f), bigBox, vec4(1, 1, 1, 1));
         if (g_DrawTransparent) {
-            glBindImageTexture(
-              0, oitHeads.getHandle(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32UI);
+            glBindImageTexture(0,
+                               oitHeads.getHandle(),
+                               0,
+                               GL_FALSE,
+                               0,
+                               GL_READ_WRITE,
+                               GL_R32UI);
             glDepthMask(GL_FALSE);
             glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
             programOIT.useProgram();
@@ -527,10 +537,10 @@ main(void)
         }
         if (g_FreezeCullingView)
             renderCameraFrustumGL(
-              canvas, g_CullingView, proj, vec4(1, 1, 0, 1), 100);
+                canvas, g_CullingView, proj, vec4(1, 1, 0, 1), 100);
         if (g_EnableShadows && g_ShowLightFrustum) {
             renderCameraFrustumGL(
-              canvas, lightView, lightProj, vec4(1, 0, 0, 1), 100);
+                canvas, lightView, lightProj, vec4(1, 0, 0, 1), 100);
             canvas.line(vec3(0.0f), lightDir * 100.0f, vec4(0, 0, 1, 1));
         }
         canvas.flush();
@@ -539,10 +549,10 @@ main(void)
         if (g_EnableSSAO) {
             glDisable(GL_DEPTH_TEST);
             glClearNamedFramebufferfv(
-              ssao.getHandle(),
-              GL_COLOR,
-              0,
-              glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+                ssao.getHandle(),
+                GL_COLOR,
+                0,
+                glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
             glNamedBufferSubData(perFrameDataBuffer.getHandle(),
                                  0,
                                  sizeof(g_SSAOParams),
@@ -569,10 +579,10 @@ main(void)
                 ssao.unbind();
             }
             glClearNamedFramebufferfv(
-              framebuffer.getHandle(),
-              GL_COLOR,
-              0,
-              glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+                framebuffer.getHandle(),
+                GL_COLOR,
+                0,
+                glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
             framebuffer.bind();
             progCombineSSAO.useProgram();
             glBindTextureUnit(0,
@@ -641,7 +651,7 @@ main(void)
                                GL_READ_ONLY,
                                GL_RGBA16F);
             glBindImageTexture(
-              1, luminance1x1, 0, GL_TRUE, 0, GL_READ_ONLY, GL_RGBA16F);
+                1, luminance1x1, 0, GL_TRUE, 0, GL_READ_ONLY, GL_RGBA16F);
             glBindImageTexture(2,
                                luminances[1]->getHandle(),
                                0,
@@ -709,7 +719,7 @@ main(void)
         if (g_EnableGPUCulling && fenceCulling) {
             for (;;) {
                 const GLenum res = glClientWaitSync(
-                  fenceCulling, GL_SYNC_FLUSH_COMMANDS_BIT, 1000);
+                    fenceCulling, GL_SYNC_FLUSH_COMMANDS_BIT, 1000);
                 if (res == GL_ALREADY_SIGNALED || res == GL_CONDITION_SATISFIED)
                     break;
             }
@@ -747,9 +757,9 @@ main(void)
         ImGui::SliderFloat("SSAO bias", &g_SSAOParams.bias_, 0.0f, 0.3f);
         ImGui::SliderFloat("SSAO radius", &g_SSAOParams.radius, 0.02f, 0.2f);
         ImGui::SliderFloat(
-          "SSAO attenuation scale", &g_SSAOParams.attScale, 0.5f, 1.5f);
+            "SSAO attenuation scale", &g_SSAOParams.attScale, 0.5f, 1.5f);
         ImGui::SliderFloat(
-          "SSAO distance scale", &g_SSAOParams.distScale, 0.0f, 1.0f);
+            "SSAO distance scale", &g_SSAOParams.distScale, 0.0f, 1.0f);
         imGuiPopFlagsAndStyles();
         ImGui::Unindent(indentSize);
         ImGui::Separator();
@@ -760,9 +770,9 @@ main(void)
         ImGui::SliderFloat("Exposure", &g_HDRParams.exposure_, 0.1f, 2.0f);
         ImGui::SliderFloat("Max white", &g_HDRParams.maxWhite_, 0.5f, 2.0f);
         ImGui::SliderFloat(
-          "Bloom strength", &g_HDRParams.bloomStrength_, 0.0f, 2.0f);
+            "Bloom strength", &g_HDRParams.bloomStrength_, 0.0f, 2.0f);
         ImGui::SliderFloat(
-          "Adaptation speed", &g_HDRParams.adaptationSpeed_, 0.01f, 0.5f);
+            "Adaptation speed", &g_HDRParams.adaptationSpeed_, 0.01f, 0.5f);
         imGuiPopFlagsAndStyles();
         ImGui::Unindent(indentSize);
         ImGui::Separator();

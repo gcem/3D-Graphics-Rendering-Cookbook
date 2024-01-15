@@ -50,7 +50,7 @@ public:
       , bufferIndices_(header.indexDataSize, indices, 0)
       , bufferVertices_(header.vertexDataSize, vertexData, 0)
       , bufferIndirect_(sizeof(DrawElementsIndirectCommand) * header.meshCount +
-                          sizeof(GLsizei),
+                            sizeof(GLsizei),
                         nullptr,
                         GL_DYNAMIC_STORAGE_BIT)
     {
@@ -72,7 +72,7 @@ public:
         // normal
         glEnableVertexArrayAttrib(vao_, 2);
         glVertexArrayAttribFormat(
-          vao_, 2, 3, GL_FLOAT, GL_TRUE, sizeof(vec3) + sizeof(vec2));
+            vao_, 2, 3, GL_FLOAT, GL_TRUE, sizeof(vec3) + sizeof(vec2));
         glVertexArrayAttribBinding(vao_, 2, 0);
 
         std::vector<uint8_t> drawCommands;
@@ -86,8 +86,8 @@ public:
         memcpy(drawCommands.data(), &numCommands, sizeof(numCommands));
 
         DrawElementsIndirectCommand *cmd =
-          std::launder(reinterpret_cast<DrawElementsIndirectCommand *>(
-            drawCommands.data() + sizeof(GLsizei)));
+            std::launder(reinterpret_cast<DrawElementsIndirectCommand *>(
+                drawCommands.data() + sizeof(GLsizei)));
 
         // prepare indirect commands buffer
         for (uint32_t i = 0; i != numCommands; i++) {
@@ -144,7 +144,7 @@ main(void)
     const GLsizeiptr kUniformBufferSize = sizeof(PerFrameData);
 
     GLBuffer perFrameDataBuffer(
-      kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER,
                       0,
                       perFrameDataBuffer.getHandle(),
@@ -163,7 +163,7 @@ main(void)
 
     MeshData meshData;
     const MeshFileHeader header =
-      loadMeshData("data/meshes/test.meshes", meshData);
+        loadMeshData("data/meshes/test.meshes", meshData);
 
     GLMesh mesh(header,
                 meshData.meshes_.data(),
@@ -176,42 +176,42 @@ main(void)
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, modelMatrices.getHandle());
 
     glfwSetCursorPosCallback(
-      app.getWindow(), [](auto *window, double x, double y) {
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
-          mouseState.pos.x = static_cast<float>(x / width);
-          mouseState.pos.y = static_cast<float>(y / height);
-      });
+        app.getWindow(), [](auto *window, double x, double y) {
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            mouseState.pos.x = static_cast<float>(x / width);
+            mouseState.pos.y = static_cast<float>(y / height);
+        });
 
     glfwSetMouseButtonCallback(
-      app.getWindow(), [](auto *window, int button, int action, int mods) {
-          if (button == GLFW_MOUSE_BUTTON_LEFT)
-              mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+        app.getWindow(), [](auto *window, int button, int action, int mods) {
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+                mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      app.getWindow(),
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (mods & GLFW_MOD_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        app.getWindow(),
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (mods & GLFW_MOD_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     double timeStamp = glfwGetTime();
     float deltaSeconds = 0.0f;
@@ -236,9 +236,11 @@ main(void)
         const PerFrameData perFrameData = { .view = view,
                                             .proj = p,
                                             .cameraPos = glm::vec4(
-                                              camera.getPosition(), 1.0f) };
-        glNamedBufferSubData(
-          perFrameDataBuffer.getHandle(), 0, kUniformBufferSize, &perFrameData);
+                                                camera.getPosition(), 1.0f) };
+        glNamedBufferSubData(perFrameDataBuffer.getHandle(),
+                             0,
+                             kUniformBufferSize,
+                             &perFrameData);
 
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);

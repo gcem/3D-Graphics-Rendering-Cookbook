@@ -28,17 +28,17 @@ struct MyApp : public CameraApp
       ,
 
       multiRenderer(
-        ctx_,
-        sceneData,
-        "data/shaders/chapter07/VK01.vert",
-        "data/shaders/chapter07/VK01.frag",
-        { colorTex, depthTex },
-        ctx_.resources.addRenderPass(
+          ctx_,
+          sceneData,
+          "data/shaders/chapter07/VK01.vert",
+          "data/shaders/chapter07/VK01.frag",
           { colorTex, depthTex },
-          RenderPassCreateInfo{ .clearColor_ = true,
-                                .clearDepth_ = true,
-                                .flags_ = eRenderPassBit_First |
-                                          eRenderPassBit_Offscreen }))
+          ctx_.resources.addRenderPass(
+              { colorTex, depthTex },
+              RenderPassCreateInfo{ .clearColor_ = true,
+                                    .clearDepth_ = true,
+                                    .flags_ = eRenderPassBit_First |
+                                              eRenderPassBit_Offscreen }))
       ,
 
       SSAO(ctx_, colorTex, depthTex, finalTex)
@@ -48,9 +48,9 @@ struct MyApp : public CameraApp
       , imgui(ctx_, { colorTex, SSAO.getBlurY() })
     {
         positioner =
-          CameraPositioner_FirstPerson(glm::vec3(-10.0f, -3.0f, 3.0f),
-                                       glm::vec3(0.0f, 0.0f, -1.0f),
-                                       vec3(0.0f, 1.0f, 0.0f));
+            CameraPositioner_FirstPerson(glm::vec3(-10.0f, -3.0f, 3.0f),
+                                         glm::vec3(0.0f, 0.0f, -1.0f),
+                                         vec3(0.0f, 1.0f, 0.0f));
 
         onScreenRenderers_.emplace_back(multiRenderer);
         onScreenRenderers_.emplace_back(SSAO);
@@ -77,9 +77,9 @@ struct MyApp : public CameraApp
         ImGui::Separator();
         ImGui::SliderFloat("SSAO radius", &SSAO.params->radius, 0.05f, 0.5f);
         ImGui::SliderFloat(
-          "SSAO attenuation scale", &SSAO.params->attScale, 0.5f, 1.5f);
+            "SSAO attenuation scale", &SSAO.params->attScale, 0.5f, 1.5f);
         ImGui::SliderFloat(
-          "SSAO distance scale", &SSAO.params->distScale, 0.0f, 1.0f);
+            "SSAO distance scale", &SSAO.params->distScale, 0.0f, 1.0f);
         ImGui::End();
 
         if (enableSSAO) {

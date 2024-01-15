@@ -49,7 +49,7 @@ main(void)
     const GLsizeiptr kUniformBufferSize = sizeof(PerFrameData);
 
     GLBuffer perFrameDataBuffer(
-      kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER,
                       0,
                       perFrameDataBuffer.getHandle(),
@@ -77,7 +77,7 @@ main(void)
                       shaderFragment);
 
     const aiScene *scene =
-      aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
+        aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
 
     if (!scene || !scene->HasMeshes()) {
         printf("Unable to load data/rubber_duck/scene.gltf\n");
@@ -96,7 +96,7 @@ main(void)
         const aiVector3D v = mesh->mVertices[i];
         const aiVector3D t = mesh->mTextureCoords[0][i];
         vertices.push_back(
-          { .pos = vec3(v.x, v.z, v.y), .tc = vec2(t.x, t.y) });
+            { .pos = vec3(v.x, v.z, v.y), .tc = vec2(t.x, t.y) });
     }
     std::vector<unsigned int> indices;
     for (unsigned i = 0; i != mesh->mNumFaces; i++) {
@@ -124,13 +124,13 @@ main(void)
     GLuint modelMatrices;
     glCreateBuffers(1, &modelMatrices);
     glNamedBufferStorage(
-      modelMatrices, sizeof(mat4), nullptr, GL_DYNAMIC_STORAGE_BIT);
+        modelMatrices, sizeof(mat4), nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, modelMatrices);
 
     // texture
     int w, h, comp;
     const uint8_t *img = stbi_load(
-      "data/rubber_duck/textures/Duck_baseColor.png", &w, &h, &comp, 3);
+        "data/rubber_duck/textures/Duck_baseColor.png", &w, &h, &comp, 3);
 
     GLuint texture;
     glCreateTextures(GL_TEXTURE_2D, 1, &texture);
@@ -144,50 +144,50 @@ main(void)
     stbi_image_free((void *)img);
 
     glfwSetCursorPosCallback(
-      app.getWindow(), [](auto *window, double x, double y) {
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
-          mouseState.pos.x = static_cast<float>(x / width);
-          mouseState.pos.y = static_cast<float>(y / height);
+        app.getWindow(), [](auto *window, double x, double y) {
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            mouseState.pos.x = static_cast<float>(x / width);
+            mouseState.pos.y = static_cast<float>(y / height);
 
-          ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
-      });
+            ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
+        });
 
     glfwSetMouseButtonCallback(
-      app.getWindow(), [](auto *window, int button, int action, int mods) {
-          if (button == GLFW_MOUSE_BUTTON_LEFT)
-              mouseState.pressedLeft = action == GLFW_PRESS;
+        app.getWindow(), [](auto *window, int button, int action, int mods) {
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+                mouseState.pressedLeft = action == GLFW_PRESS;
 
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
-      });
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      app.getWindow(),
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (mods & GLFW_MOD_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        app.getWindow(),
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (mods & GLFW_MOD_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     double timeStamp = glfwGetTime();
     float deltaSeconds = 0.0f;
@@ -221,14 +221,16 @@ main(void)
             .cameraPos = glm::vec4(camera.getPosition(), 1.0f),
             .tessellationScale = tessellationScale
         };
-        glNamedBufferSubData(
-          perFrameDataBuffer.getHandle(), 0, kUniformBufferSize, &perFrameData);
+        glNamedBufferSubData(perFrameDataBuffer.getHandle(),
+                             0,
+                             kUniformBufferSize,
+                             &perFrameData);
 
         const mat4 s = glm::scale(mat4(1.0f), vec3(10.0f));
-        const mat4 m =
-          s * glm::rotate(glm::translate(mat4(1.0f), vec3(0.0f, -0.5f, -1.5f)),
-                          (float)glfwGetTime() * 0.1f,
-                          vec3(0.0f, 1.0f, 0.0f));
+        const mat4 m = s * glm::rotate(glm::translate(mat4(1.0f),
+                                                      vec3(0.0f, -0.5f, -1.5f)),
+                                       (float)glfwGetTime() * 0.1f,
+                                       vec3(0.0f, 1.0f, 0.0f));
         glNamedBufferSubData(modelMatrices, 0, sizeof(mat4), value_ptr(m));
 
         glBindVertexArray(vao);
@@ -249,7 +251,7 @@ main(void)
         io.DisplaySize = ImVec2((float)width, (float)height);
         ImGui::NewFrame();
         ImGui::SliderFloat(
-          "Tessellation scale", &tessellationScale, 1.0f, 2.0f, "%.1f");
+            "Tessellation scale", &tessellationScale, 1.0f, 2.0f, "%.1f");
         ImGui::Render();
         rendererUI.render(width, height, ImGui::GetDrawData());
 

@@ -6,9 +6,9 @@ VulkanSingleQuadRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
                                               VkImageLayout desiredLayout)
 {
     VkDescriptorSetLayoutBinding binding =
-      descriptorSetLayoutBinding(0,
-                                 VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                 VK_SHADER_STAGE_FRAGMENT_BIT);
+        descriptorSetLayoutBinding(0,
+                                   VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                   VK_SHADER_STAGE_FRAGMENT_BIT);
 
     const VkDescriptorSetLayoutCreateInfo layoutInfo = {
         .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
@@ -19,29 +19,29 @@ VulkanSingleQuadRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
     };
 
     VK_CHECK(vkCreateDescriptorSetLayout(
-      vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
+        vkDev.device, &layoutInfo, nullptr, &descriptorSetLayout_));
 
     const std::vector<VkDescriptorSetLayout> layouts(
-      vkDev.swapchainImages.size(), descriptorSetLayout_);
+        vkDev.swapchainImages.size(), descriptorSetLayout_);
 
     const VkDescriptorSetAllocateInfo allocInfo = {
         .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
         .pNext = nullptr,
         .descriptorPool = descriptorPool_,
         .descriptorSetCount =
-          static_cast<uint32_t>(vkDev.swapchainImages.size()),
+            static_cast<uint32_t>(vkDev.swapchainImages.size()),
         .pSetLayouts = layouts.data()
     };
 
     descriptorSets_.resize(vkDev.swapchainImages.size());
 
     VK_CHECK(vkAllocateDescriptorSets(
-      vkDev.device, &allocInfo, descriptorSets_.data()));
+        vkDev.device, &allocInfo, descriptorSets_.data()));
 
     VkDescriptorImageInfo textureDescriptor =
-      VkDescriptorImageInfo{ .sampler = textureSampler,
-                             .imageView = texture.imageView,
-                             .imageLayout = desiredLayout };
+        VkDescriptorImageInfo{ .sampler = textureSampler,
+                               .imageView = texture.imageView,
+                               .imageLayout = desiredLayout };
 
     for (size_t i = 0; i < vkDev.swapchainImages.size(); i++) {
         VkWriteDescriptorSet imageDescriptorWrite = {
@@ -55,7 +55,7 @@ VulkanSingleQuadRenderer::createDescriptorSet(VulkanRenderDevice &vkDev,
         };
 
         vkUpdateDescriptorSets(
-          vkDev.device, 1, &imageDescriptorWrite, 0, nullptr);
+            vkDev.device, 1, &imageDescriptorWrite, 0, nullptr);
     }
 
     return true;
@@ -85,9 +85,9 @@ VulkanSingleQuadRenderer::VulkanSingleQuadRenderer(VulkanRenderDevice &vkDev,
         !createDescriptorPool(vkDev, 0, 0, 1, &descriptorPool_) ||
         !createDescriptorSet(vkDev, desiredLayout) ||
         !createColorAndDepthRenderPass(
-          vkDev, false, &renderPass_, RenderPassCreateInfo()) ||
+            vkDev, false, &renderPass_, RenderPassCreateInfo()) ||
         !createPipelineLayout(
-          vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
+            vkDev.device, descriptorSetLayout_, &pipelineLayout_) ||
         !createGraphicsPipeline(vkDev,
                                 renderPass_,
                                 pipelineLayout_,
@@ -100,7 +100,7 @@ VulkanSingleQuadRenderer::VulkanSingleQuadRenderer(VulkanRenderDevice &vkDev,
     }
 
     createColorAndDepthFramebuffers(
-      vkDev, renderPass_, VK_NULL_HANDLE, swapchainFramebuffers_);
+        vkDev, renderPass_, VK_NULL_HANDLE, swapchainFramebuffers_);
 }
 
 VulkanSingleQuadRenderer::~VulkanSingleQuadRenderer() {}

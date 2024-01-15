@@ -75,7 +75,7 @@ convolveDiffuse(const vec3 *data,
         for (int x = 0; x != dstW; x++) {
             const float phi1 = float(x) / float(dstW) * Math::TWOPI;
             const vec3 V1 = vec3(
-              sin(theta1) * cos(phi1), sin(theta1) * sin(phi1), cos(theta1));
+                sin(theta1) * cos(phi1), sin(theta1) * sin(phi1), cos(theta1));
             vec3 color = vec3(0.0f);
             float weight = 0.0f;
             for (int i = 0; i != numMonteCarloSamples; i++) {
@@ -153,7 +153,7 @@ convertEquirectangularMapToVerticalCross(const Bitmap &b)
                 //	float point source coordinates
                 const float Uf = float(2.0f * faceSize * (theta + M_PI) / M_PI);
                 const float Vf =
-                  float(2.0f * faceSize * (M_PI / 2.0f - phi) / M_PI);
+                    float(2.0f * faceSize * (M_PI / 2.0f - phi) / M_PI);
                 // 4-samples for bilinear interpolation
                 const int U1 = clamp(int(floor(Uf)), 0, clampW);
                 const int V1 = clamp(int(floor(Vf)), 0, clampH);
@@ -171,7 +171,7 @@ convertEquirectangularMapToVerticalCross(const Bitmap &b)
                 const vec4 color = A * (1 - s) * (1 - t) + B * (s) * (1 - t) +
                                    C * (1 - s) * t + D * (s) * (t);
                 result.setPixel(
-                  i + kFaceOffsets[face].x, j + kFaceOffsets[face].y, color);
+                    i + kFaceOffsets[face].x, j + kFaceOffsets[face].y, color);
             }
         };
     }
@@ -204,7 +204,7 @@ convertVerticalCrossToCubeMapFaces(const Bitmap &b)
     */
 
     const int pixelSize =
-      cubemap.comp_ * Bitmap::getBytesPerComponent(cubemap.fmt_);
+        cubemap.comp_ * Bitmap::getBytesPerComponent(cubemap.fmt_);
 
     for (int face = 0; face != 6; ++face) {
         for (int j = 0; j != faceHeight; ++j) {

@@ -65,7 +65,7 @@ processLods(std::vector<uint32_t> &indices,
         indices.resize(numOptIndices);
 
         meshopt_optimizeVertexCache(
-          indices.data(), indices.data(), indices.size(), verticesCountIn);
+            indices.data(), indices.data(), indices.size(), verticesCountIn);
 
         printf("\n   LOD%i: %i indices %s",
                int(LOD),
@@ -83,7 +83,7 @@ convertAIMesh(const aiMesh *m)
 {
     const bool hasTexCoords = m->HasTextureCoords(0);
     const uint32_t streamElementSize =
-      static_cast<uint32_t>(g_numElementsToStore * sizeof(float));
+        static_cast<uint32_t>(g_numElementsToStore * sizeof(float));
 
     // Original data for LOD calculation
     std::vector<float> srcVertices;
@@ -97,7 +97,7 @@ convertAIMesh(const aiMesh *m)
         const aiVector3D v = m->mVertices[i];
         const aiVector3D n = m->mNormals[i];
         const aiVector3D t =
-          hasTexCoords ? m->mTextureCoords[0][i] : aiVector3D();
+            hasTexCoords ? m->mTextureCoords[0][i] : aiVector3D();
 
         if (g_calculateLODs) {
             srcVertices.push_back(v.x);
@@ -162,11 +162,11 @@ loadFile(const char *fileName)
     printf("Loading '%s'...\n", fileName);
 
     const unsigned int flags =
-      0 | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate |
-      aiProcess_GenSmoothNormals | aiProcess_LimitBoneWeights |
-      aiProcess_SplitLargeMeshes | aiProcess_ImproveCacheLocality |
-      aiProcess_RemoveRedundantMaterials | aiProcess_FindDegenerates |
-      aiProcess_FindInvalidData | aiProcess_GenUVCoords;
+        0 | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate |
+        aiProcess_GenSmoothNormals | aiProcess_LimitBoneWeights |
+        aiProcess_SplitLargeMeshes | aiProcess_ImproveCacheLocality |
+        aiProcess_RemoveRedundantMaterials | aiProcess_FindDegenerates |
+        aiProcess_FindInvalidData | aiProcess_GenUVCoords;
 
     const aiScene *scene = aiImportFile(fileName, flags);
 
@@ -196,12 +196,12 @@ main()
     g_vertexOffset = 0;
     for (auto i = 0; i < g_meshData.meshes_.size(); i++) {
         grid.push_back(
-          DrawData{ .meshIndex = (uint32_t)i,
-                    .materialIndex = 0,
-                    .LOD = 0,
-                    .indexOffset = g_meshData.meshes_[i].indexOffset,
-                    .vertexOffset = g_vertexOffset,
-                    .transformIndex = 0 });
+            DrawData{ .meshIndex = (uint32_t)i,
+                      .materialIndex = 0,
+                      .LOD = 0,
+                      .indexOffset = g_meshData.meshes_[i].indexOffset,
+                      .vertexOffset = g_vertexOffset,
+                      .transformIndex = 0 });
         g_vertexOffset += g_meshData.meshes_[i].vertexCount;
     }
 

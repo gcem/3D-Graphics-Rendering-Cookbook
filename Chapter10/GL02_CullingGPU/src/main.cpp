@@ -58,28 +58,28 @@ main(void)
     const GLuint kMaxNumObjects = 128 * 1024;
     const GLsizeiptr kUniformBufferSize = sizeof(PerFrameData);
     const GLsizeiptr kBoundingBoxesBufferSize =
-      sizeof(BoundingBox) * kMaxNumObjects;
+        sizeof(BoundingBox) * kMaxNumObjects;
     const GLuint kBufferIndex_BoundingBoxes = kBufferIndex_PerFrameUniforms + 1;
     const GLuint kBufferIndex_DrawCommands = kBufferIndex_PerFrameUniforms + 2;
     const GLuint kBufferIndex_NumVisibleMeshes =
-      kBufferIndex_PerFrameUniforms + 3;
+        kBufferIndex_PerFrameUniforms + 3;
 
     GLBuffer perFrameDataBuffer(
-      kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER,
                       kBufferIndex_PerFrameUniforms,
                       perFrameDataBuffer.getHandle(),
                       0,
                       kUniformBufferSize);
     GLBuffer boundingBoxesBuffer(
-      kBoundingBoxesBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kBoundingBoxesBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     GLBuffer numVisibleMeshesBuffer(sizeof(uint32_t),
                                     nullptr,
                                     GL_MAP_READ_BIT | GL_MAP_WRITE_BIT |
-                                      GL_MAP_PERSISTENT_BIT |
-                                      GL_MAP_COHERENT_BIT);
+                                        GL_MAP_PERSISTENT_BIT |
+                                        GL_MAP_COHERENT_BIT);
     volatile uint32_t *numVisibleMeshesPtr = (uint32_t *)glMapNamedBuffer(
-      numVisibleMeshesBuffer.getHandle(), GL_READ_WRITE);
+        numVisibleMeshesBuffer.getHandle(), GL_READ_WRITE);
     assert(numVisibleMeshesPtr);
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -92,53 +92,53 @@ main(void)
     GLMesh mesh(sceneData);
 
     glfwSetCursorPosCallback(
-      app.getWindow(), [](auto *window, double x, double y) {
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
-          mouseState.pos.x = static_cast<float>(x / width);
-          mouseState.pos.y = static_cast<float>(y / height);
-          ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
-      });
+        app.getWindow(), [](auto *window, double x, double y) {
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            mouseState.pos.x = static_cast<float>(x / width);
+            mouseState.pos.y = static_cast<float>(y / height);
+            ImGui::GetIO().MousePos = ImVec2((float)x, (float)y);
+        });
 
     glfwSetMouseButtonCallback(
-      app.getWindow(), [](auto *window, int button, int action, int mods) {
-          auto &io = ImGui::GetIO();
-          const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
-                          : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
-                                                              : 1;
-          io.MouseDown[idx] = action == GLFW_PRESS;
+        app.getWindow(), [](auto *window, int button, int action, int mods) {
+            auto &io = ImGui::GetIO();
+            const int idx = button == GLFW_MOUSE_BUTTON_LEFT    ? 0
+                            : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
+                                                                : 1;
+            io.MouseDown[idx] = action == GLFW_PRESS;
 
-          if (!io.WantCaptureMouse)
-              if (button == GLFW_MOUSE_BUTTON_LEFT)
-                  mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+            if (!io.WantCaptureMouse)
+                if (button == GLFW_MOUSE_BUTTON_LEFT)
+                    mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      app.getWindow(),
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        app.getWindow(),
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
 
-          if (key == GLFW_KEY_P && pressed)
-              g_FreezeCullingView = !g_FreezeCullingView;
-      });
+            if (key == GLFW_KEY_P && pressed)
+                g_FreezeCullingView = !g_FreezeCullingView;
+        });
 
     positioner.maxSpeed_ = 1.0f;
 
@@ -169,7 +169,7 @@ main(void)
         fpsCounter.tick(app.getDeltaSeconds());
 
         positioner.update(
-          app.getDeltaSeconds(), mouseState.pos, mouseState.pressedLeft);
+            app.getDeltaSeconds(), mouseState.pos, mouseState.pressedLeft);
 
         int width, height;
         glfwGetFramebufferSize(app.getWindow(), &width, &height);
@@ -177,7 +177,7 @@ main(void)
 
         glViewport(0, 0, width, height);
         glClearNamedFramebufferfv(
-          0, GL_COLOR, 0, glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+            0, GL_COLOR, 0, glm::value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.0f)));
         glClearNamedFramebufferfi(0, GL_DEPTH_STENCIL, 0, 1.0f, 0);
 
         if (!g_FreezeCullingView)
@@ -191,14 +191,16 @@ main(void)
             .light = mat4(0.0f),
             .cameraPos = glm::vec4(camera.getPosition(), 1.0f),
             .numShapesToCull =
-              g_EnableGPUCulling ? (uint32_t)sceneData.shapes_.size() : 0u
+                g_EnableGPUCulling ? (uint32_t)sceneData.shapes_.size() : 0u
         };
 
         getFrustumPlanes(proj * g_CullingView, perFrameData.frustumPlanes);
         getFrustumCorners(proj * g_CullingView, perFrameData.frustumCorners);
 
-        glNamedBufferSubData(
-          perFrameDataBuffer.getHandle(), 0, kUniformBufferSize, &perFrameData);
+        glNamedBufferSubData(perFrameDataBuffer.getHandle(),
+                             0,
+                             kUniformBufferSize,
+                             &perFrameData);
 
         // cull
         *numVisibleMeshesPtr = 0;
@@ -238,13 +240,13 @@ main(void)
 
         if (g_FreezeCullingView)
             renderCameraFrustumGL(
-              canvas, g_CullingView, proj, vec4(1, 1, 0, 1), 100);
+                canvas, g_CullingView, proj, vec4(1, 1, 0, 1), 100);
         canvas.flush();
 
         // wait for compute shader results to become visible
         for (;;) {
             const GLenum res =
-              glClientWaitSync(fence, GL_SYNC_FLUSH_COMMANDS_BIT, 1000);
+                glClientWaitSync(fence, GL_SYNC_FLUSH_COMMANDS_BIT, 1000);
             if (res == GL_ALREADY_SIGNALED || res == GL_CONDITION_SATISFIED)
                 break;
         }

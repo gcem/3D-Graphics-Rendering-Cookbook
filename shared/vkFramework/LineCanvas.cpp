@@ -8,13 +8,13 @@ LineCanvas::LineCanvas(VulkanRenderContext &ctx,
   : Renderer(ctx)
 {
     framebuffer_ = framebuffer;
-    const PipelineInfo pInfo =
-      initRenderPass(PipelineInfo{ .topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST,
-                                   .useDepth = useDepth,
-                                   .useBlending = false },
-                     outputs,
-                     screenRenderPass,
-                     ctx.screenRenderPass);
+    const PipelineInfo pInfo = initRenderPass(
+        PipelineInfo{ .topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST,
+                      .useDepth = useDepth,
+                      .useBlending = false },
+        outputs,
+        screenRenderPass,
+        ctx.screenRenderPass);
 
     const size_t imgCount = ctx.vkDev.swapchainImages.size();
 
@@ -35,7 +35,7 @@ LineCanvas::LineCanvas(VulkanRenderContext &ctx,
 
     descriptorSetLayout_ = ctx.resources.addDescriptorSetLayout(dsInfo);
     descriptorPool_ =
-      ctx.resources.addDescriptorPool(dsInfo, (uint32_t)imgCount);
+        ctx.resources.addDescriptorPool(dsInfo, (uint32_t)imgCount);
 
     for (size_t i = 0; i < imgCount; i++) {
         uniforms_[i] = ctx.resources.addUniformBuffer(sizeof(UniformBuffer));
@@ -44,8 +44,8 @@ LineCanvas::LineCanvas(VulkanRenderContext &ctx,
         dsInfo.buffers[0].buffer = uniforms_[i];
         dsInfo.buffers[1].buffer = storages_[i];
 
-        descriptorSets_[i] =
-          ctx.resources.addDescriptorSet(descriptorPool_, descriptorSetLayout_);
+        descriptorSets_[i] = ctx.resources.addDescriptorSet(
+            descriptorPool_, descriptorSetLayout_);
         ctx.resources.updateDescriptorSet(descriptorSets_[i], dsInfo);
     }
 
@@ -62,8 +62,11 @@ LineCanvas::updateBuffers(size_t currentImage)
 
     const VkDeviceSize bufferSize = lines_.size() * sizeof(VertexData);
 
-    uploadBufferData(
-      ctx_.vkDev, storages_[currentImage].memory, 0, lines_.data(), bufferSize);
+    uploadBufferData(ctx_.vkDev,
+                     storages_[currentImage].memory,
+                     0,
+                     lines_.data(),
+                     bufferSize);
 
     const UniformBuffer ubo = { .mvp = mvp_, .time = (float)glfwGetTime() };
 
@@ -172,10 +175,10 @@ drawBox3d(LineCanvas &canvas,
           const glm::vec4 &color)
 {
     drawBox3d_internal(
-      canvas,
-      m * glm::translate(glm::mat4(1.f), .5f * (box.min_ + box.max_)),
-      0.5f * vec3(box.max_ - box.min_),
-      color);
+        canvas,
+        m * glm::translate(glm::mat4(1.f), .5f * (box.min_ + box.max_)),
+        0.5f * vec3(box.max_ - box.min_),
+        color);
 }
 
 void

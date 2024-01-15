@@ -59,8 +59,8 @@ public:
                          data.materials_.data(),
                          0)
       , bufferIndirect_(sizeof(DrawElementsIndirectCommand) *
-                            data.shapes_.size() +
-                          sizeof(GLsizei),
+                                data.shapes_.size() +
+                            sizeof(GLsizei),
                         nullptr,
                         GL_DYNAMIC_STORAGE_BIT)
       , bufferModelMatrices_(sizeof(glm::mat4) * data.shapes_.size(),
@@ -85,13 +85,13 @@ public:
         // normal
         glEnableVertexArrayAttrib(vao_, 2);
         glVertexArrayAttribFormat(
-          vao_, 2, 3, GL_FLOAT, GL_TRUE, sizeof(vec3) + sizeof(vec2));
+            vao_, 2, 3, GL_FLOAT, GL_TRUE, sizeof(vec3) + sizeof(vec2));
         glVertexArrayAttribBinding(vao_, 2, 0);
 
         std::vector<uint8_t> drawCommands;
 
         drawCommands.resize(sizeof(DrawElementsIndirectCommand) *
-                              data.shapes_.size() +
+                                data.shapes_.size() +
                             sizeof(GLsizei));
 
         // store the number of draw commands in the very beginning of the buffer
@@ -99,16 +99,16 @@ public:
         memcpy(drawCommands.data(), &numCommands, sizeof(numCommands));
 
         DrawElementsIndirectCommand *cmd =
-          std::launder(reinterpret_cast<DrawElementsIndirectCommand *>(
-            drawCommands.data() + sizeof(GLsizei)));
+            std::launder(reinterpret_cast<DrawElementsIndirectCommand *>(
+                drawCommands.data() + sizeof(GLsizei)));
 
         // prepare indirect commands buffer
         for (size_t i = 0; i != data.shapes_.size(); i++) {
             const uint32_t meshIdx = data.shapes_[i].meshIndex;
             const uint32_t lod = data.shapes_[i].LOD;
             *cmd++ = { .count_ =
-                         data.meshData_.meshes_[meshIdx].getLODIndicesCount(
-                           lod),
+                           data.meshData_.meshes_[meshIdx].getLODIndicesCount(
+                               lod),
                        .instanceCount_ = 1,
                        .firstIndex_ = data.shapes_[i].indexOffset,
                        .baseVertex_ = data.shapes_[i].vertexOffset,
@@ -180,7 +180,7 @@ main(void)
     const GLsizeiptr kUniformBufferSize = sizeof(PerFrameData);
 
     GLBuffer perFrameDataBuffer(
-      kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
+        kUniformBufferSize, nullptr, GL_DYNAMIC_STORAGE_BIT);
     glBindBufferRange(GL_UNIFORM_BUFFER,
                       kBufferIndex_PerFrameUniforms,
                       perFrameDataBuffer.getHandle(),
@@ -206,42 +206,42 @@ main(void)
     GLMesh mesh2(sceneData2);
 
     glfwSetCursorPosCallback(
-      app.getWindow(), [](auto *window, double x, double y) {
-          int width, height;
-          glfwGetFramebufferSize(window, &width, &height);
-          mouseState.pos.x = static_cast<float>(x / width);
-          mouseState.pos.y = static_cast<float>(y / height);
-      });
+        app.getWindow(), [](auto *window, double x, double y) {
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            mouseState.pos.x = static_cast<float>(x / width);
+            mouseState.pos.y = static_cast<float>(y / height);
+        });
 
     glfwSetMouseButtonCallback(
-      app.getWindow(), [](auto *window, int button, int action, int mods) {
-          if (button == GLFW_MOUSE_BUTTON_LEFT)
-              mouseState.pressedLeft = action == GLFW_PRESS;
-      });
+        app.getWindow(), [](auto *window, int button, int action, int mods) {
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+                mouseState.pressedLeft = action == GLFW_PRESS;
+        });
 
     glfwSetKeyCallback(
-      app.getWindow(),
-      [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-          const bool pressed = action != GLFW_RELEASE;
-          if (key == GLFW_KEY_ESCAPE && pressed)
-              glfwSetWindowShouldClose(window, GLFW_TRUE);
-          if (key == GLFW_KEY_W)
-              positioner.movement_.forward_ = pressed;
-          if (key == GLFW_KEY_S)
-              positioner.movement_.backward_ = pressed;
-          if (key == GLFW_KEY_A)
-              positioner.movement_.left_ = pressed;
-          if (key == GLFW_KEY_D)
-              positioner.movement_.right_ = pressed;
-          if (key == GLFW_KEY_1)
-              positioner.movement_.up_ = pressed;
-          if (key == GLFW_KEY_2)
-              positioner.movement_.down_ = pressed;
-          if (mods & GLFW_MOD_SHIFT)
-              positioner.movement_.fastSpeed_ = pressed;
-          if (key == GLFW_KEY_SPACE)
-              positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
-      });
+        app.getWindow(),
+        [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+            const bool pressed = action != GLFW_RELEASE;
+            if (key == GLFW_KEY_ESCAPE && pressed)
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (key == GLFW_KEY_W)
+                positioner.movement_.forward_ = pressed;
+            if (key == GLFW_KEY_S)
+                positioner.movement_.backward_ = pressed;
+            if (key == GLFW_KEY_A)
+                positioner.movement_.left_ = pressed;
+            if (key == GLFW_KEY_D)
+                positioner.movement_.right_ = pressed;
+            if (key == GLFW_KEY_1)
+                positioner.movement_.up_ = pressed;
+            if (key == GLFW_KEY_2)
+                positioner.movement_.down_ = pressed;
+            if (mods & GLFW_MOD_SHIFT)
+                positioner.movement_.fastSpeed_ = pressed;
+            if (key == GLFW_KEY_SPACE)
+                positioner.setUpVector(vec3(0.0f, 1.0f, 0.0f));
+        });
 
     positioner.maxSpeed_ = 1.0f;
 
@@ -268,9 +268,11 @@ main(void)
         const PerFrameData perFrameData = { .view = view,
                                             .proj = p,
                                             .cameraPos = glm::vec4(
-                                              camera.getPosition(), 1.0f) };
-        glNamedBufferSubData(
-          perFrameDataBuffer.getHandle(), 0, kUniformBufferSize, &perFrameData);
+                                                camera.getPosition(), 1.0f) };
+        glNamedBufferSubData(perFrameDataBuffer.getHandle(),
+                             0,
+                             kUniformBufferSize,
+                             &perFrameData);
 
         glDisable(GL_BLEND);
         program.useProgram();

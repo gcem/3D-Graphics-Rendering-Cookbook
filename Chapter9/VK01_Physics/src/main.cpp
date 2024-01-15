@@ -23,9 +23,9 @@ struct MyApp : public CameraApp
       , imgui(ctx_)
     {
         positioner =
-          CameraPositioner_FirstPerson(glm::vec3(0.0f, 50.0f, 100.0f),
-                                       vec3(0.0f, 0.0f, 0.0f),
-                                       vec3(0.0f, -1.0f, 0.0f)),
+            CameraPositioner_FirstPerson(glm::vec3(0.0f, 50.0f, 100.0f),
+                                         vec3(0.0f, 0.0f, 0.0f),
+                                         vec3(0.0f, -1.0f, 0.0f)),
 
         onScreenRenderers_.emplace_back(plane, false);
         onScreenRenderers_.emplace_back(multiRenderer);

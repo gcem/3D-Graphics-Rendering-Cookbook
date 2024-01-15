@@ -83,12 +83,12 @@ struct VulkanContextCreator
     VulkanContextCreator() = default;
 
     VulkanContextCreator(
-      VulkanInstance &vk,
-      VulkanRenderDevice &dev,
-      void *window,
-      int screenWidth,
-      int screenHeight,
-      const VulkanContextFeatures &ctxFeatures = VulkanContextFeatures());
+        VulkanInstance &vk,
+        VulkanRenderDevice &dev,
+        void *window,
+        int screenWidth,
+        int screenHeight,
+        const VulkanContextFeatures &ctxFeatures = VulkanContextFeatures());
     ~VulkanContextCreator();
 
     VulkanInstance &instance;
@@ -253,11 +253,11 @@ createSemaphore(VkDevice device, VkSemaphore *outSemaphore);
 
 bool
 createTextureSampler(
-  VkDevice device,
-  VkSampler *sampler,
-  VkFilter minFilter = VK_FILTER_LINEAR,
-  VkFilter maxFilter = VK_FILTER_LINEAR,
-  VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_REPEAT);
+    VkDevice device,
+    VkSampler *sampler,
+    VkFilter minFilter = VK_FILTER_LINEAR,
+    VkFilter maxFilter = VK_FILTER_LINEAR,
+    VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_REPEAT);
 
 bool
 createDescriptorPool(VulkanRenderDevice &vkDev,
@@ -274,11 +274,11 @@ querySwapchainSupport(VkPhysicalDevice device, VkSurfaceKHR surface);
 
 VkSurfaceFormatKHR
 chooseSwapSurfaceFormat(
-  const std::vector<VkSurfaceFormatKHR> &availableFormats);
+    const std::vector<VkSurfaceFormatKHR> &availableFormats);
 
 VkPresentModeKHR
 chooseSwapPresentMode(
-  const std::vector<VkPresentModeKHR> &availablePresentModes);
+    const std::vector<VkPresentModeKHR> &availablePresentModes);
 
 uint32_t
 chooseSwapImageCount(const VkSurfaceCapabilitiesKHR &capabilities);
@@ -310,19 +310,19 @@ hasStencilComponent(VkFormat format);
 
 bool
 createGraphicsPipeline(
-  VulkanRenderDevice &vkDev,
-  VkRenderPass renderPass,
-  VkPipelineLayout pipelineLayout,
-  const std::vector<const char *> &shaderFiles,
-  VkPipeline *pipeline,
-  VkPrimitiveTopology topology =
-    VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST /* defaults to triangles*/,
-  bool useDepth = true,
-  bool useBlending = true,
-  bool dynamicScissorState = false,
-  int32_t customWidth = -1,
-  int32_t customHeight = -1,
-  uint32_t numPatchControlPoints = 0);
+    VulkanRenderDevice &vkDev,
+    VkRenderPass renderPass,
+    VkPipelineLayout pipelineLayout,
+    const std::vector<const char *> &shaderFiles,
+    VkPipeline *pipeline,
+    VkPrimitiveTopology topology =
+        VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST /* defaults to triangles*/,
+    bool useDepth = true,
+    bool useBlending = true,
+    bool dynamicScissorState = false,
+    int32_t customWidth = -1,
+    int32_t customHeight = -1,
+    uint32_t numPatchControlPoints = 0);
 
 VkResult
 createComputePipeline(VkDevice device,
@@ -451,9 +451,9 @@ struct RenderPass
 {
     RenderPass() = default;
     explicit RenderPass(
-      VulkanRenderDevice &device,
-      bool useDepth = true,
-      const RenderPassCreateInfo &ci = RenderPassCreateInfo());
+        VulkanRenderDevice &device,
+        bool useDepth = true,
+        const RenderPassCreateInfo &ci = RenderPassCreateInfo());
 
     RenderPassCreateInfo info;
     VkRenderPass handle = VK_NULL_HANDLE;
@@ -517,11 +517,11 @@ initVulkanRenderDevice2(VulkanInstance &vk,
                         VkPhysicalDeviceFeatures2 deviceFeatures2);
 bool
 initVulkanRenderDevice3(
-  VulkanInstance &vk,
-  VulkanRenderDevice &vkDev,
-  uint32_t width,
-  uint32_t height,
-  const VulkanContextFeatures &ctxFeatures = VulkanContextFeatures());
+    VulkanInstance &vk,
+    VulkanRenderDevice &vkDev,
+    uint32_t width,
+    uint32_t height,
+    const VulkanContextFeatures &ctxFeatures = VulkanContextFeatures());
 void
 destroyVulkanRenderDevice(VulkanRenderDevice &vkDev);
 void
@@ -536,20 +536,20 @@ initVulkanRenderDeviceWithCompute(VulkanInstance &vk,
 
 bool
 initVulkanRenderDevice2WithCompute(
-  VulkanInstance &vk,
-  VulkanRenderDevice &vkDev,
-  uint32_t width,
-  uint32_t height,
-  std::function<bool(VkPhysicalDevice)> selector,
-  VkPhysicalDeviceFeatures2 deviceFeatures2,
-  bool supportScreenshots = false);
+    VulkanInstance &vk,
+    VulkanRenderDevice &vkDev,
+    uint32_t width,
+    uint32_t height,
+    std::function<bool(VkPhysicalDevice)> selector,
+    VkPhysicalDeviceFeatures2 deviceFeatures2,
+    bool supportScreenshots = false);
 
 bool
 createColorAndDepthFramebuffers(
-  VulkanRenderDevice &vkDev,
-  VkRenderPass renderPass,
-  VkImageView depthImageView,
-  std::vector<VkFramebuffer> &swapchainFramebuffers);
+    VulkanRenderDevice &vkDev,
+    VkRenderPass renderPass,
+    VkImageView depthImageView,
+    std::vector<VkFramebuffer> &swapchainFramebuffers);
 bool
 createColorAndDepthFramebuffer(VulkanRenderDevice &vkDev,
                                uint32_t width,
@@ -614,15 +614,15 @@ updateTextureImage(VulkanRenderDevice &vkDev,
 
 bool
 updateTextureVolume(
-  VulkanRenderDevice &vkDev,
-  VkImage &textureVolume,
-  VkDeviceMemory &textureVolumeMemory,
-  uint32_t texWidth,
-  uint32_t texHeight,
-  uint32_t texDepth,
-  VkFormat texFormat,
-  const void *volumeData,
-  VkImageLayout sourceImageLayout = VK_IMAGE_LAYOUT_UNDEFINED);
+    VulkanRenderDevice &vkDev,
+    VkImage &textureVolume,
+    VkDeviceMemory &textureVolumeMemory,
+    uint32_t texWidth,
+    uint32_t texHeight,
+    uint32_t texDepth,
+    VkFormat texFormat,
+    const void *volumeData,
+    VkImageLayout sourceImageLayout = VK_IMAGE_LAYOUT_UNDEFINED);
 
 bool
 downloadImageData(VulkanRenderDevice &vkDev,
@@ -774,7 +774,7 @@ getVulkanBufferAlignment(VulkanRenderDevice &vkDev)
     VkPhysicalDeviceProperties devProps;
     vkGetPhysicalDeviceProperties(vkDev.physicalDevice, &devProps);
     return static_cast<uint32_t>(
-      devProps.limits.minStorageBufferOffsetAlignment);
+        devProps.limits.minStorageBufferOffsetAlignment);
 }
 
 /* Check if the texture is used as a depth buffer */
