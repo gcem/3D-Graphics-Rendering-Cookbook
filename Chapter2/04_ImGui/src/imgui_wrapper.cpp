@@ -17,11 +17,11 @@
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 
-#include "imgui.cpp"
-#include "imgui_demo.cpp"
-#include "imgui_draw.cpp"
-#include "imgui_tables.cpp"
-#include "imgui_widgets.cpp"
+// #include "imgui.cpp"
+// #include "imgui_demo.cpp"
+// #include "imgui_draw.cpp"
+// #include "imgui_tables.cpp"
+// #include "imgui_widgets.cpp"
 
 #if defined(_MSC_VER)
 #pragma warning(pop)

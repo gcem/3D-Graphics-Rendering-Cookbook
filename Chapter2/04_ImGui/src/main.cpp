@@ -52,7 +52,7 @@ main()
         });
 
     glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
+    gladLoadGL();
     glfwSwapInterval(1);
 
     GLuint vao;
@@ -153,7 +153,7 @@ main()
     cfg.OversampleH = 4;
     cfg.OversampleV = 4;
     ImFont *Font = io.Fonts->AddFontFromFileTTF(
-        "data/OpenSans-Light.ttf", cfg.SizePixels, &cfg);
+        "../../../data/OpenSans-Light.ttf", cfg.SizePixels, &cfg);
 
     unsigned char *pixels = nullptr;
     int width, height;
