@@ -34,8 +34,22 @@ main()
     glfwSetKeyCallback(
         window,
         [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            switch (key) {
+                case GLFW_KEY_ESCAPE:
+                    if (action == GLFW_PRESS)
+                        glfwSetWindowShouldClose(window, GLFW_TRUE);
+                    break;
+                    // I thought this would flip the scrolling direction but
+                    // it doesn't.
+                    // case GLFW_KEY_LEFT_SHIFT:
+                    //     ImGui::GetIO().AddKeyEvent(ImGuiKey_LeftShift,
+                    //                                action == GLFW_PRESS);
+                    //     break;
+                    // case GLFW_KEY_RIGHT_SHIFT:
+                    //     ImGui::GetIO().AddKeyEvent(ImGuiKey_RightShift,
+                    //                                action == GLFW_PRESS);
+                    //     break;
+            }
         });
 
     glfwSetCursorPosCallback(window, [](auto *window, double x, double y) {
@@ -49,6 +63,17 @@ main()
                             : button == GLFW_MOUSE_BUTTON_RIGHT ? 2
                                                                 : 1;
             io.MouseDown[idx] = action == GLFW_PRESS;
+        });
+
+    glfwSetScrollCallback(
+        window, [](GLFWwindow *window, double xoffset, double yoffset) {
+            auto &io = ImGui::GetIO();
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ||
+                glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
+                // flip x and y scroll
+                io.AddMouseWheelEvent(yoffset, xoffset);
+            else
+                io.AddMouseWheelEvent(xoffset, yoffset);
         });
 
     glfwMakeContextCurrent(window);
