@@ -112,8 +112,8 @@ main(void)
     GLuint meshData;
     glCreateBuffers(1, &meshData);
 
-    const aiScene *scene =
-        aiImportFile("data/rubber_duck/scene.gltf", aiProcess_Triangulate);
+    const aiScene *scene = aiImportFile("../../../data/rubber_duck/scene.gltf",
+                                        aiProcess_Triangulate);
 
     if (!scene || !scene->HasMeshes()) {
         printf("Unable to load data/rubber_duck/scene.gltf\n");
