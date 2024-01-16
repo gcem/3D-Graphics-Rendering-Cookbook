@@ -112,7 +112,7 @@ main(void)
         });
 
     glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
+    gladLoadGL();
     glfwSwapInterval(1);
 
     OPTICK_PUSH("Create resources");

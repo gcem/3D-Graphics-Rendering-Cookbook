@@ -110,7 +110,7 @@ main(void)
         });
 
     glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
+    gladLoadGL();
     glfwSwapInterval(1);
 
     const GLuint shaderVertex = glCreateShader(GL_VERTEX_SHADER);
