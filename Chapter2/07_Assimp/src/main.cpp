@@ -122,13 +122,11 @@ main(void)
 
     const aiMesh *mesh = scene->mMeshes[0];
     std::vector<vec3> positions;
+    positions.reserve(mesh->mNumFaces * 3);
     for (unsigned int i = 0; i != mesh->mNumFaces; i++) {
         const aiFace &face = mesh->mFaces[i];
-        const unsigned int idx[3] = { face.mIndices[0],
-                                      face.mIndices[1],
-                                      face.mIndices[2] };
         for (int j = 0; j != 3; j++) {
-            const aiVector3D v = mesh->mVertices[idx[j]];
+            const aiVector3D v = mesh->mVertices[face.mIndices[j]];
             positions.push_back(vec3(v.x, v.z, v.y));
         }
     }
