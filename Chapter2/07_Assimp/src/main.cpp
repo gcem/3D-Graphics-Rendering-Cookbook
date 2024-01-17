@@ -109,39 +109,46 @@ main(void)
     glEnable(GL_POLYGON_OFFSET_LINE);
     glPolygonOffset(-1.0f, -1.0f);
 
-    GLuint meshData;
-    glCreateBuffers(1, &meshData);
-
-    const aiScene *scene = aiImportFile("../../../data/rubber_duck/scene.gltf",
-                                        aiProcess_Triangulate);
+    const char *sceneFilename = "../../../data/rubber_duck/scene.gltf";
+    const aiScene *scene = aiImportFile(sceneFilename, aiProcess_Triangulate);
 
     if (!scene || !scene->HasMeshes()) {
-        printf("Unable to load data/rubber_duck/scene.gltf\n");
+        printf("Unable to load scene file %s\n", sceneFilename);
         exit(255);
     }
 
     const aiMesh *mesh = scene->mMeshes[0];
     std::vector<vec3> positions;
-    positions.reserve(mesh->mNumFaces * 3);
-    for (unsigned int i = 0; i != mesh->mNumFaces; i++) {
+    std::vector<GLuint> indices;
+    positions.reserve(mesh->mNumVertices);
+    indices.reserve(mesh->mNumFaces * 3);
+    for (int i = 0; i < mesh->mNumVertices; i++) {
+        const aiVector3D &v = mesh->mVertices[i];
+        positions.push_back(vec3(v.x, v.z, v.y));
+    }
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
         const aiFace &face = mesh->mFaces[i];
-        for (int j = 0; j != 3; j++) {
-            const aiVector3D v = mesh->mVertices[face.mIndices[j]];
-            positions.push_back(vec3(v.x, v.z, v.y));
+        for (int j = 0; j < 3; j++) {
+            indices.push_back(face.mIndices[j]);
         }
     }
 
     aiReleaseImport(scene);
 
-    glNamedBufferStorage(
-        meshData, sizeof(vec3) * positions.size(), positions.data(), 0);
+    GLuint vertexBuffer, indexBuffer;
+    glCreateBuffers(1, &vertexBuffer);
+    glCreateBuffers(1, &indexBuffer);
 
-    glVertexArrayVertexBuffer(vao, 0, meshData, 0, sizeof(vec3));
+    glNamedBufferStorage(
+        vertexBuffer, sizeof(vec3) * positions.size(), positions.data(), 0);
+    glNamedBufferStorage(
+        indexBuffer, sizeof(GLuint) * indices.size(), indices.data(), 0);
+
+    glVertexArrayVertexBuffer(vao, 0, vertexBuffer, 0, sizeof(vec3));
+    glVertexArrayElementBuffer(vao, indexBuffer);
     glEnableVertexArrayAttrib(vao, 0);
     glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(vao, 0, 0);
-
-    const int numVertices = static_cast<int>(positions.size());
 
     while (!glfwWindowShouldClose(window)) {
         int width, height;
@@ -163,19 +170,22 @@ main(void)
         glNamedBufferSubData(perFrameDataBuffer, 0, kBufferSize, &perFrameData);
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        glDrawArrays(GL_TRIANGLES, 0, numVertices);
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        // glDrawArrays(GL_TRIANGLES, 0, indices.size());
 
         perFrameData.isWireframe = true;
         glNamedBufferSubData(perFrameDataBuffer, 0, kBufferSize, &perFrameData);
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        glDrawArrays(GL_TRIANGLES, 0, numVertices);
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        // glDrawArrays(GL_TRIANGLES, 0, indices.size());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    glDeleteBuffers(1, &meshData);
+    glDeleteBuffers(1, &vertexBuffer);
+    glDeleteBuffers(1, &indexBuffer);
     glDeleteBuffers(1, &perFrameDataBuffer);
     glDeleteProgram(program);
     glDeleteShader(shaderFragment);
